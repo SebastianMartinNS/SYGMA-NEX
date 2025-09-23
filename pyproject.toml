@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {file = "LICENSE"}
 authors = [
-    {name = "Sebastian", email = "dev@sigma-nex.org"},
+    {name = "Martin Sebastian", email = "martin.sebastian@sigma-nex.org"},
 ]
 keywords = ["ai", "survival", "offline", "ollama", "cognitive-agent"]
 classifiers = [
@@ -54,7 +54,7 @@ dev = [
 
 [project.urls]
 Homepage = "https://github.com/SebastianMartinNS/SYGMA-NEX"
-Documentation = "https://github.com/sigma-nex/sigma-nex/wiki"
+Documentation = "docs/"
 Repository = "https://github.com/SebastianMartinNS/SYGMA-NEX.git"
 "Bug Reports" = "https://github.com/SebastianMartinNS/SYGMA-NEX/issues"
 
