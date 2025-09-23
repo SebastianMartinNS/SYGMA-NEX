@@ -1,0 +1,12 @@
+# Test Dependencies for SIGMA-NEX Project
+
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-mock>=3.11.1
+pytest-asyncio>=0.21.1
+coverage>=7.3.0
+
+# Minimal runtime deps required by unit tests
+click>=8.1.0
+requests>=2.31.0
+faiss-cpu>=1.7.4

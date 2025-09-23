@@ -1,0 +1,138 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sigma-nex"
+version = "0.2.1"
+description = "Agente cognitivo autonomo per la sopravvivenza offline-first in scenari estremi"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Sebastian", email = "dev@sigma-nex.org"},
+]
+keywords = ["ai", "survival", "offline", "ollama", "cognitive-agent"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Environment :: Web Environment", 
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: System :: Systems Administration",
+]
+dependencies = [
+    "click>=8.1.0",
+    "pyyaml>=6.0",
+    "torch>=2.0.0",
+    "transformers>=4.30.0",
+    "faiss-cpu>=1.7.4",
+    "cryptography>=41.0.0",
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "pydantic>=2.4.0",
+    "requests>=2.31.0",
+    "customtkinter>=5.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.1",
+    "pytest-asyncio>=0.21.1",
+    "coverage>=7.3.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/sigma-nex/sigma-nex"
+Documentation = "https://github.com/sigma-nex/sigma-nex/wiki"
+Repository = "https://github.com/sigma-nex/sigma-nex.git"
+"Bug Reports" = "https://github.com/sigma-nex/sigma-nex/issues"
+
+[project.scripts]
+sigma = "sigma_nex.cli:main"
+sigma-api = "sigma_nex.server:main"
+sigma-gui = "sigma_nex.gui:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["sigma_nex*"]
+exclude = ["tests*", "venv*", "build*", "dist*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=sigma_nex",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-report=xml"
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "api: marks tests that require API access",
+    "gui: marks tests for GUI components",
+    "cli: marks tests for CLI functionality"
+]
+filterwarnings = [
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning"
+]
+
+[tool.coverage.run]
+source = ["sigma_nex"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/migrations/*",
+    "*/venv/*",
+    "*/virtualenv/*",
+    "*/.venv/*",
+    # Keep only non-source/cache paths omitted; include all project modules in coverage
+    "sigma_nex/core/models/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod"
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.coverage.xml]
+output = "coverage.xml"

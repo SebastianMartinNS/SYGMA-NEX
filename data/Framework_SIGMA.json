@@ -1,0 +1,194 @@
+{
+  "modules": [
+    {
+      "numero": 1,
+      "nome": "idratazione",
+      "priorita": "alta",
+      "descrizione": "Strategie per trovare, purificare e conservare acqua potabile in ambienti isolati o ostili.",
+      "comandi": [
+        "1. Raccogli materiali naturali: sabbia, carbone da legna, contenitori puliti.",
+        "2. Costruisci un filtro a strati con carbone, sabbia e tessuto.",
+        "3. Versa acqua torbida lentamente nel filtro e raccogli l'acqua filtrata.",
+        "4. Se disponibile, aggiungi una pastiglia potabilizzante e attendi 30 minuti prima di bere."
+      ],
+      "fallback": "1. Raccogli rugiada al mattino con un panno pulito, strizzalo in un contenitore. 2. Taglia piante tuberose (es. ortica, canna) per estrarre liquidi interni. 3. Evita di bere acqua stagnante senza filtrarla o bollirla. 4. Se puoi accendere un fuoco, fai bollire l'acqua almeno 1 minuto."
+    },
+    {
+      "numero": 2,
+      "nome": "alimentazione",
+      "priorita": "alta",
+      "descrizione": "Tecniche per reperire, conservare e cucinare cibo in assenza di fonti moderne.",
+      "comandi": [
+        "1. Costruisci trappole semplici con cordini e rami piegati (a maniglia o molla).",
+        "2. Raccogli piante note come edibili, iniziando da quelle a foglia larga e frutti non amari.",
+        "3. Prepara fumo leggero su braci con rami verdi per essiccare carne e radici.",
+        "4. Conserva gli alimenti asciutti in sacche di tessuto o contenitori naturali."
+      ],
+      "fallback": "1. Scava per trovare radici amidacee nelle zone umide. 2. Raccogli insetti (formiche, grilli) e cuocili. 3. Evita bacche lucide o funghi non identificati. 4. Bevi linfa se disponibile."
+    },
+    {
+      "numero": 3,
+      "nome": "rifugio",
+      "priorita": "alta",
+      "descrizione": "Metodi per costruire rifugi temporanei o semipermanenti adattandosi al clima e alle risorse locali.",
+      "comandi": [
+        "1. Raccogli rami lunghi, fogliame secco e un telo impermeabile se presente.",
+        "2. Costruisci struttura ad 'A' con un bastone centrale e due supporti laterali.",
+        "3. Copri con foglie e fronde per isolamento termico e protezione dalla pioggia.",
+        "4. Scava trincee intorno al rifugio per deviare l'acqua piovana."
+      ],
+      "fallback": "1. Trova sporgenze rocciose asciutte o grotte sicure. 2. Prepara un letto di foglie spesso per isolarti dal terreno. 3. Costruisci paravento con rami se il vento è forte. 4. Usa pietre calde per riscaldarti."
+    },
+    {
+      "numero": 4,
+      "nome": "energia",
+      "priorita": "alta",
+      "descrizione": "Fonti di energia alternativa e strategie per generare calore, luce e caricare dispositivi in modo autonomo.",
+      "comandi": [
+        "1. Crea forno solare con scatola, alluminio e plastica trasparente.",
+        "2. Posiziona candela sotto modulo TEG collegato a powerbank (controlla polarità).",
+        "3. Costruisci dinamo manuale: manovella con piccolo generatore a magnete."
+      ],
+      "fallback": "1. Riduci attività per risparmiare energia. 2. Usa luce solare diretta per le attività. 3. Condividi calore corporeo o animale. 4. Crea torcia a olio con barattolo e stoppino."
+    },
+    {
+      "numero": 5,
+      "nome": "medicina",
+      "priorita": "alta",
+      "descrizione": "Primo soccorso, erbe officinali e gestione autonoma di emergenze mediche.",
+      "comandi": [
+        "1. Pulisci ferite con acqua (o acqua ossigenata se disponibile).",
+        "2. Applica impacco di malva o calendula schiacciata su garza.",
+        "3. Immobilizza arti con stecche e fasciature."
+      ],
+      "fallback": "1. Rimuovi sporco con acqua corrente. 2. Immobilizza l'area lesa. 3. Riposa per favorire guarigione. 4. Usa erbe antibatteriche locali se infezione."
+    },
+    {
+      "numero": 6,
+      "nome": "comunicazione",
+      "priorita": "alta",
+      "descrizione": "Strategie per inviare segnali e farsi localizzare in assenza di rete.",
+      "comandi": [
+        "1. Rifletti luce solare con specchio verso soccorritori.",
+        "2. Costruisci bandiera chiara su ramo alto come segnalazione.",
+        "3. Sintonizza radio analogica su frequenze civili."
+      ],
+      "fallback": "1. Disegna SOS o frecce grandi sul terreno. 2. Accendi fuochi con fumo scuro per emergenza. 3. Lascia messaggi incisi su rocce o tronchi."
+    },
+    {
+      "numero": 7,
+      "nome": "autodifesa",
+      "priorita": "alta",
+      "descrizione": "Principi di autodifesa non armata, occultamento e protezione da minacce.",
+      "comandi": [
+        "1. Assumi postura stabile e braccia pronte a bloccare.",
+        "2. Crea ostacoli naturali: rami intrecciati o detriti rumorosi.",
+        "3. Usa bastone robusto come deterrente."
+      ],
+      "fallback": "1. Evita il confronto diretto: nasconditi o fuggi. 2. Usa rumori forti per intimidire. 3. Dirigiti verso zone illuminate e sopraelevate."
+    },
+    {
+      "numero": 8,
+      "nome": "orientamento",
+      "priorita": "alta",
+      "descrizione": "Orientarsi senza strumenti elettronici tramite sole, stelle e segnali naturali.",
+      "comandi": [
+        "1. Usa orologio analogico: punta lancetta ore verso il sole, sud a metà tra lancetta e 12.",
+        "2. Cerca Stella Polare di notte per identificare nord.",
+        "3. Traccia mappa mentale di riferimenti fissi, fonti d'acqua e pendenze."
+      ],
+      "fallback": "1. Segui corsi d'acqua in discesa verso insediamenti. 2. Evita spostamenti notturni. 3. Segna il percorso con oggetti visibili tornando a punti noti."
+    },
+    {
+      "numero": 9,
+      "nome": "fuoco",
+      "priorita": "alta",
+      "descrizione": "Tecniche per accendere e mantenere fuoco sicuro in ogni condizione.",
+      "comandi": [
+        "1. Raccogli esca: corteccia, erba secca, cotone.",
+        "2. Separa legna in spessori diversi per accensione e durata.",
+        "3. Usa acciarino, accendino o metodo a frizione per scintille.",
+        "4. Isola base del fuoco dal terreno umido con pietre."
+      ],
+      "fallback": "1. Usa batteria + paglietta per scintille. 2. Proteggi esca dal vento con contenitore. 3. Costruisci arco a frizione con legni adatti."
+    },
+    {
+      "numero": 10,
+      "nome": "abbigliamento",
+      "priorita": "alta",
+      "descrizione": "Protezione da freddo, umidità, calore estremo e insetti.",
+      "comandi": [
+        "1. Vesti a strati per trattenere calore e togli strati se sudi.",
+        "2. Isola con foglie o pellicola tra gli abiti se necessario.",
+        "3. Copri testa e collo per ridurre dispersione termica.",
+        "4. In climi caldi usa tessuti leggeri e colori chiari."
+      ],
+      "fallback": "1. Se i vestiti sono bagnati, strizzali e asciugali vicino a fonte di calore. 2. Usa sacchi o teli come poncho improvvisato."
+    },
+    {
+      "numero": 11,
+      "nome": "igiene",
+      "priorita": "alta",
+      "descrizione": "Mantenere condizioni minime di igiene per evitare infezioni, parassiti e malattie.",
+      "comandi": [
+        "1. Lava mani e viso quotidianamente anche con sola acqua.",
+        "2. Scava una latrina lontano da corsi d'acqua.",
+        "3. Usa cenere o sabbia per strofinare e disinfettare.",
+        "4. Mantieni stoviglie in area pulita e asciutta."
+      ],
+      "fallback": "1. In mancanza d'acqua, friziona mani con sabbia o cenere calda. 2. Mantieni zone rifiuti separate dal rifugio."
+    },
+    {
+      "numero": 12,
+      "nome": "psicologia",
+      "priorita": "alta",
+      "descrizione": "Gestione dello stress, solitudine e panico in ambienti estremi.",
+      "comandi": [
+        "1. Respira profondamente e conta lentamente fino a 10.",
+        "2. Mantieni routine giornaliera di attività e riposo.",
+        "3. Stabilisci obiettivi piccoli e raggiungibili ogni giorno.",
+        "4. Parla a te stesso con frasi motivanti per mantenere lucidità."
+      ],
+      "fallback": "1. Se ansia paralizza, focalizzati su 3 oggetti visibili e 3 suoni. 2. Canta o recita per mantenere attivazione mentale."
+    },
+    {
+      "numero": 13,
+      "nome": "gestione rifiuti",
+      "priorita": "alta",
+      "descrizione": "Smaltimento di rifiuti organici e inorganici senza contaminare l'area di sopravvivenza.",
+      "comandi": [
+        "1. Separa combustibile (carta, legno) da non combustibile (metallo, plastica).",
+        "2. Brucia solo materiali sicuri lontano dal rifugio.",
+        "3. Interra rifiuti organici a >30 cm di profondità.",
+        "4. Riutilizza contenitori rigidi per stoccaggio o strumenti."
+      ],
+      "fallback": "1. Conserva rifiuti in contenitori chiusi finché non trovi soluzione. 2. Non lasciare scarti alimentari scoperti: attirano animali."
+    },
+    {
+      "numero": 14,
+      "nome": "mobilità sicura",
+      "priorita": "alta",
+      "descrizione": "Come spostarsi minimizzando rischi e rilevabilità.",
+      "comandi": [
+        "1. Muoviti di giorno in zone aperte, di notte solo se necessario.",
+        "2. Evita sentieri evidenti: usa percorsi naturali paralleli.",
+        "3. Verifica stabilità di terreno e ostacoli prima di passare.",
+        "4. Effettua pause frequenti per ascoltare l'ambiente."
+      ],
+      "fallback": "1. Se inseguito, cambia direzione improvvisamente. 2. Lascia segnali per eventuali soccorritori."
+    },
+    {
+      "numero": 15,
+      "nome": "gestione risorse",
+      "priorita": "alta",
+      "descrizione": "Conservare e razionare acqua, cibo, energia e materiali in periodi prolungati.",
+      "comandi": [
+        "1. Stima consumo giornaliero di ogni risorsa.",
+        "2. Dividi scorte in razioni giornaliere e settimanali.",
+        "3. Etichetta contenitori e registra utilizzo.",
+        "4. Raccogli e riutilizza ogni residuo utile."
+      ],
+      "fallback": "1. Riduci attività fisica per risparmiare energie. 2. Organizza turni di lavoro per evitare sprechi."
+    }
+  ]
+}
