@@ -123,9 +123,9 @@ pip-licenses
 6. **📝 Post-Mortem**: Analisi e documentazione per prevenzione futura
 
 ### Contatti di Emergenza
-- **🔴 Security Team**: security@sigma-nex.org
+- **🔴 Security Team**: rootedlab6@gmail.com
 - **📞 Emergency Hotline**: +39 XXX XXX XXXX (solo per emergenze critiche)
-- **💻 On-Call Engineer**: oncall@sigma-nex.org
+- **💻 On-Call Engineer**: adriansebastianmartin@gmail.com
 
 ## 📚 Risorse Sicurezza
 
@@ -171,6 +171,6 @@ Ringraziamo tutti i security researcher che contribuiscono a rendere SIGMA-NEX p
 
 **🔒 La sicurezza è una responsabilità condivisa**
 
-[Segnala una vulnerabilità](mailto:security@sigma-nex.org) • [Torna alla documentazione principale](../README.md)
+[Segnala una vulnerabilità](rootedlab6@gmail.com) • [Torna alla documentazione principale](../README.md)
 
 </div>
