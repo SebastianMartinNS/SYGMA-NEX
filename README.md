@@ -6,7 +6,7 @@
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Build Status](https://img.shields.io/badge/Build-Passing-success?style=for-the-badge)
-![Coverage](https://img.shields.io/badge/Coverage-95%25-brightgreen?style=for-the-badge)
+![Coverage](https://img.shields.io/badge/Coverage-60%25-yellow?style=for-the-badge)
 
 **🛡️ Sistema di Intelligenza Artificiale Autonomo per la Sopravvivenza Offline-First**
 
@@ -352,7 +352,7 @@ mypy sigma_nex/
 
 | **Metrica** | **Valore** | **Target** |
 |:---:|:---:|:---:|
-| Coverage Test | 95%+ | ✅ |
+| Coverage Test | 60%+ | ✅ |
 | Python Version | 3.10+ | ✅ |
 | Dependencies | 15 | ✅ |
 | Lines of Code | ~5000 | ✅ |
