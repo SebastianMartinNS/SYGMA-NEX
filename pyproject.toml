@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {file = "LICENSE"}
 authors = [
-    {name = "Martin Sebastian", email = "martin.sebastian@sigma-nex.org"},
+    {name = "Martin Sebastian", email = "rootedlab6@gmail.com"},
 ]
 keywords = ["ai", "survival", "offline", "ollama", "cognitive-agent"]
 classifiers = [

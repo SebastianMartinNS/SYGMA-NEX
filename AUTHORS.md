@@ -2,7 +2,7 @@
 
 ## Project Lead & Primary Developer
 **Martin Sebastian**
-- Email: martin.sebastian@sigma-nex.org
+- Email: rootedlab6@gmail.com
 - GitHub: [@SebastianMartinNS](https://github.com/SebastianMartinNS)
 - Role: Founder, Lead Developer, Architect
 

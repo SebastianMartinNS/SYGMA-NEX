@@ -332,7 +332,7 @@ def complex_function(
 
 ### Segnalare Vulnerabilità
 - **NON** aprire issue pubbliche per vulnerabilità di sicurezza
-- Invia email a: security@sigma-nex.org
+- Invia email a: rootedlab6@gmail.com
 - Include dettagli completi e proof-of-concept
 
 ## 🎯 Linee Guida per le Pull Request

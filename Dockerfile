@@ -3,7 +3,7 @@
 FROM python:3.11-slim as base
 
 # Metadata
-LABEL maintainer="Sebastian Martin <dev@sigma-nex.org>"
+LABEL maintainer="Sebastian Martin <rootedlab6@gmail.com>"
 LABEL version="0.2.1"
 LABEL description="SIGMA-NEX - Sistema di Intelligenza Artificiale Autonomo per la Sopravvivenza Offline-First"
 

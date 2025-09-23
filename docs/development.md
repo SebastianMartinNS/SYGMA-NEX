@@ -315,6 +315,6 @@ logging.basicConfig(level=logging.DEBUG)
 
 - **GitHub Issues:** For bugs and feature requests
 - **GitHub Discussions:** For questions and ideas
-- **Email:** dev@sigma-nex.org for direct contact
+- **Email:** rootedlab6@gmail.com for direct contact
 
 Happy coding! 🚀

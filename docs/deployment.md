@@ -459,13 +459,13 @@ awk '{print $1}' /app/logs/access.log | sort | uniq -c | sort -nr
 ## 📞 Support
 
 ### Deployment Support
-- **Email**: deployment@sigma-nex.org
+- **Email**: rootedlab6@gmail.com
 - **Documentation**: https://github.com/SebastianMartinNS/SYGMA-NEX/wiki
 - **Issues**: https://github.com/SebastianMartinNS/SYGMA-NEX/issues
 
 ### Emergency Contacts
-- **Critical Issues**: emergency@sigma-nex.org
-- **Security Issues**: security@sigma-nex.org
+- **Critical Issues**: rootedlab6@gmail.com
+- **Security Issues**: rootedlab6@gmail.com
 - **24/7 Support**: +1-xxx-xxx-xxxx (Enterprise only)
 
 ---

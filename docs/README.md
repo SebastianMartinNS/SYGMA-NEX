@@ -51,26 +51,26 @@ sigma gui
 ### 📘 Guide Utente
 
 1. **[Guida Installazione](installation.md)** - Installazione dettagliata per tutti i sistemi operativi
-2. **[Configurazione Base](configuration.md)** - Configurazione iniziale e personalizzazione
-3. **[Utilizzo CLI](cli-guide.md)** - Guida completa all'interfaccia a riga di comando
-4. **[Utilizzo GUI](gui-guide.md)** - Guida all'interfaccia grafica
-5. **[API Usage](api-usage.md)** - Come utilizzare l'API REST
-6. **[Troubleshooting](troubleshooting.md)** - Risoluzione problemi comuni
+2. **[Configurazione Base](guides/configuration.md)** - Configurazione iniziale e personalizzazione
+3. **[Utilizzo CLI](guides/cli-guide.md)** - Guida completa all'interfaccia a riga di comando
+4. **[Utilizzo GUI](guides/gui-guide.md)** - Guida all'interfaccia grafica
+5. **[API Usage](guides/api-usage.md)** - Come utilizzare l'API REST
+6. **[Troubleshooting](guides/troubleshooting.md)** - Risoluzione problemi comuni
 
 ### 🏗️ Guide Sviluppatore
 
 1. **[Development Setup](development.md)** - Configurazione ambiente di sviluppo
-2. **[Architecture Overview](architecture.md)** - Panoramica dell'architettura del sistema
+2. **[Architecture Overview](architecture/overview.md)** - Panoramica dell'architettura del sistema
 3. **[Contributing Guidelines](../CONTRIBUTING.md)** - Come contribuire al progetto
-4. **[Testing Guide](../TESTING.md)** - Guida completa al testing
-5. **[Security Guidelines](security-dev.md)** - Linee guida per lo sviluppo sicuro
+4. **[Testing Guide](testing.md)** - Guida completa al testing
+5. **[Security Guidelines](architecture/security-dev.md)** - Linee guida per lo sviluppo sicuro
 
 ### 🚀 Guide Deployment
 
-1. **[Docker Deployment](docker-guide.md)** - Deploy con Docker e Docker Compose
-2. **[Production Setup](production.md)** - Configurazione per produzione
-3. **[Monitoring](monitoring.md)** - Monitoraggio e logging
-4. **[Backup & Recovery](backup.md)** - Strategie di backup e recovery
+1. **[Docker Deployment](deployment.md)** - Deploy con Docker e Docker Compose
+2. **[Production Setup](guides/production.md)** - Configurazione per produzione
+3. **[Monitoring](guides/monitoring.md)** - Monitoraggio e logging
+4. **[Backup & Recovery](guides/backup.md)** - Strategie di backup e recovery
 
 ## 📖 API Reference
 
@@ -84,12 +84,12 @@ sigma gui
 ### Interfaces
 
 - **[CLI Reference](api/cli.md)** - Riferimento completo comandi CLI
-- **[REST API](api/rest.md)** - Documentazione endpoint REST
+- **[REST API](api.md)** - Documentazione endpoint REST
 - **[GUI Components](api/gui.md)** - Componenti dell'interfaccia grafica
 
 ### Utilities
 
-- **[Configuration](api/config.md)** - Sistema di configurazione
+- **[Configuration](config/config.md)** - Sistema di configurazione
 - **[Security Utils](api/security.md)** - Utilità di sicurezza
 - **[Validation](api/validation.md)** - Sistema di validazione input
 
@@ -187,7 +187,7 @@ pytest --cov=sigma_nex --cov-report=html
 pytest tests/unit/test_runner.py -v
 ```
 
-Per maggiori dettagli, consulta la [Guida Testing completa](../TESTING.md).
+Per maggiori dettagli, consulta la [Guida Testing completa](testing.md).
 
 ## 🤝 Contribuire
 
@@ -214,7 +214,7 @@ SIGMA-NEX è un progetto open source e accoglie contributi dalla comunità:
 
 SIGMA-NEX prende seriamente la sicurezza. Per segnalazioni di vulnerabilità:
 
-- **Email**: security@sigma-nex.org
+- **Email**: rootedlab6@gmail.com
 - **Policy completa**: [SECURITY.md](../SECURITY.md)
 
 ### Best Practices
@@ -228,30 +228,29 @@ SIGMA-NEX prende seriamente la sicurezza. Per segnalazioni di vulnerabilità:
 
 ```
 docs/
-├── README.md                 # Questo file
-├── api.md                   # API Reference generale
+├── README.md                 # Questo file - Panoramica generale
+├── api.md                   # API Reference base
 ├── development.md           # Guida sviluppo
-├── installation.md          # Guida installazione dettagliata
-├── configuration.md         # Configurazione avanzata
-├── troubleshooting.md       # Risoluzione problemi
-├── api/                     # API Reference dettagliata
-│   ├── runner.md
-│   ├── context.md
-│   ├── retriever.md
-│   └── ...
-├── guides/                  # Guide dettagliate
-│   ├── cli-guide.md
-│   ├── gui-guide.md
-│   ├── api-usage.md
-│   └── ...
-├── architecture/            # Documentazione architettura
-│   ├── overview.md
-│   ├── patterns.md
-│   └── ...
-└── config/                  # Configurazione
-    ├── advanced.md
-    ├── environment.md
-    └── ...
+├── deployment.md            # Guida deployment
+├── testing.md              # Guida testing
+├── installation.md         # Guida installazione dettagliata
+├── api/                    # API Reference dettagliata
+│   ├── runner.md           # Core Runner API
+│   ├── context.md          # Context Management API
+│   ├── retriever.md        # Retrieval System API
+│   ├── translation.md      # Translation Service API
+│   └── cli.md              # CLI Reference completa
+├── guides/                 # Guide dettagliate
+│   ├── cli-guide.md        # Guida CLI completa
+│   ├── gui-guide.md        # Guida interfaccia grafica
+│   ├── api-usage.md        # Utilizzo API REST
+│   ├── configuration.md    # Configurazione del sistema
+│   └── troubleshooting.md  # Risoluzione problemi
+├── architecture/           # Documentazione architettura
+│   └── overview.md         # Panoramica architetturale
+└── config/                 # Configurazione
+    ├── config.md           # Reference configurazione
+    └── security.md         # Configurazione sicurezza
 ```
 
 ## 🔗 Link Utili
@@ -268,7 +267,7 @@ Hai bisogno di aiuto? Ecco come contattarci:
 
 - 🐛 **Bug Reports**: [GitHub Issues](https://github.com/SebastianMartinNS/SYGMA-NEX/issues)
 - 💡 **Feature Requests**: [GitHub Discussions](https://github.com/SebastianMartinNS/SYGMA-NEX/discussions)
-- 📧 **Email**: dev@sigma-nex.org
+- 📧 **Email**: rootedlab6@gmail.com
 - 💬 **Community**: [Discord Server](#) (coming soon)
 
 ---

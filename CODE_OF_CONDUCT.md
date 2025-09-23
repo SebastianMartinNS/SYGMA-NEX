@@ -39,7 +39,7 @@ Questo Codice di Condotta si applica in tutti gli spazi comunitari, e si applica
 
 I casi di comportamento abusivo, molesto o altrimenti inaccettabile possono essere segnalati ai leader della comunità responsabili dell'applicazione a:
 
-- 📧 **Email**: conduct@sigma-nex.org
+- 📧 **Email**: rootedlab6@gmail.com
 - 🐛 **GitHub Issue**: [Segnalazione riservata](https://github.com/sigma-nex/sigma-nex/security/advisories/new)
 - 💬 **Discussioni private**: Contatta un maintainer direttamente
 
