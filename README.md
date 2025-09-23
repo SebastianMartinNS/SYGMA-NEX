@@ -12,7 +12,7 @@
 
 *Un agente cognitivo avanzato progettato per scenari critici, blackout e ambienti ostili*
 
-[📖 Documentazione](https://github.com/SebastianMartinNS/SYGMA-NEX/wiki) • [🚀 Demo](https://sigma-nex.org) • [💬 Discussioni](https://github.com/SebastianMartinNS/SYGMA-NEX/discussions)
+[📖 Documentazione](docs/) • [🚀 Releases](https://github.com/SebastianMartinNS/SYGMA-NEX/releases) • [💬 Discussioni](https://github.com/SebastianMartinNS/SYGMA-NEX/discussions)
 
 </div>
 
@@ -363,11 +363,10 @@ mypy sigma_nex/
 
 ## 📚 Documentazione
 
-- 📖 **[Wiki Completo](https://github.com/SebastianMartinNS/SYGMA-NEX/wiki)**
-- 🔌 **[API Reference](docs/api.md)**
+- 📖 **[API Reference](docs/api.md)**
 - 🛠️ **[Guida Sviluppo](docs/development.md)**
 - 🧪 **[Testing Guide](docs/testing.md)**
-- 🚀 **[Deployment](docs/deployment.md)**
+- 🚀 **[Deployment Guide](docs/deployment.md)**
 
 ## 🏷️ Versioni e Changelog
 
@@ -408,10 +407,10 @@ copies of the Software...
 ## 🆘 Supporto e Contatti
 
 - 🐛 **[Bug Reports](https://github.com/SebastianMartinNS/SYGMA-NEX/issues)**
-- 💡 **[Feature Requests](https://github.com/sigma-nex/sigma-nex/discussions)**
-- 💬 **[Community Chat](https://github.com/sigma-nex/sigma-nex/discussions)**
-- 📧 **Email**: dev@sigma-nex.org
-- 🌐 **Website**: [https://sigma-nex.org](https://sigma-nex.org)
+- 💡 **[Feature Requests](https://github.com/SebastianMartinNS/SYGMA-NEX/discussions)**
+- 💬 **[Community Chat](https://github.com/SebastianMartinNS/SYGMA-NEX/discussions)**
+- 📧 **Email**: martin.sebastian@sigma-nex.org
+- 🌐 **Repository**: [https://github.com/SebastianMartinNS/SYGMA-NEX](https://github.com/SebastianMartinNS/SYGMA-NEX)
 
 ## 🙏 Riconoscimenti
 
@@ -427,13 +426,17 @@ copies of the Software...
 
 Un ringraziamento speciale a tutti i contributori che rendono SIGMA-NEX possibile!
 
+**Sviluppatore Principale**: Martin Sebastian
+
 ---
 
 <div align="center">
 
 **🌟 Se questo progetto ti è utile, considera di lasciare una stella!**
 
-[![GitHub stars](https://img.shields.io/github/stars/sigma-nex/sigma-nex?style=social)](https://github.com/sigma-nex/sigma-nex/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/sigma-nex/sigma-nex?style=social)](https://github.com/sigma-nex/sigma-nex/fork)
+[![GitHub stars](https://img.shields.io/github/stars/SebastianMartinNS/SYGMA-NEX?style=social)](https://github.com/SebastianMartinNS/SYGMA-NEX/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/SebastianMartinNS/SYGMA-NEX?style=social)](https://github.com/SebastianMartinNS/SYGMA-NEX/fork)
+
+**Progetto sviluppato da Martin Sebastian - 2025**
 
 </div>
