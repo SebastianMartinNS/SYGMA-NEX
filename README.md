@@ -409,7 +409,7 @@ copies of the Software...
 - 🐛 **[Bug Reports](https://github.com/SebastianMartinNS/SYGMA-NEX/issues)**
 - 💡 **[Feature Requests](https://github.com/SebastianMartinNS/SYGMA-NEX/discussions)**
 - 💬 **[Community Chat](https://github.com/SebastianMartinNS/SYGMA-NEX/discussions)**
-- 📧 **Email**: martin.sebastian@sigma-nex.org
+- 📧 **Email**: rootedlab6@gmail.com
 - 🌐 **Repository**: [https://github.com/SebastianMartinNS/SYGMA-NEX](https://github.com/SebastianMartinNS/SYGMA-NEX)
 
 ## 🙏 Riconoscimenti

@@ -252,10 +252,10 @@ notifications:
     enabled: false
     smtp_server: "smtp.example.com"
     smtp_port: 587
-    username: "sigma-nex@example.com"
+    username: "rootedlab6@gmail.com"
     password: "${SMTP_PASSWORD}"  # Usa variabile d'ambiente
     recipients:
-      - "admin@example.com"
+      - "rootedlab6@gmail.com"
   
   # Slack notifications
   slack:
@@ -343,6 +343,6 @@ system_prompt: |
 # Compatibile con SIGMA-NEX v0.2.1+
 # 
 # Autore: Martin Sebastian
-# Email: martin.sebastian@sigma-nex.org
+# Email: rootedlab6@gmail.com
 # Progetto: SIGMA-NEX - Sistema di Intelligenza Artificiale Autonomo
 # Repository: https://github.com/SebastianMartinNS/SYGMA-NEX

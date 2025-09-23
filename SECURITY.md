@@ -125,7 +125,7 @@ pip-licenses
 ### Contatti di Emergenza
 - **🔴 Security Team**: rootedlab6@gmail.com
 - **📞 Emergency Hotline**: +39 XXX XXX XXXX (solo per emergenze critiche)
-- **💻 On-Call Engineer**: adriansebastianmartin@gmail.com
+- **💻 On-Call Engineer**: rootedlab6@gmail.com
 
 ## 📚 Risorse Sicurezza
 
