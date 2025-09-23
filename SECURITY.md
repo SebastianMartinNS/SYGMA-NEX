@@ -17,7 +17,7 @@ SIGMA-NEX prende molto seriamente la sicurezza. Se scopri una vulnerabilità di 
 
 ### 📧 Come Segnalare
 
-**Invia un'email a:** security@sigma-nex.org
+**Invia un'email a:** rootedlab6@gmail.com
 
 Include nel tuo report:
 - 📝 **Descrizione dettagliata** della vulnerabilità
@@ -99,13 +99,6 @@ logger.info("Query processed for user %s", user_id)  # Non loggare dati sensibil
 logger.debug("Query details: %s", query_hash)  # Usa hash invece di testo grezzo
 ```
 
-### Code Review Checklist
-- [ ] Input validation presente?
-- [ ] Error handling sicuro?
-- [ ] No hardcoded secrets?
-- [ ] Logging non espone dati sensibili?
-- [ ] Dependencies aggiornate?
-- [ ] Tests di sicurezza presenti?
 
 ### Dependency Management
 ```bash
@@ -160,7 +153,7 @@ Questa policy di sicurezza viene rivista e aggiornata regolarmente. Le modifiche
 - 📧 Notificate via email agli stakeholder
 - 📝 Documentate con data e versione
 
-**Ultimo aggiornamento**: Dicembre 2024
+**Ultimo aggiornamento**: SETTEMBRE 2025
 **Versione**: 1.0
 
 ---
