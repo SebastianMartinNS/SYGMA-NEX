@@ -17,7 +17,7 @@ SIGMA-NEX prende molto seriamente la sicurezza. Se scopri una vulnerabilità di 
 
 ### 📧 Come Segnalare
 
-**Invia un'email a:** security@sigma-nex.org
+**Invia un'email a:** rootedlab6@gmail.com
 
 Include nel tuo report:
 - 📝 **Descrizione dettagliata** della vulnerabilità
@@ -99,13 +99,6 @@ logger.info("Query processed for user %s", user_id)  # Non loggare dati sensibil
 logger.debug("Query details: %s", query_hash)  # Usa hash invece di testo grezzo
 ```
 
-### Code Review Checklist
-- [ ] Input validation presente?
-- [ ] Error handling sicuro?
-- [ ] No hardcoded secrets?
-- [ ] Logging non espone dati sensibili?
-- [ ] Dependencies aggiornate?
-- [ ] Tests di sicurezza presenti?
 
 ### Dependency Management
 ```bash
@@ -130,9 +123,9 @@ pip-licenses
 6. **📝 Post-Mortem**: Analisi e documentazione per prevenzione futura
 
 ### Contatti di Emergenza
-- **🔴 Security Team**: security@sigma-nex.org
+- **🔴 Security Team**: rootedlab6@gmail.com
 - **📞 Emergency Hotline**: +39 XXX XXX XXXX (solo per emergenze critiche)
-- **💻 On-Call Engineer**: oncall@sigma-nex.org
+- **💻 On-Call Engineer**: adriansebastianmartin@gmail.com
 
 ## 📚 Risorse Sicurezza
 
@@ -160,7 +153,7 @@ Questa policy di sicurezza viene rivista e aggiornata regolarmente. Le modifiche
 - 📧 Notificate via email agli stakeholder
 - 📝 Documentate con data e versione
 
-**Ultimo aggiornamento**: Dicembre 2024
+**Ultimo aggiornamento**: SETTEMBRE 2025
 **Versione**: 1.0
 
 ---
@@ -178,6 +171,6 @@ Ringraziamo tutti i security researcher che contribuiscono a rendere SIGMA-NEX p
 
 **🔒 La sicurezza è una responsabilità condivisa**
 
-[Segnala una vulnerabilità](mailto:security@sigma-nex.org) • [Torna alla documentazione principale](../README.md)
+[Segnala una vulnerabilità](rootedlab6@gmail.com) • [Torna alla documentazione principale](../README.md)
 
 </div>
