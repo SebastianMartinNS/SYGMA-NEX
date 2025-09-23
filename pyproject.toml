@@ -53,10 +53,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/sigma-nex/sigma-nex"
+Homepage = "https://github.com/SebastianMartinNS/SYGMA-NEX"
 Documentation = "https://github.com/sigma-nex/sigma-nex/wiki"
-Repository = "https://github.com/sigma-nex/sigma-nex.git"
-"Bug Reports" = "https://github.com/sigma-nex/sigma-nex/issues"
+Repository = "https://github.com/SebastianMartinNS/SYGMA-NEX.git"
+"Bug Reports" = "https://github.com/SebastianMartinNS/SYGMA-NEX/issues"
 
 [project.scripts]
 sigma = "sigma_nex.cli:main"

@@ -12,7 +12,7 @@
 
 *Un agente cognitivo avanzato progettato per scenari critici, blackout e ambienti ostili*
 
-[📖 Documentazione](https://github.com/sigma-nex/sigma-nex/wiki) • [🚀 Demo](https://sigma-nex.org) • [💬 Discussioni](https://github.com/sigma-nex/sigma-nex/discussions)
+[📖 Documentazione](https://github.com/SebastianMartinNS/SYGMA-NEX/wiki) • [🚀 Demo](https://sigma-nex.org) • [💬 Discussioni](https://github.com/SebastianMartinNS/SYGMA-NEX/discussions)
 
 </div>
 
@@ -81,8 +81,8 @@ SIGMA-NEX è un sistema di intelligenza artificiale completamente offline proget
 
 ```bash
 # 1. Clona il repository
-git clone https://github.com/sigma-nex/sigma-nex.git
-cd sigma-nex
+git clone https://github.com/SebastianMartinNS/SYGMA-NEX.git
+cd SYGMA-NEX
 
 # 2. Esegui setup automatico (Windows)
 .\venvesetup.bat
@@ -363,7 +363,7 @@ mypy sigma_nex/
 
 ## 📚 Documentazione
 
-- 📖 **[Wiki Completo](https://github.com/sigma-nex/sigma-nex/wiki)**
+- 📖 **[Wiki Completo](https://github.com/SebastianMartinNS/SYGMA-NEX/wiki)**
 - 🔌 **[API Reference](docs/api.md)**
 - 🛠️ **[Guida Sviluppo](docs/development.md)**
 - 🧪 **[Testing Guide](docs/testing.md)**
@@ -407,7 +407,7 @@ copies of the Software...
 
 ## 🆘 Supporto e Contatti
 
-- 🐛 **[Bug Reports](https://github.com/sigma-nex/sigma-nex/issues)**
+- 🐛 **[Bug Reports](https://github.com/SebastianMartinNS/SYGMA-NEX/issues)**
 - 💡 **[Feature Requests](https://github.com/sigma-nex/sigma-nex/discussions)**
 - 💬 **[Community Chat](https://github.com/sigma-nex/sigma-nex/discussions)**
 - 📧 **Email**: dev@sigma-nex.org
