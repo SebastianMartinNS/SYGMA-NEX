@@ -1,0 +1,351 @@
+name: 🧪 SIGMA-NEX CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main, develop ]
+
+# Cancella job precedenti dello stesso workflow se ne parte uno nuovo
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: '3.11'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # 🔍 Pre-checks: Linting e Security
+  pre-checks:
+    name: 🔍 Pre-checks
+    runs-on: ubuntu-latest
+    outputs:
+      python-matrix: ${{ steps.set-matrix.outputs.python-matrix }}
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev]"
+
+    - name: 🎨 Code formatting check (Black)
+      run: black --check sigma_nex tests
+
+    - name: 📏 Import sorting check (isort)
+      run: isort --check-only sigma_nex tests
+
+    - name: 🔍 Linting (flake8)
+      run: flake8 sigma_nex tests
+
+    - name: 🏷️ Type checking (mypy)
+      run: mypy sigma_nex --ignore-missing-imports
+      continue-on-error: true
+
+    - name: 🔒 Security scan (Bandit)
+      run: bandit -r sigma_nex -f json -o bandit-report.json
+      continue-on-error: true
+
+    - name: 🛡️ Dependency vulnerability check
+      run: safety check --json --output safety-report.json
+      continue-on-error: true
+
+    - name: 📊 Upload security reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+          safety-report.json
+
+    - name: 🎯 Set Python matrix
+      id: set-matrix
+      run: |
+        echo "python-matrix=[\"3.10\", \"3.11\", \"3.12\"]" >> $GITHUB_OUTPUT
+
+  # 🧪 Test suite con multiple versioni Python
+  test:
+    name: 🧪 Tests (Python ${{ matrix.python-version }})
+    needs: pre-checks
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ${{ fromJson(needs.pre-checks.outputs.python-matrix) }}
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+
+    - name: 🐍 Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev]"
+
+    - name: 🧪 Run unit tests
+      run: |
+        pytest tests/unit/ -v \
+          --cov=sigma_nex \
+          --cov-report=xml \
+          --cov-report=term-missing \
+          --junit-xml=pytest-results.xml
+
+    - name: 🔗 Run integration tests
+      run: |
+        pytest tests/integration/ -v \
+          --junit-xml=pytest-integration-results.xml
+      env:
+        SIGMA_SKIP_OLLAMA: "true"
+
+    - name: 📊 Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      if: matrix.python-version == env.PYTHON_VERSION
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        file: ./coverage.xml
+        flags: unittests
+        name: sigma-nex-coverage
+        fail_ci_if_error: false
+
+    - name: 📈 Publish test results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: |
+          pytest-results.xml
+          pytest-integration-results.xml
+
+  # 🚀 Performance tests
+  performance:
+    name: 🚀 Performance Tests
+    needs: pre-checks
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'performance')
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev]" pytest-benchmark
+
+    - name: ⚡ Run performance tests
+      run: |
+        pytest tests/performance/ -v \
+          --benchmark-json=benchmark-results.json
+      env:
+        SIGMA_SKIP_OLLAMA: "true"
+
+    - name: 📊 Upload benchmark results
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmark-results
+        path: benchmark-results.json
+
+  # 🐳 Docker build and test
+  docker:
+    name: 🐳 Docker Build & Test
+    needs: pre-checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+
+    - name: 🐳 Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: 🏗️ Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        target: production
+        push: false
+        tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: 🧪 Test Docker image
+      run: |
+        docker run --rm \
+          -e SIGMA_SKIP_OLLAMA=true \
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test \
+          sigma self-check
+
+    - name: 🔐 Log in to Container Registry
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 🏷️ Extract metadata
+      if: github.event_name != 'pull_request'
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha,prefix={{branch}}-
+
+    - name: 🚀 Build and push Docker image
+      if: github.event_name != 'pull_request'
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        target: production
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  # 📄 Documentation build
+  docs:
+    name: 📄 Documentation
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 📦 Install documentation dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install sphinx sphinx-rtd-theme myst-parser
+
+    - name: 🔨 Build documentation
+      run: |
+        mkdir -p docs/_build
+        sphinx-build -b html docs docs/_build/html
+      continue-on-error: true
+
+    - name: 🌐 Deploy to GitHub Pages
+      if: success()
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/_build/html
+
+  # 🏷️ Release automation
+  release:
+    name: 🏷️ Release
+    needs: [pre-checks, test, docker]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 📦 Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+
+    - name: 🏗️ Build package
+      run: python -m build
+
+    - name: 🔍 Check package
+      run: twine check dist/*
+
+    - name: 📝 Generate release notes
+      id: release_notes
+      run: |
+        # Estrai note dalla CHANGELOG.md
+        sed -n '/^## \[.*\]/,/^## \[.*\]/p' CHANGELOG.md | head -n -1 > release_notes.md
+        echo "notes_file=release_notes.md" >> $GITHUB_OUTPUT
+
+    - name: 🚀 Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        body_path: ${{ steps.release_notes.outputs.notes_file }}
+        files: |
+          dist/*.whl
+          dist/*.tar.gz
+        draft: false
+        prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
+
+    - name: 📤 Publish to PyPI
+      if: ${{ !contains(github.ref, 'alpha') && !contains(github.ref, 'beta') && !contains(github.ref, 'rc') }}
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      run: twine upload dist/*
+
+  # 📊 Quality gate finale
+  quality-gate:
+    name: 📊 Quality Gate
+    needs: [pre-checks, test, docker, performance]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: 🎯 Check job results
+      run: |
+        echo "Pre-checks: ${{ needs.pre-checks.result }}"
+        echo "Tests: ${{ needs.test.result }}"
+        echo "Docker: ${{ needs.docker.result }}"
+        echo "Performance: ${{ needs.performance.result }}"
+        
+        # Fail se ci sono fallimenti critici
+        if [[ "${{ needs.pre-checks.result }}" == "failure" || "${{ needs.test.result }}" == "failure" || "${{ needs.docker.result }}" == "failure" ]]; then
+          echo "❌ Quality gate failed - critical jobs failed"
+          exit 1
+        fi
+        
+        echo "✅ Quality gate passed"
+
+    - name: 📈 Quality gate status
+      run: |
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          echo "🔍 PR Quality Gate: PASSED ✅"
+        else
+          echo "🚀 CI Quality Gate: PASSED ✅"
+        fi

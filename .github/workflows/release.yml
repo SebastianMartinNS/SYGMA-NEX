@@ -1,0 +1,394 @@
+name: 🏷️ Release Automation
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Type of release'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  PYTHON_VERSION: '3.11'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # 🔖 Version management
+  version:
+    name: 🔖 Version Management
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      is_prerelease: ${{ steps.version.outputs.is_prerelease }}
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 📦 Install bump2version
+      run: pip install bump2version
+
+    - name: 🔖 Get or create version
+      id: version
+      run: |
+        if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          # Manual release - bump version
+          echo "Creating new ${{ inputs.release_type }} release..."
+          
+          # Configure git
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # Bump version
+          bump2version ${{ inputs.release_type }} --tag
+          
+          # Get new version
+          VERSION=$(python -c "import sigma_nex; print(sigma_nex.__version__)")
+          TAG="v${VERSION}"
+          
+          # Push changes
+          git push origin HEAD:${{ github.ref_name }} --tags
+          
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "is_prerelease=${{ inputs.prerelease }}" >> $GITHUB_OUTPUT
+        else
+          # Tagged release
+          TAG=${GITHUB_REF#refs/tags/}
+          VERSION=${TAG#v}
+          
+          # Check if it's a prerelease
+          if [[ "$TAG" =~ (alpha|beta|rc) ]]; then
+            IS_PRERELEASE=true
+          else
+            IS_PRERELEASE=false
+          fi
+          
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "is_prerelease=${IS_PRERELEASE}" >> $GITHUB_OUTPUT
+        fi
+
+  # 🏗️ Build artifacts
+  build:
+    name: 🏗️ Build Artifacts
+    needs: version
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ needs.version.outputs.tag }}
+
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 📦 Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build wheel setuptools
+
+    - name: ✏️ Update version in files
+      run: |
+        VERSION=${{ needs.version.outputs.version }}
+        
+        # Update pyproject.toml
+        sed -i "s/version = \".*\"/version = \"${VERSION}\"/" pyproject.toml
+        
+        # Update __init__.py
+        echo "__version__ = \"${VERSION}\"" > sigma_nex/__init__.py
+
+    - name: 🏗️ Build source distribution
+      run: python -m build --sdist
+
+    - name: 🏗️ Build wheel
+      run: python -m build --wheel
+
+    - name: 🔍 Check distributions
+      run: |
+        pip install twine
+        twine check dist/*
+
+    - name: 📊 Show build info
+      run: |
+        ls -la dist/
+        tar -tzf dist/*.tar.gz | head -20
+        unzip -l dist/*.whl | head -20
+
+    - name: 📤 Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: python-packages
+        path: dist/
+
+  # 🐳 Build Docker image
+  docker-build:
+    name: 🐳 Build Docker Image
+    needs: version
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ needs.version.outputs.tag }}
+
+    - name: 🐳 Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: 🔐 Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 🏷️ Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=semver,pattern={{version}},value=${{ needs.version.outputs.version }}
+          type=semver,pattern={{major}}.{{minor}},value=${{ needs.version.outputs.version }}
+          type=semver,pattern={{major}},value=${{ needs.version.outputs.version }}
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: 🏗️ Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        target: production
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        build-args: |
+          VERSION=${{ needs.version.outputs.version }}
+
+    - name: 🔍 Test Docker image
+      run: |
+        docker run --rm \
+          -e SIGMA_SKIP_OLLAMA=true \
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.version.outputs.version }} \
+          sigma self-check
+
+  # 📄 Generate release notes
+  release-notes:
+    name: 📄 Generate Release Notes
+    needs: version
+    runs-on: ubuntu-latest
+    outputs:
+      release_notes: ${{ steps.notes.outputs.release_notes }}
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 📝 Extract changelog
+      id: changelog
+      run: |
+        VERSION=${{ needs.version.outputs.version }}
+        
+        # Estrai sezione dalla CHANGELOG.md
+        awk "/^## \[${VERSION}\]/{flag=1; next} /^## \[/{flag=0} flag" CHANGELOG.md > current_changes.md
+        
+        # Se non trova la sezione, genera automaticamente
+        if [ ! -s current_changes.md ]; then
+          echo "### What's Changed" > current_changes.md
+          echo "" >> current_changes.md
+          
+          # Ottieni l'ultimo tag
+          LAST_TAG=$(git describe --tags --abbrev=0 HEAD^)
+          
+          # Genera note dai commit
+          git log ${LAST_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges >> current_changes.md
+        fi
+
+    - name: 📊 Generate statistics
+      id: stats
+      run: |
+        # Statistiche del rilascio
+        echo "" >> current_changes.md
+        echo "### 📊 Release Statistics" >> current_changes.md
+        echo "" >> current_changes.md
+        
+        # Conta file modificati
+        LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+        if [ -n "$LAST_TAG" ]; then
+          FILES_CHANGED=$(git diff --name-only ${LAST_TAG}..HEAD | wc -l)
+          COMMITS=$(git rev-list --count ${LAST_TAG}..HEAD)
+          ADDITIONS=$(git diff --shortstat ${LAST_TAG}..HEAD | awk '{print $4}' | sed 's/,//')
+          DELETIONS=$(git diff --shortstat ${LAST_TAG}..HEAD | awk '{print $6}')
+          
+          echo "- 📁 Files changed: ${FILES_CHANGED}" >> current_changes.md
+          echo "- 💾 Commits: ${COMMITS}" >> current_changes.md
+          echo "- ➕ Lines added: ${ADDITIONS:-0}" >> current_changes.md
+          echo "- ➖ Lines deleted: ${DELETIONS:-0}" >> current_changes.md
+        fi
+
+    - name: 🎯 Add contributors
+      run: |
+        echo "" >> current_changes.md
+        echo "### 👥 Contributors" >> current_changes.md
+        echo "" >> current_changes.md
+        echo "Thanks to all contributors who made this release possible:" >> current_changes.md
+        echo "" >> current_changes.md
+        
+        # Ottieni contributori
+        LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+        if [ -n "$LAST_TAG" ]; then
+          git log ${LAST_TAG}..HEAD --pretty=format:"- @%an" | sort -u >> current_changes.md
+        else
+          echo "- @${{ github.actor }}" >> current_changes.md
+        fi
+
+    - name: 📝 Finalize release notes
+      id: notes
+      run: |
+        # Aggiungi header
+        {
+          echo "# 🚀 SIGMA-NEX v${{ needs.version.outputs.version }}"
+          echo ""
+          cat current_changes.md
+          echo ""
+          echo "### 📦 Installation"
+          echo ""
+          echo "\`\`\`bash"
+          echo "# Via pip"
+          echo "pip install sigma-nex==${{ needs.version.outputs.version }}"
+          echo ""
+          echo "# Via Docker"
+          echo "docker pull ghcr.io/sebastianmartinns/sygma-nex:${{ needs.version.outputs.version }}"
+          echo "\`\`\`"
+          echo ""
+          echo "### 🔗 Links"
+          echo ""
+          echo "- [📖 Documentation](https://github.com/SebastianMartinNS/SYGMA-NEX/wiki)"
+          echo "- [🐛 Report Issues](https://github.com/SebastianMartinNS/SYGMA-NEX/issues)"
+          echo "- [💬 Discussions](https://github.com/SebastianMartinNS/SYGMA-NEX/discussions)"
+        } > final_release_notes.md
+        
+        # Set output per GitHub Actions
+        echo "release_notes=final_release_notes.md" >> $GITHUB_OUTPUT
+
+    - name: 📤 Upload release notes
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-notes
+        path: final_release_notes.md
+
+  # 🚀 Create GitHub release
+  github-release:
+    name: 🚀 GitHub Release
+    needs: [version, build, docker-build, release-notes]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: ./artifacts
+
+    - name: 🏷️ Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ needs.version.outputs.tag }}
+        name: "SIGMA-NEX ${{ needs.version.outputs.version }}"
+        body_path: ./artifacts/release-notes/final_release_notes.md
+        files: |
+          ./artifacts/python-packages/*.whl
+          ./artifacts/python-packages/*.tar.gz
+        draft: false
+        prerelease: ${{ needs.version.outputs.is_prerelease }}
+        generate_release_notes: false
+
+  # 📤 Publish to PyPI
+  pypi-publish:
+    name: 📤 Publish to PyPI
+    needs: [version, build, github-release]
+    runs-on: ubuntu-latest
+    if: ${{ !needs.version.outputs.is_prerelease }}
+    
+    steps:
+    - name: 📥 Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: python-packages
+        path: dist/
+
+    - name: 📤 Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.GITHUB_TOKEN }}
+        verbose: true
+
+  # 📧 Notification
+  notify:
+    name: 📧 Notify Release
+    needs: [version, github-release, pypi-publish]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: 🎉 Success notification
+      if: ${{ needs.github-release.result == 'success' }}
+      run: |
+        echo "🎉 SIGMA-NEX ${{ needs.version.outputs.version }} released successfully!"
+        echo "📦 GitHub Release: ✅"
+        echo "🐳 Docker Image: ✅"
+        
+        if [[ "${{ needs.pypi-publish.result }}" == "success" ]]; then
+          echo "📤 PyPI Publish: ✅"
+        else
+          echo "📤 PyPI Publish: ⏭️ (Skipped for prerelease)"
+        fi
+
+    - name: ❌ Failure notification
+      if: ${{ needs.github-release.result == 'failure' }}
+      run: |
+        echo "❌ Release failed for SIGMA-NEX ${{ needs.version.outputs.version }}"
+        echo "Check the logs for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+    # Opzionale: Invia notifica su Discord/Slack
+    - name: 📢 Discord notification
+      if: ${{ needs.github-release.result == 'success' }}
+      uses: Ilshidur/action-discord@master
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        args: |
+          🚀 **SIGMA-NEX ${{ needs.version.outputs.version }}** è stato rilasciato!
+          
+          📦 **Download**: https://github.com/SebastianMartinNS/SYGMA-NEX/releases/tag/${{ needs.version.outputs.tag }}
+          🐳 **Docker**: `docker pull ghcr.io/sebastianmartinns/sygma-nex:${{ needs.version.outputs.version }}`
+          📖 **Changelog**: Controlla le release notes per i dettagli!

@@ -1,0 +1,143 @@
+# Docker Compose per Development - SIGMA-NEX
+version: '3.8'
+
+# Usa la configurazione base
+include:
+  - docker-compose.yml
+
+services:
+  # Override per development
+  sigma-nex:
+    build:
+      target: development
+    
+    # Mount codice sorgente per hot-reload
+    volumes:
+      - .:/app
+      - sigma-data:/app/data
+      - sigma-logs:/app/logs
+      - ./config.yaml:/app/config.yaml
+    
+    # Variabili per development
+    environment:
+      - SIGMA_LOG_LEVEL=DEBUG
+      - SIGMA_SECURITY_MODE=disabled
+      - ENABLE_OLLAMA=true
+      - OLLAMA_HOST=http://ollama:11434
+      - PYTHONPATH=/app
+      - FLASK_ENV=development
+      - WATCHFILES_FORCE_POLLING=true
+    
+    # Override comando per development con hot-reload
+    command: ["sigma", "server", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    
+    # Porte aggiuntive per debugging
+    ports:
+      - "8000:8000"
+      - "5678:5678"  # Debug port per VSCode/PyCharm
+      - "8001:8001"  # Porta alternativa
+    
+    # Development-specific health check (più frequente)
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  # Ollama per development (meno restrittivo)
+  ollama:
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_KEEP_ALIVE=1h  # Meno tempo per development
+      - OLLAMA_MAX_LOADED_MODELS=1
+      - OLLAMA_DEBUG=1
+    
+    # Rimuovi limiti di memoria per development
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 6G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+
+  # Servizio per test database (opzionale)
+  test-postgres:
+    image: postgres:15-alpine
+    container_name: sigma-test-db
+    restart: unless-stopped
+    
+    networks:
+      - sigma-net
+    
+    ports:
+      - "5433:5432"  # Porta diversa per non confliggere
+    
+    environment:
+      - POSTGRES_DB=sigma_nex_test
+      - POSTGRES_USER=test_user
+      - POSTGRES_PASSWORD=test_password
+    
+    volumes:
+      - test-db-data:/var/lib/postgresql/data
+    
+    profiles:
+      - test
+
+  # Redis per caching (development)
+  redis:
+    image: redis:7-alpine
+    container_name: sigma-redis-dev
+    restart: unless-stopped
+    
+    networks:
+      - sigma-net
+    
+    ports:
+      - "6379:6379"
+    
+    command: redis-server --appendonly yes
+    
+    volumes:
+      - redis-data:/data
+    
+    profiles:
+      - cache
+
+  # Jupyter Notebook per analisi e sviluppo
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: sigma-jupyter
+    
+    networks:
+      - sigma-net
+    
+    ports:
+      - "8888:8888"
+    
+    volumes:
+      - .:/app
+      - jupyter-data:/home/sigma/.jupyter
+    
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=sigma-nex-dev
+    
+    command: ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+    
+    profiles:
+      - jupyter
+
+# Volumi aggiuntivi per development
+volumes:
+  test-db-data:
+    driver: local
+  redis-data:
+    driver: local
+  jupyter-data:
+    driver: local
