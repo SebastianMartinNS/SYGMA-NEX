@@ -209,7 +209,6 @@ test_temp_file.py.patch
 build_index.py
 build_index1.py
 setup_dev.bat
-venvesetup.bat
 cleanup.bat
 avvia_gui.bat
 
