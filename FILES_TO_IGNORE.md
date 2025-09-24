@@ -1,35 +1,36 @@
-# Files da Ignorare per GitHub Upload
+# Repository Cleanup - Files Rimossi per Versione Professionale
 
-Questo documento elenca tutti i file che devono essere ignorati prima di caricare il progetto su GitHub. Questi file sono già stati aggiunti al .gitignore.
+Questo documento elenca i file che sono stati rimossi dal repository per mantenere una struttura pulita e professionale.
 
-## File di Analisi e Development (Non necessari in produzione)
+## ✅ **File Rimossi - Completato**
 
-### Script di Analisi Coverage
-- `ANALISI_COVERAGE_CORE.md`
-- `analyze_coverage.py`
-- `detailed_coverage_analysis.py`
-- `final_coverage_report.py`
-- `final_real_analysis.py`
-- `improvement_report.py`
-- `real_analysis.py`
+### Script di Test Temporanei (RIMOSSI ✅)
+- ~~`test_basic.py`~~ - Rimosso: file di test temporaneo
+- ~~`marian_test.py`~~ - Rimosso: test sperimentale traduzione
+- ~~`MARIANDWND.py`~~ - Rimosso: file di test non documentato
+- ~~`faiss.py`~~ - Rimosso: script di test FAISS standalone
+- ~~`text_translate.py`~~ - Rimosso: test traduzione temporaneo
 
-### File di Test Temporanei
-- `check_tests.py`
-- `quick_fix_tests.py`
-- `test_basic.py`
-- `test_temp_file.py.patch`
-- `marian_test.py`
-- `MARIANDWND.py`
-- `faiss.py`
-- `text_translate.py`
+### Script di Build/Setup Locali (RIMOSSI ✅)
+- ~~`build_index.py`~~ - Rimosso: script build locale
+- ~~`build_index1.py`~~ - Rimosso: script build duplicato
+- ~~`setup_dev.bat`~~ - Rimosso: setup Windows locale  
+- ~~`venvesetup.bat`~~ - Rimosso: setup venv locale
+- ~~`cleanup.bat`~~ - Rimosso: script cleanup locale
+- ~~`avvia_gui.bat`~~ - Rimosso: launcher Windows locale
 
-### Script di Build e Setup Locali
-- `build_index.py`
-- `build_index1.py`
-- `setup_dev.bat`
-- `venvesetup.bat`
-- `cleanup.bat`
-- `avvia_gui.bat`
+### File di Coverage/Config Duplicati (RIMOSSI ✅)
+- ~~`.coverage`~~ - Rimosso: file di coverage locale
+- ~~`pytest-simple.ini`~~ - Rimosso: config pytest duplicata
+- ~~`config.production.yaml`~~ - Rimosso: config non utilizzata
+- ~~`.pre-commit-config.yaml`~~ - Rimosso: config pre-commit non necessaria
+
+### File di Test Obsoleti (RIMOSSI ✅)
+- ~~`tests/test_server_medical.py`~~ - Rimosso: test medico obsoleto
+- ~~`tests/test_validation.py`~~ - Rimosso: sostituito con versione realistica
+
+### File di Data Duplicati (RIMOSSI ✅)
+- ~~`data/Framework_SIGMA1.json`~~ - Rimosso: dataset duplicato
 
 ## File di Output e Cache
 
