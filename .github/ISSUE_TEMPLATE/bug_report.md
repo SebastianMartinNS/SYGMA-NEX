@@ -27,7 +27,7 @@ Una descrizione chiara di cosa ti aspettavi che accadesse.
 
 - **OS**: [es. Windows 11, Ubuntu 22.04, macOS 13]
 - **Python Version**: [es. 3.11.3]
-- **SIGMA-NEX Version**: [es. 0.2.1]
+- **SIGMA-NEX Version**: [es. 0.3.1]
 - **Ollama Version**: [es. 0.1.20]
 - **Modelli Installati**: [es. mistral, medllama2]
 

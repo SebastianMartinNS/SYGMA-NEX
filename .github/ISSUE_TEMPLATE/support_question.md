@@ -36,7 +36,7 @@ sigma self-check
 
 - **OS**: [es. Windows 11, Ubuntu 22.04]
 - **Python Version**: [es. 3.11.3]
-- **SIGMA-NEX Version**: [es. 0.2.1]
+- **SIGMA-NEX Version**: [es. 0.3.1]
 - **Ollama Version**: [es. 0.1.20]
 - **Hardware**: [CPU, RAM, GPU se rilevante]
 
