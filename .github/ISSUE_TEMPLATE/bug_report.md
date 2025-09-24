@@ -1,9 +1,10 @@
 ---
-name: 🐛 Bug Report
-description: Segnala un bug o problema nel sistema
+name: "\U0001F41B Bug Report"
+about: Report your bug here!
 title: "[BUG] Breve descrizione del problema"
-labels: ["bug", "triage"]
-assignees: []
+labels: bug
+assignees: ''
+
 ---
 
 ## 🐛 Descrizione del Bug
