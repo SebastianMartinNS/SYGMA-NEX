@@ -17,13 +17,13 @@ try:
     from sigma_nex.gui.main_gui import launch_gui
     
     if __name__ == '__main__':
-        print("🚀 Starting SIGMA-NEX GUI...")
-        print("📝 Note: Consider using 'sigma gui' command instead")
+        print("Starting SIGMA-NEX GUI...")
+        print("Note: Consider using 'sigma gui' command instead")
         launch_gui()
         
 except ImportError as e:
     print(f"❌ Error importing GUI: {e}")
-    print("💡 Please install dependencies: pip install customtkinter")
+    print("Please install dependencies: pip install customtkinter")
     input("Press Enter to exit...")
 except Exception as e:
     print(f"❌ Error starting GUI: {e}")

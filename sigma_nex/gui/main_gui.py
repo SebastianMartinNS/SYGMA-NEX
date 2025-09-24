@@ -1,7 +1,17 @@
 import os
 import sys
 import threading
-import customtkinter as ctk
+
+try:
+    import customtkinter as ctk
+except ImportError as e:
+    # Allow tests to simulate missing dependency or handle when customtkinter is not installed
+    ctk = None
+    print(f"[WARNING] customtkinter not available: {e}")
+except Exception as e:
+    # Handle other potential import errors
+    ctk = None
+    print(f"[WARNING] Error importing customtkinter: {e}")
 from tkinter import messagebox, filedialog
 
 # Imposta la working directory alla root del progetto
@@ -12,7 +22,11 @@ def set_project_root():
         base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 
     os.chdir(base_path)
-    sys.path.insert(0, base_path)  # << FIX IMPORT
+    # Insert project root at position 0 for imports
+    try:
+        sys.path.insert(0, base_path)
+    except Exception:
+        pass
     print(f"[DEBUG] Working directory impostata a: {base_path}")
 
 set_project_root()
@@ -23,11 +37,15 @@ from sigma_nex.core.runner import Runner
 from sigma_nex.data_loader import DataLoader
 
 # Tema GUI
-ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("green")
+if ctk is not None:
+    ctk.set_appearance_mode("dark")
+    ctk.set_default_color_theme("green")
 
-class SigmaNexGUI(ctk.CTk):
+class SigmaNexGUI(ctk.CTk if ctk is not None else object):
     def __init__(self):
+        if ctk is None:
+            raise ImportError("customtkinter is not available. Please install it with: pip install customtkinter")
+        
         super().__init__()
         self.title("SIGMA-NEX :: Interfaccia Cognitiva")
         self.geometry("760x560")
@@ -150,10 +168,24 @@ class SigmaNexGUI(ctk.CTk):
         self.run_background(load)
 
 
-def launch_gui():
-    app = SigmaNexGUI()
-    app.mainloop()
+def main():
+    try:
+        if ctk is None:
+            print("Error: customtkinter is not available.")
+            print("Please install it with: pip install customtkinter")
+            return False
+        
+        app = SigmaNexGUI()
+        app.mainloop()
+        return True
+    except ImportError as e:
+        print(f"Import error: {e}")
+        print("Please install customtkinter with: pip install customtkinter")
+        return False
+    except Exception as e:
+        print(f"GUI error: {e}")
+        return False
 
 
 if __name__ == '__main__':
-    launch_gui()
+    main()

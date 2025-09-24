@@ -4,9 +4,19 @@ pytest>=7.4.0
 pytest-cov>=4.1.0
 pytest-mock>=3.11.1
 pytest-asyncio>=0.21.1
+pytest-xvfb>=3.0.0  # For GUI testing headless
 coverage>=7.3.0
 
 # Minimal runtime deps required by unit tests
 click>=8.1.0
 requests>=2.31.0
 faiss-cpu>=1.7.4
+PyYAML>=6.0
+
+# Optional dependencies for GUI testing
+customtkinter>=5.2.0  # Optional - tests will skip if not available
+
+# Translation dependencies (optional)
+transformers>=4.30.0  # Optional - for translate tests
+torch>=2.0.0  # Optional - for translate tests
+sentencepiece>=0.1.99  # Optional - for translate tests

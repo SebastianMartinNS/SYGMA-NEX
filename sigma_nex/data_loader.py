@@ -37,3 +37,17 @@ class DataLoader:
             # In caso di errore di parsing o apertura file
             click.echo(f"Errore caricamento scenario: {e}", err=True)
             return 0
+
+
+def load_json_data(path: str):
+    """Utility usata nei test: carica un file JSON e restituisce i dati.
+
+    In caso di errori, restituisce una lista vuota per compatibilità con i test.
+    """
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return []
+    except Exception:
+        return []

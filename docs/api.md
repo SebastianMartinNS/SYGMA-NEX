@@ -89,15 +89,9 @@ Download the complete log file (localhost only).
 
 **Response:** Plain text file download
 
-## Medical Integration
+## Response Processing
 
-The API automatically detects medical-related queries and provides enhanced responses using specialized medical models when available.
-
-**Medical Keywords Detected:**
-- medicina, disinfettante, ferita, primo soccorso
-- antibiotico, kit medico, antiseptico, benda
-- farmaco, antidolorifico, ustione, medicazione
-- And many more...
+The API processes queries through the SIGMA-NEX cognitive engine, which includes context management, semantic retrieval, and translation capabilities when needed.
 
 ## Error Handling
 
@@ -118,10 +112,10 @@ Error responses include details:
 
 ## Rate Limiting and Security
 
-- Blocklist functionality for users/chats
-- Request logging with OSINT data collection
+- Request logging and monitoring
 - IP-based access control for sensitive endpoints
-- No rate limiting currently implemented
+- Input validation and sanitization
+- Secure communication protocols
 
 ## Starting the Server
 

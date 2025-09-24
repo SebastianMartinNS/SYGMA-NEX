@@ -1,30 +1,29 @@
-# 📖 Documentazione SIGMA-NEX
+# Documentazione SIGMA-NEX
 
 Benvenuto nella documentazione completa di SIGMA-NEX, il Sistema di Intelligenza Artificiale Autonomo per la Sopravvivenza Offline-First.
 
-## 📋 Indice
+## Indice
 
-- [🚀 Quick Start](#-quick-start)
-- [📚 Guide](#-guide)
-- [📖 API Reference](#-api-reference)
-- [🏗️ Architettura](#️-architettura)
-- [🔧 Configurazione](#-configurazione)
-- [🧪 Testing](#-testing)
-- [🤝 Contribuire](#-contribuire)
-- [🔒 Sicurezza](#-sicurezza)
+- [Quick Start](#quick-start)
+- [Guide](#guide)
+- [API Reference](#api-reference)
+- [Architettura](#architettura)
+- [Configurazione](#configurazione)
+- [Testing](#testing)
+- [Contribuire](#contribuire)
+- [Sicurezza](#sicurezza)
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installazione Rapida
 
 ```bash
-# Metodo 1: Pip (raccomandato)
-pip install sigma-nex
+# Metodo 1: Sorgente (attuale)
+git clone https://github.com/SebastianMartinNS/SYGMA-NEX.git
+cd SYGMA-NEX
+pip install -e .
 
-# Metodo 2: Docker
-docker run -p 8000:8000 ghcr.io/sebastianmartinns/sygma-nex
-
-# Metodo 3: Sorgente
+# Metodo 2: Docker (in sviluppo)
 git clone https://github.com/SebastianMartinNS/SYGMA-NEX.git
 cd SYGMA-NEX
 pip install -e .
@@ -46,9 +45,9 @@ sigma server
 sigma gui
 ```
 
-## 📚 Guide
+## Guide
 
-### 📘 Guide Utente
+### Guide Utente
 
 1. **[Guida Installazione](installation.md)** - Installazione dettagliata per tutti i sistemi operativi
 2. **[Configurazione Base](guides/configuration.md)** - Configurazione iniziale e personalizzazione
@@ -57,7 +56,7 @@ sigma gui
 5. **[API Usage](guides/api-usage.md)** - Come utilizzare l'API REST
 6. **[Troubleshooting](guides/troubleshooting.md)** - Risoluzione problemi comuni
 
-### 🏗️ Guide Sviluppatore
+### Guide Sviluppatore
 
 1. **[Development Setup](development.md)** - Configurazione ambiente di sviluppo
 2. **[Architecture Overview](architecture/overview.md)** - Panoramica dell'architettura del sistema
@@ -65,14 +64,14 @@ sigma gui
 4. **[Testing Guide](testing.md)** - Guida completa al testing
 5. **[Security Guidelines](architecture/security-dev.md)** - Linee guida per lo sviluppo sicuro
 
-### 🚀 Guide Deployment
+### Guide Deployment
 
 1. **[Docker Deployment](deployment.md)** - Deploy con Docker e Docker Compose
 2. **[Production Setup](guides/production.md)** - Configurazione per produzione
 3. **[Monitoring](guides/monitoring.md)** - Monitoraggio e logging
 4. **[Backup & Recovery](guides/backup.md)** - Strategie di backup e recovery
 
-## 📖 API Reference
+## API Reference
 
 ### Core Components
 
@@ -93,7 +92,7 @@ sigma gui
 - **[Security Utils](api/security.md)** - Utilità di sicurezza
 - **[Validation](api/validation.md)** - Sistema di validazione input
 
-## 🏗️ Architettura
+## Architettura
 
 ### Panoramica del Sistema
 
@@ -116,8 +115,8 @@ sigma gui
 │  ┌─────────────────────────────────────────────────────┐   │
 │  │             AI MODELS & DATA                        │   │
 │  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐ │   │
-│  │  │ Ollama  │  │ FAISS   │  │MarianMT │  │Medical  │ │   │
-│  │  │(Mistral)│  │ Index   │  │Models   │  │ Models  │ │   │
+│  │  │ Ollama  │  │ FAISS   │  │MarianMT │             │ │   │
+│  │  │(Mistral)│  │ Index   │  │Models   │             │ │   │
 │  │  └─────────┘  └─────────┘  └─────────┘  └─────────┘ │   │
 │  └─────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
@@ -130,7 +129,7 @@ sigma gui
 - **[Component Interaction](architecture/components.md)** - Interazione tra componenti
 - **[Security Architecture](architecture/security.md)** - Architettura di sicurezza
 
-## 🔧 Configurazione
+## Configurazione
 
 ### File di Configurazione
 
@@ -164,7 +163,7 @@ target_language: "it"
 - **[Production Config](config/production.md)** - Configurazione per produzione
 - **[Performance Tuning](config/performance.md)** - Ottimizzazione performance
 
-## 🧪 Testing
+## Testing
 
 ### Framework di Testing
 
@@ -189,7 +188,7 @@ pytest tests/unit/test_runner.py -v
 
 Per maggiori dettagli, consulta la [Guida Testing completa](testing.md).
 
-## 🤝 Contribuire
+## Contribuire
 
 SIGMA-NEX è un progetto open source e accoglie contributi dalla comunità:
 
@@ -208,7 +207,7 @@ SIGMA-NEX è un progetto open source e accoglie contributi dalla comunità:
 - Scrivi test per il nuovo codice
 - Mantieni la documentazione aggiornata
 
-## 🔒 Sicurezza
+## Sicurezza
 
 ### Politica di Sicurezza
 
@@ -224,7 +223,7 @@ SIGMA-NEX prende seriamente la sicurezza. Per segnalazioni di vulnerabilità:
 - Crittografia dei dati sensibili
 - Audit logging completo
 
-## 📁 Struttura Documentazione
+## Struttura Documentazione
 
 ```
 docs/
@@ -253,7 +252,7 @@ docs/
     └── security.md         # Configurazione sicurezza
 ```
 
-## 🔗 Link Utili
+## Link Utili
 
 - **[Repository GitHub](https://github.com/SebastianMartinNS/SYGMA-NEX)**
 - **[Issues](https://github.com/SebastianMartinNS/SYGMA-NEX/issues)**
@@ -261,21 +260,21 @@ docs/
 - **[Releases](https://github.com/SebastianMartinNS/SYGMA-NEX/releases)**
 - **[Wiki](https://github.com/SebastianMartinNS/SYGMA-NEX/wiki)**
 
-## 📧 Supporto
+## Supporto
 
 Hai bisogno di aiuto? Ecco come contattarci:
 
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/SebastianMartinNS/SYGMA-NEX/issues)
-- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/SebastianMartinNS/SYGMA-NEX/discussions)
-- 📧 **Email**: rootedlab6@gmail.com
-- 💬 **Community**: [Discord Server](#) (coming soon)
+- **Bug Reports**: [GitHub Issues](https://github.com/SebastianMartinNS/SYGMA-NEX/issues)
+- **Feature Requests**: [GitHub Discussions](https://github.com/SebastianMartinNS/SYGMA-NEX/discussions)
+- **Email**: rootedlab6@gmail.com
+- **Community**: [Discord Server](#) (coming soon)
 
 ---
 
 <div align="center">
 
-**🚀 SIGMA-NEX - Sopravvivenza Intelligente Offline-First**
+**SIGMA-NEX - Sopravvivenza Intelligente Offline-First**
 
-*Documentazione aggiornata al 23 Settembre 2025*
+*Documentazione aggiornata al 24 Settembre 2025*
 
 </div>

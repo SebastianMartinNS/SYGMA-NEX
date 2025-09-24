@@ -13,7 +13,7 @@ from pathlib import Path
 
 def run_command(cmd, description):
     """Run a command and handle errors."""
-    print(f"🔄 {description}...")
+    print(f"{description}...")
     try:
         result = subprocess.run(cmd, shell=True, check=True, capture_output=True, text=True)
         print(f"✅ {description} completed successfully")
@@ -29,7 +29,7 @@ def run_command(cmd, description):
 
 def check_prerequisites():
     """Check if required tools are installed."""
-    print("🔍 Checking prerequisites...")
+    print("Checking prerequisites...")
     
     # Check Python version
     if sys.version_info < (3, 10):
@@ -52,7 +52,7 @@ def setup_virtual_environment():
     venv_path = Path("venv")
     
     if venv_path.exists():
-        print("📁 Virtual environment already exists")
+        print("Virtual environment already exists")
         return True
     
     return run_command(
@@ -101,7 +101,7 @@ def pull_ollama_models():
     models = ["mistral", "medllama2"]
     
     for model in models:
-        print(f"📥 Pulling Ollama model: {model}")
+        print(f"Pulling Ollama model: {model}")
         try:
             subprocess.run(["ollama", "pull", model], check=True)
             print(f"✅ Model {model} downloaded successfully")
@@ -141,7 +141,7 @@ system_prompt: |
 
 def main():
     """Main setup function."""
-    print("🚀 SIGMA-NEX Development Setup")
+    print("SIGMA-NEX Development Setup")
     print("=" * 40)
     
     if not check_prerequisites():
@@ -163,7 +163,7 @@ def main():
     # Optional step - doesn't fail setup if it doesn't work
     pull_ollama_models()
     
-    print("\n🎉 Development environment setup completed!")
+    print("\nDevelopment environment setup completed!")
     print("\nNext steps:")
     print("1. Activate the virtual environment:")
     if os.name == "nt":

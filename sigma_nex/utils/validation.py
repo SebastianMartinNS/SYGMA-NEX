@@ -86,7 +86,14 @@ def validate_file_path(file_path: Union[str, Path],
     if not file_path:
         raise ValidationError("File path cannot be empty")
     
-    path = Path(file_path).resolve()
+    path = Path(file_path)
+    
+    # Check if it's a symbolic link BEFORE resolving (potential security risk)
+    if path.is_symlink():
+        raise ValidationError("Symbolic links are not allowed")
+    
+    # Now resolve the path
+    path = path.resolve()
     
     # Check for path traversal attempts
     if '..' in str(file_path) or str(file_path).startswith('/'):
@@ -107,10 +114,6 @@ def validate_file_path(file_path: Union[str, Path],
     # Check if it's a file (not a directory)
     if not path.is_file():
         raise ValidationError("Path is not a file")
-    
-    # Check if it's a symbolic link (potential security risk)
-    if path.is_symlink():
-        raise ValidationError("Symbolic links are not allowed")
     
     # Check file extension
     if allowed_extensions:
@@ -141,13 +144,14 @@ def validate_user_id(user_id: Any) -> int:
     
     try:
         uid = int(user_id)
-        if uid < 0:
-            raise ValidationError("User ID must be positive")
-        if uid > 2**63 - 1:  # Max int64
-            raise ValidationError("User ID too large")
-        return uid
     except (ValueError, TypeError):
         raise ValidationError("User ID must be a valid integer")
+    
+    if uid < 0:
+        raise ValidationError("User ID must be positive")
+    if uid > 2**63 - 1:  # Max int64
+        raise ValidationError("User ID too large")
+    return uid
 
 
 def validate_model_name(model_name: str) -> str:
@@ -166,6 +170,12 @@ def validate_model_name(model_name: str) -> str:
     if not model_name or not isinstance(model_name, str):
         raise ValidationError("Model name must be a non-empty string")
     
+    # Strip whitespace first
+    model_name = model_name.strip()
+    
+    if not model_name:
+        raise ValidationError("Model name cannot be empty after stripping")
+    
     # Allow alphanumeric, hyphens, underscores, and colons (for tags)
     if not re.match(r'^[a-zA-Z0-9._:-]+$', model_name):
         raise ValidationError("Model name contains invalid characters")
@@ -173,7 +183,7 @@ def validate_model_name(model_name: str) -> str:
     if len(model_name) > 100:
         raise ValidationError("Model name too long")
     
-    return model_name.strip()
+    return model_name
 
 
 def validate_prompt(prompt: str) -> str:
@@ -224,7 +234,7 @@ def is_safe_command(command: str) -> bool:
         r'\bformat\b',   # format command
         r'\bdel\b.*[/\\]', # del with paths
         r'>\s*/dev/',    # redirect to device files
-        r'\|.*nc\b',     # netcat piping
+        r'\bnc\b.*\|',   # netcat piping (corrected)
         r'\bcurl\b.*\|', # curl piping
         r'\bwget\b.*\|', # wget piping
         r';\s*rm\b',     # chained rm

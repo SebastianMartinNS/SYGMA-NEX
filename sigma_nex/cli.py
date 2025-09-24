@@ -57,14 +57,14 @@ def server(ctx, host, port):
     """Avvia il server API REST."""
     try:
         from .server import SigmaServer
-        click.echo(f"🚀 Avvio server SIGMA-NEX su {host}:{port}")
+        click.echo(f"Avvio server SIGMA-NEX su {host}:{port}")
         server = SigmaServer()
         server.run(host=host, port=port)
     except ImportError:
         click.echo("❌ Errore: dipendenze del server non installate. "
                   "Installa con: pip install fastapi uvicorn", err=True)
     except KeyboardInterrupt:
-        click.echo("\n👋 Server fermato.")
+        click.echo("\nServer fermato.")
 
 
 @main.command()
@@ -77,7 +77,7 @@ def gui():
         click.echo("❌ Errore: dipendenze GUI non installate. "
                   "Installa con: pip install customtkinter", err=True)
     except KeyboardInterrupt:
-        click.echo("\n👋 GUI chiusa.")
+        click.echo("\nGUI chiusa.")
 
 
 if __name__ == '__main__':

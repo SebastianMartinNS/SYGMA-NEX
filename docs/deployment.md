@@ -1,10 +1,10 @@
-# 🚀 SIGMA-NEX Deployment Guide
+# SIGMA-NEX Deployment Guide
 
 ## Panoramica
 
 Guida completa per il deployment di SIGMA-NEX in ambienti di produzione, sviluppo e testing.
 
-## 🐳 Docker Deployment (Raccomandato)
+## Docker Deployment (Raccomandato)
 
 ### Production Deployment
 ```bash
@@ -48,7 +48,7 @@ services:
       retries: 3
 ```
 
-## 🖥️ Traditional Deployment
+## Traditional Deployment
 
 ### System Requirements
 - **OS**: Ubuntu 20.04+, Windows 10+, macOS 11+

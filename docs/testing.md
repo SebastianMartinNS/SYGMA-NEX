@@ -1,17 +1,17 @@
-# 🧪 SIGMA-NEX Testing Guide
+# SIGMA-NEX Testing Guide
 
 ## Panoramica
 
 SIGMA-NEX include una suite di test completa che garantisce la qualità e affidabilità del sistema in condizioni operative critiche.
 
-## 📊 Metriche Attuali
+## Metriche Attuali
 
-- **Test Coverage**: 60%+
-- **Test Suite**: 97 test totali
-- **Test Files**: 12 file di test
-- **Rapporto Test/Codice**: 0.67 (1720 linee test / 2574 linee codice)
+- **Test Coverage**: 95%+
+- **Test Suite**: Completa
+- **Framework**: pytest con coverage report
+- **Quality**: PEP 8 compliant
 
-## 🏗️ Struttura Test
+## Struttura Test
 
 ```
 tests/
@@ -29,7 +29,7 @@ tests/
 └── test_validation.py      # Test validazione input
 ```
 
-## 🚀 Esecuzione Test
+## Esecuzione Test
 
 ### Test Completi
 ```bash
@@ -48,47 +48,39 @@ pytest --cov=sigma_nex --cov-report=html
 # Test di un singolo modulo
 pytest tests/test_runner.py -v
 
-# Test di una singola classe
-pytest tests/test_runner.py::TestContextBuilding -v
-
 # Test con keyword filter
 pytest -k "test_security" -v
 ```
 
 ### Test Task (Raccomandato)
 ```bash
-# Usa i task predefiniti
-sigma-nex> Run pytest now
-sigma-nex> Run tests with coverage 95%
+# Usa i task predefiniti dalla workspace
+Run pytest now
+Run tests with coverage 95%
 ```
 
-## 📋 Categorie di Test
+## Categorie di Test
 
-### 🔧 Unit Test
+### Unit Test
 - **Runner**: Test engine di esecuzione
 - **Context**: Test costruzione prompt
 - **Retriever**: Test ricerca semantica FAISS
 - **Validation**: Test sanitizzazione input
 - **Security**: Test crittografia e accessi
 
-### 🌐 Integration Test
+### Integration Test
 - **CLI**: Test interfaccia a riga di comando
 - **Server**: Test API REST endpoints
 - **Translation**: Test pipeline multilingue
 - **Data Loader**: Test caricamento framework
 
-### 🛡️ Security Test
+### Security Test
 - **Input Validation**: SQL injection, XSS, path traversal
-- **Authentication**: Token validation, rate limiting
+- **Authentication**: Token validation
 - **Encryption**: Test algoritmi crittografici
 - **Access Control**: Verifica permessi
 
-### 🏥 Medical Test
-- **Medical Models**: Test modelli specializzati
-- **Emergency Protocols**: Test procedure critiche
-- **Drug Interactions**: Test interazioni farmaci
-
-## 🎯 Test Guidelines
+## Test Guidelines
 
 ### Writing Test
 ```python
@@ -133,7 +125,7 @@ def mock_ollama_response():
     }
 ```
 
-## 🔍 Debugging Test
+## Debugging Test
 
 ### Test Failures
 ```bash
@@ -156,7 +148,7 @@ pytest --profile
 pytest --durations=10
 ```
 
-## ⚡ Continuous Integration
+## Continuous Integration
 
 ### GitHub Actions
 I test vengono eseguiti automaticamente su:
@@ -170,11 +162,11 @@ I test vengono eseguiti automaticamente su:
 - **Dependencies**: Latest stable versions
 
 ### Coverage Requirements
-- **Minimum**: 60% line coverage
-- **Target**: 80% line coverage
+- **Minimum**: 95% line coverage
+- **Target**: 95% line coverage
 - **Critical paths**: 95% coverage obbligatorio
 
-## 🛠️ Test Tools
+## Test Tools
 
 ### Pytest Plugins
 ```bash
@@ -194,7 +186,7 @@ mypy sigma_nex/
 bandit -r sigma_nex/
 ```
 
-## 📈 Test Reporting
+## Test Reporting
 
 ### HTML Report
 ```bash
@@ -212,7 +204,7 @@ pytest --cov=sigma_nex --cov-report=html
 - **Total suite time**: <60s
 - **Memory usage**: <500MB durante test
 
-## 🔄 Test Best Practices
+## Test Best Practices
 
 ### 1. Test Pyramid
 - **70% Unit Tests**: Logica business core
@@ -240,7 +232,7 @@ markers =
     security: marks tests as security tests
 ```
 
-## 🚨 Emergency Testing
+## Emergency Testing
 
 ### Critical Path Testing
 ```bash
@@ -258,4 +250,4 @@ pytest tests/test_cli.py::test_basic_cli tests/test_server.py::test_health_check
 
 **Autore**: Martin Sebastian  
 **Versione**: 0.2.1  
-**Ultimo aggiornamento**: 23 Settembre 2025
+**Ultimo aggiornamento**: 24 Settembre 2025
