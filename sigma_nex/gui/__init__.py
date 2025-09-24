@@ -1,24 +1,17 @@
 """
-SIGMA-NEX GUI Main Module
+SIGMA-NEX GUI package.
 
-Entry point for the graphical user interface of SIGMA-NEX.
+This package intentionally avoids importing the heavy GUI module at import time.
 """
 
-import os
-import sys
-from pathlib import Path
-
-# Add the project root to Python path
-project_root = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(project_root))
-
-from .main_gui import SigmaNexGUI, launch_gui
+def main() -> None:
+    """Lazy entry point for SIGMA-NEX GUI."""
+    print("Starting SIGMA-NEX GUI...")
+    from . import main_gui as _mg  # lazy import to allow tests to patch
+    _mg.main()
 
 
-def main():
-    """Main entry point for SIGMA-NEX GUI."""
-    print("🚀 Starting SIGMA-NEX GUI...")
-    launch_gui()
+__all__ = ["main"]
 
 
 if __name__ == "__main__":

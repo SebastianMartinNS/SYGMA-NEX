@@ -13,8 +13,8 @@
 
 ```bash
 # Clone repository
-git clone https://github.com/sigma-nex/sigma-nex.git
-cd sigma-nex
+git clone https://github.com/SebastianMartinNS/SYGMA-NEX.git
+cd SYGMA-NEX
 
 # Create virtual environment
 python -m venv venv
@@ -317,4 +317,4 @@ logging.basicConfig(level=logging.DEBUG)
 - **GitHub Discussions:** For questions and ideas
 - **Email:** rootedlab6@gmail.com for direct contact
 
-Happy coding! 🚀
+Happy coding!

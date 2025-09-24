@@ -53,6 +53,7 @@ class SigmaConfig:
                 self._config = data if isinstance(data, dict) else {}
         except Exception:
             # Invalid YAML or other IO issues: fall back to empty config
+            print(f"⚠️ Warning: invalid or unreadable YAML at {self.config_path}")
             self._config = {}
     
     @property
@@ -96,6 +97,29 @@ class SigmaConfig:
             
         # Default fallback
         return self.project_root / default_relative
+
+    # --- lightweight mutation helpers used by tests ---
+    def set(self, key: str, value: Any) -> None:
+        """Set a configuration value using dotted keys, creating nested dicts as needed."""
+        cfg = self.config  # ensure loaded
+        if not isinstance(key, str) or not key:
+            return
+        parts = key.split('.')
+        cur = cfg
+        for part in parts[:-1]:
+            if part not in cur or not isinstance(cur[part], dict):
+                cur[part] = {}
+            cur = cur[part]
+        cur[parts[-1]] = value
+
+    def save(self) -> None:
+        """Persist current configuration to disk, creating parent directory if needed."""
+        try:
+            Path(self.config_path).parent.mkdir(parents=True, exist_ok=True)
+            with open(self.config_path, 'w', encoding='utf-8') as f:
+                yaml.safe_dump(self.config, f, sort_keys=False, allow_unicode=True)
+        except Exception as e:
+            raise RuntimeError(f"Unable to save configuration: {e}")
     
     def get(self, key: str, default: Any = None) -> Any:
         """Get a configuration value with dotted-key support and sensible defaults."""

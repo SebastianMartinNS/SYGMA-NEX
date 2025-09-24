@@ -22,7 +22,7 @@ cat << "EOF"
 EOF
 echo -e "${NC}"
 
-echo -e "${GREEN}🛡️  SIGMA-NEX Container Starting...${NC}"
+echo -e "${GREEN}SIGMA-NEX Container Starting...${NC}"
 echo -e "${BLUE}   Sistema di Intelligenza Artificiale Autonomo${NC}"
 echo -e "${BLUE}   per la Sopravvivenza Offline-First${NC}"
 echo ""
@@ -136,7 +136,7 @@ setup_security() {
 
 # Gestione segnali
 cleanup() {
-    log_info "🛑 Ricevuto segnale di terminazione, fermando SIGMA-NEX..."
+    log_info "Ricevuto segnale di terminazione, fermando SIGMA-NEX..."
     kill $PID 2>/dev/null || true
     wait $PID 2>/dev/null || true
     log_info "✅ SIGMA-NEX fermato correttamente"
@@ -183,15 +183,15 @@ main() {
     
     case "$CMD" in
         "server"|"")
-            log_info "🚀 Avviando SIGMA-NEX API Server..."
+            log_info "Avviando SIGMA-NEX API Server..."
             exec sigma server --host 0.0.0.0 --port ${PORT:-8000} "$@" &
             ;;
         "cli")
-            log_info "💬 Avviando SIGMA-NEX CLI..."
+            log_info "Avviando SIGMA-NEX CLI..."
             exec sigma start "$@" &
             ;;
         "self-check")
-            log_info "🔍 Eseguendo self-check..."
+            log_info "Eseguendo self-check..."
             exec sigma self-check "$@"
             ;;
         "gui")
@@ -199,7 +199,7 @@ main() {
             exit 1
             ;;
         *)
-            log_info "🎯 Eseguendo comando personalizzato: $CMD"
+            log_info "Eseguendo comando personalizzato: $CMD"
             exec sigma "$CMD" "$@" &
             ;;
     esac

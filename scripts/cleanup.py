@@ -20,10 +20,10 @@ def remove_patterns(patterns, root_dir="."):
             try:
                 if os.path.isdir(match):
                     shutil.rmtree(match)
-                    print(f"🗂️  Removed directory: {match}")
+                    print(f"Removed directory: {match}")
                 else:
                     os.remove(match)
-                    print(f"🗑️  Removed file: {match}")
+                    print(f"Removed file: {match}")
                 removed.append(match)
             except Exception as e:
                 print(f"⚠️  Could not remove {match}: {e}")
@@ -74,7 +74,7 @@ def main():
     removed = remove_patterns(cleanup_patterns)
     
     print(f"\n✅ Cleanup completed! Removed {len(removed)} items.")
-    print("\n📋 Project is now clean and organized!")
+    print("\nProject is now clean and organized!")
 
 
 if __name__ == "__main__":

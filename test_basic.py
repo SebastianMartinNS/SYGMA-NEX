@@ -134,7 +134,7 @@ if __name__ == "__main__":
     print(f"Results: {passed}/{total} tests passed")
     
     if passed == total:
-        print("🎉 All basic tests passed! Core functionality is working.")
+        print("All basic tests passed! Core functionality is working.")
         sys.exit(0)
     else:
         print("❌ Some tests failed. Check the output above for details.")

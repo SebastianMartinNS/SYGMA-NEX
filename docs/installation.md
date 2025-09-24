@@ -1,4 +1,4 @@
-# 🔧 Installation Guide
+# Installation Guide
 
 ## System Requirements
 
@@ -17,32 +17,7 @@
 
 ## Installation Methods
 
-### Method 1: PyPI Installation (Recommended)
-
-```bash
-# Install from PyPI
-pip install sigma-nex
-
-# Verify installation
-sigma --version
-sigma self-check
-```
-
-### Method 2: Docker Installation
-
-```bash
-# Pull Docker image
-docker pull ghcr.io/sebastianmartinns/sygma-nex:latest
-
-# Run container
-docker run -p 8000:8000 ghcr.io/sebastianmartinns/sygma-nex:latest
-
-# Or use Docker Compose
-curl -O https://raw.githubusercontent.com/SebastianMartinNS/SYGMA-NEX/master/docker-compose.yml
-docker-compose up -d
-```
-
-### Method 3: Source Installation
+### Method 1: Source Installation (Current)
 
 ```bash
 # Clone repository
@@ -181,12 +156,18 @@ pip install sigma-nex
 ### Core Dependencies
 
 SIGMA-NEX will automatically install core dependencies:
-- `ollama-python`: Ollama API client
-- `fastapi`: Web API framework
-- `customtkinter`: Modern GUI framework
 - `click`: CLI framework
 - `pyyaml`: Configuration management
+- `torch`: PyTorch for ML models
+- `transformers`: Hugging Face transformers
+- `faiss-cpu`: Vector similarity search
+- `cryptography`: Security features
+- `fastapi`: Web API framework
+- `uvicorn`: ASGI server
+- `pydantic`: Data validation
 - `requests`: HTTP client
+- `customtkinter`: Modern GUI framework
+- `sentence-transformers`: Sentence embeddings
 
 ### AI Model Dependencies
 
@@ -197,26 +178,13 @@ curl -fsSL https://ollama.com/install.sh | sh  # Linux/Mac
 
 # Pull required models
 ollama pull mistral
-ollama pull medllama2  # Optional medical model
 ```
 
-### Optional Dependencies
+### Development Dependencies
 
 ```bash
-# Translation support
-pip install torch transformers sentencepiece
-
-# Advanced search
-pip install faiss-cpu  # or faiss-gpu for CUDA
-
-# Database support
-pip install sqlalchemy alembic
-
-# Monitoring
-pip install prometheus-client psutil
-
 # Development tools
-pip install pytest pytest-cov black isort mypy
+pip install pytest pytest-cov pytest-mock pytest-asyncio coverage black isort flake8
 ```
 
 ## Configuration Setup
