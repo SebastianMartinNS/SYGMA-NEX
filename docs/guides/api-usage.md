@@ -32,7 +32,7 @@ curl http://localhost:8000/
 {
   "status": "ok",
   "info": "SIGMA-NEX API con logging, OSINT e blocklist attivi",
-  "version": "0.2.1"
+  "version": "0.3.1"
 }
 ```
 
@@ -88,7 +88,7 @@ Content-Type: application/json
 {
   "status": "ok",
   "info": "SIGMA-NEX API active",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "components": {
     "ollama": "connected",
     "retrieval": "active",
