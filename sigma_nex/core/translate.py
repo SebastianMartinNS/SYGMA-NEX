@@ -1,7 +1,13 @@
 """
 SIGMA-NEX Translation Module
 
-Optimized translation with lazy loading and path management.
+Optimized translation with lazy loading and path                 print(f"Loading translation model: {direction}")
+                tokenizer = MarianTokenizer.from_pretrained(str(model_path))
+                model = MarianMTModel.from_pretrained(str(model_path))
+                _models[direction] = (tokenizer, model)
+                print(f"[SUCCESS] Translation model loaded: {direction}")
+            except Exception as e:
+                print(f"[ERROR] loading translation model {direction}: {e}")ent.
 """
 
 import threading
@@ -36,7 +42,7 @@ def _check_transformers():
             _transformers_available = True
         except Exception:
             _transformers_available = False
-            print("⚠️ Warning: transformers not available. Translation disabled.")
+            print("[WARNING] transformers not available. Translation disabled.")
 
     return _transformers_available
 
@@ -78,7 +84,7 @@ def _load_model(direction: str) -> Optional[Tuple]:
         model_path = None
 
     if not model_path or not getattr(model_path, 'exists', lambda: False)():
-        print(f"⚠️ Warning: Translation model not found at {model_path}")
+        print(f"[WARNING] Translation model not found at {model_path}")
         return None
 
     with _lock:
@@ -88,9 +94,9 @@ def _load_model(direction: str) -> Optional[Tuple]:
                 tokenizer = MarianTokenizer.from_pretrained(str(model_path))
                 model = MarianMTModel.from_pretrained(str(model_path))
                 _models[direction] = (tokenizer, model)
-                print(f"✅ Translation model loaded: {direction}")
+                print(f"[SUCCESS] Translation model loaded: {direction}")
             except Exception as e:
-                print(f"❌ Error loading translation model {direction}: {e}")
+                print(f"[ERROR] Loading translation model {direction}: {e}")
                 return None
 
     return _models.get(direction)
@@ -144,7 +150,7 @@ def _chunk_translate(text: str, tokenizer, model, max_tokens: int = 500) -> str:
             result = tokenizer.batch_decode(gen, skip_special_tokens=True)[0]
             translated_chunks.append(result)
         except Exception as e:
-            print(f"⚠️ Translation error for chunk: {e}")
+            print(f"[WARNING] Translation error for chunk: {e}")
             translated_chunks.append(chunk)  # Fallback to original
     
     return " ".join(translated_chunks)
@@ -157,7 +163,7 @@ def translate_it_to_en(text: str) -> str:
     
     model_data = _load_model('it-en')
     if not model_data:
-        print("⚠️ Italian to English translation unavailable")
+        print("[WARNING] Italian to English translation unavailable")
         return text
     
     tokenizer, model = model_data
@@ -171,7 +177,7 @@ def translate_it_to_en(text: str) -> str:
         else:
             return _chunk_translate(text, tokenizer, model, 500)
     except Exception as e:
-        print(f"❌ Translation error (IT->EN): {e}")
+        print(f"[ERROR] Translation error (IT->EN): {e}")
         return text
 
 
@@ -182,7 +188,7 @@ def translate_en_to_it(text: str) -> str:
     
     model_data = _load_model('en-it')
     if not model_data:
-        print("⚠️ English to Italian translation unavailable")
+        print("[WARNING] English to Italian translation unavailable")
         return text
     
     tokenizer, model = model_data
@@ -195,7 +201,7 @@ def translate_en_to_it(text: str) -> str:
         else:
             return _chunk_translate(text, tokenizer, model, 500)
     except Exception as e:
-        print(f"❌ Translation error (EN->IT): {e}")
+        print(f"[ERROR] Translation error (EN->IT): {e}")
         return text
 
 
@@ -212,4 +218,4 @@ def preload_models() -> None:
     print("Preloading translation models...")
     _load_model('it-en')
     _load_model('en-it')
-    print("✅ Translation models preloaded")
+    print("[SUCCESS] Translation models preloaded")
