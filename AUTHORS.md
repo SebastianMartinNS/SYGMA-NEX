@@ -11,7 +11,7 @@
 - **Repository**: https://github.com/SebastianMartinNS/SYGMA-NEX
 - **License**: MIT License
 - **Started**: 2025
-- **Current Version**: 0.2.1
+- **Current Version**: 0.3.1
 
 ## Core Contributions
 Martin Sebastian has developed:

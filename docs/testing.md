@@ -249,5 +249,5 @@ pytest tests/test_cli.py::test_basic_cli tests/test_server.py::test_health_check
 ---
 
 **Autore**: Martin Sebastian  
-**Versione**: 0.2.1  
+**Versione**: 0.3.1  
 **Ultimo aggiornamento**: 24 Settembre 2025

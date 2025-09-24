@@ -6,7 +6,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name='sigma-nex',
-    version='0.2.1',
+    version='0.3.1',
     author='Sebastian',
     author_email='rootedlab6@gmail.com',
     description='Agente cognitivo autonomo per la sopravvivenza offline-first in scenari estremi',

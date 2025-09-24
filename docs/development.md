@@ -302,8 +302,8 @@ logging.basicConfig(level=logging.DEBUG)
 2. **Update CHANGELOG.md**
 3. **Create release tag:**
    ```bash
-   git tag -a v0.2.1 -m "Release v0.2.1"
-   git push origin v0.2.1
+   git tag -a v0.3.1 -m "Release v0.3.1"
+   git push origin v0.3.1
    ```
 4. **Build and publish:**
    ```bash
