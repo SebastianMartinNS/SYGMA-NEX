@@ -150,12 +150,12 @@ sigma diagnose              # Diagnostica completa
 
 | Documento | Status | Ultimo Aggiornamento | Versione |
 |-----------|--------|---------------------|----------|
-| [README principale](../README.md) | Complete | 2025-09-24 | 0.2.1 |
-| [Installation Guide](installation.md) | Complete | 2025-09-24 | 0.2.1 |
-| [Development Guide](development.md) | Complete | 2025-09-24 | 0.2.1 |
-| [Deployment Guide](deployment.md) | Complete | 2025-09-24 | 0.2.1 |
-| [Testing Guide](testing.md) | Complete | 2025-09-24 | 0.2.1 |
-| [API Reference](api.md) | Complete | 2025-09-24 | 0.2.1 |
+| [README principale](../README.md) | Complete | 2025-09-24 | 0.3.1 |
+| [Installation Guide](installation.md) | Complete | 2025-09-24 | 0.3.1 |
+| [Development Guide](development.md) | Complete | 2025-09-24 | 0.3.1 |
+| [Deployment Guide](deployment.md) | Complete | 2025-09-24 | 0.3.1 |
+| [Testing Guide](testing.md) | Complete | 2025-09-24 | 0.3.1 |
+| [API Reference](api.md) | Complete | 2025-09-24 | 0.3.1 |
 
 ---
 

@@ -1,6 +1,6 @@
 # SIGMA-NEX
 
-![SIGMA-NEX](https://img.shields.io/badge/SIGMA--NEX-v0.2.1-blue?style=for-the-badge&logo=robot)
+![SIGMA-NEX](https://img.shields.io/badge/SIGMA--NEX-v0.3.1-blue?style=for-the-badge&logo=robot)
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Build Status](https://img.shields.io/badge/Build-Passing-success?style=for-the-badge)
@@ -347,7 +347,7 @@ mypy sigma_nex/
 
 Vedi [CHANGELOG.md](CHANGELOG.md) per le modifiche dettagliate.
 
-**Versione Corrente:** v0.2.1 (24 Settembre 2025)
+**Versione Corrente:** v0.3.1 (24 Settembre 2025)
 
 ## Licenza
 

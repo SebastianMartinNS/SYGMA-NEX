@@ -58,7 +58,7 @@ Health check endpoint.
 {
   "status": "ok",
   "info": "SIGMA-NEX API con logging, OSINT e blocklist attivi",
-  "version": "0.2.1"
+  "version": "0.3.1"
 }
 ```
 

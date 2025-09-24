@@ -137,7 +137,7 @@ Questo documento elenca i file che sono stati rimossi dal repository per mantene
 2. **Verificare sempre** che non ci siano dati sensibili nei file di configurazione prima del commit
 3. **I file di documentazione sono stati aggiornati** per riflettere lo stato attuale del progetto
 4. **La documentazione è ora professionale** senza emoji eccessive
-5. **La versione corrente è 0.2.1** come specificato in pyproject.toml
+5. **La versione corrente è 0.3.1** come specificato in pyproject.toml
 
 ## Comando per Verificare Status Git
 

@@ -471,5 +471,5 @@ awk '{print $1}' /app/logs/access.log | sort | uniq -c | sort -nr
 ---
 
 **Autore**: Martin Sebastian  
-**Versione**: 0.2.1  
+**Versione**: 0.3.1  
 **Ultimo aggiornamento**: 23 Settembre 2025
