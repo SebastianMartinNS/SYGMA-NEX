@@ -7,23 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.1] - 2025-09-24
 
-### Added
-- 🧹 **Repository Cleanup**: Rimossi 18 file obsoleti per repository professionale
-- 📚 **Documentazione Professionale**: Documentazione completamente rivista e allineata al codice
-- 🧪 **Test Suite Completa**: Test realistici per tutti i moduli con coverage migliorata
-- 🔧 **Files Management**: `FILES_TO_IGNORE.md` per gestione file da escludere
-- ⚙️ **Configuration**: .gitignore professionale e pytest.ini ottimizzato
+### Added 
+-  **Test Suite Completa**: 
+- 🔧 **Files Management**: 
+- ⚙️ **Configuration**: 
 
 ### Changed
-- 📝 **Documentazione**: Tono professionale, rimozione emoji eccessive
-- 🔄 **Test**: Sostituiti test obsoleti con versioni realistiche
-- 📂 **Struttura**: Repository pulito e organizzato per produzione
+-  **Documentazione**: 
+-  **Test**: 
+-  **Struttura**: Repository pulito e organizzato per produzione
 
 ### Removed
-- 🗑️ **File Obsoleti**: Test temporanei, script locali, configurazioni duplicate
-- 🧪 **Test Deprecati**: test_basic.py, marian_test.py, test_server_medical.py
-- 📦 **Build Scripts**: build_index.py, setup_dev.bat, cleanup.bat
-- ⚙️ **Config Duplicati**: pytest-simple.ini, config.production.yaml
+-  **File Obsoleti**: Test temporanei, script locali, configurazioni duplicate
+-  **Test Deprecati**: test_basic.py, marian_test.py, test_server_medical.py
+-  **Build Scripts**: build_index.py, setup_dev.bat, cleanup.bat
+-  **Config Duplicati**: pytest-simple.ini, config.production.yaml
 
 ## [0.2.1] - 2024-12-22
 
