@@ -106,8 +106,9 @@ class TestRunnerRealistic:
         """Test operazioni subprocess REALI nel Runner"""
         runner = Runner(test_config)
 
-        # Test self_check con subprocess REALE
-        with patch("subprocess.run") as mock_run:
+        # Force subprocess call by mocking shutil.which to return valid path
+        with patch("subprocess.run") as mock_run, \
+             patch("shutil.which", return_value="/usr/bin/ollama"):
             # Simula ollama list success
             mock_result = Mock()
             mock_result.returncode = 0
@@ -287,37 +288,37 @@ class TestRunnerRealistic:
         """Test _send_with_progress con logica reale"""
         runner = Runner(test_config)
 
-        # Mock subprocess per evitare chiamate reali a ollama
-        with patch("sigma_nex.core.runner.subprocess.Popen") as mock_popen:
-            mock_process = Mock()
-            mock_process.communicate.return_value = (b"Test response", b"")
-            mock_process.returncode = 0
-            mock_popen.return_value = mock_process
+        # Mock requests.post per evitare connessioni HTTP reali
+        with patch("requests.post") as mock_post:
+            mock_response = Mock()
+            mock_response.status_code = 200
+            mock_response.json.return_value = {"response": "Test response"}
+            mock_post.return_value = mock_response
 
             result = runner._send_with_progress("test query")
 
-            # Verifica che subprocess sia stato chiamato
-            assert "Test response" in result
-            mock_popen.assert_called_once()
+            # Verifica che la chiamata HTTP è stata fatta
+            assert result == "Test response"
+            mock_post.assert_called_once()
 
     def test_validation_integration_real(self, test_config):
         """Test integrazione validazione con logica reale"""
         runner = Runner(test_config)
 
-        # Test che _send_with_progress usi subprocess (comportamento reale)
-        with patch("sigma_nex.core.runner.subprocess.Popen") as mock_popen:
-            mock_process = Mock()
-            mock_process.communicate.return_value = (b"Response", b"")
-            mock_process.returncode = 0
-            mock_popen.return_value = mock_process
+        # Mock requests.post per evitare connessioni HTTP reali
+        with patch("requests.post") as mock_post:
+            mock_response = Mock()
+            mock_response.status_code = 200
+            mock_response.json.return_value = {"response": "Response"}
+            mock_post.return_value = mock_response
 
             result = runner._send_with_progress("test query")
 
-            # Verifica che il subprocess sia chiamato con il modello corretto
-            mock_popen.assert_called_once()
-            call_args = mock_popen.call_args[0][0]  # Get command args
-            assert "ollama" in call_args
-            assert runner.model in call_args
+            # Verifica che la chiamata HTTP sia stata fatta correttamente
+            mock_post.assert_called_once()
+            call_args = mock_post.call_args
+            assert call_args[1]["json"]["model"] == runner.model
+            assert result == "Response"
 
     def test_self_check_real(self, test_config):
         """Test self_check con comportamento reale"""
