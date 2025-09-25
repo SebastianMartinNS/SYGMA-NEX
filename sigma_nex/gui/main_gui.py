@@ -1,3 +1,6 @@
+from sigma_nex.data_loader import DataLoader
+from sigma_nex.core.runner import Runner
+from sigma_nex.config import load_config
 import os
 import sys
 import threading
@@ -5,14 +8,15 @@ import threading
 try:
     import customtkinter as ctk
 except ImportError as e:
-    # Allow tests to simulate missing dependency or handle when customtkinter is not installed
+    # Allow tests to simulate missing dependency or handle when customtkinter
+    # is not installed
     ctk = None
     print(f"[WARNING] customtkinter not available: {e}")
 except Exception as e:
     # Handle other potential import errors
     ctk = None
     print(f"[WARNING] Error importing customtkinter: {e}")
-from tkinter import messagebox, filedialog
+from tkinter import filedialog, messagebox
 
 
 # Imposta la working directory alla root del progetto
@@ -34,9 +38,6 @@ def set_project_root():
 set_project_root()
 
 # Importa core
-from sigma_nex.config import load_config
-from sigma_nex.core.runner import Runner
-from sigma_nex.data_loader import DataLoader
 
 # Tema GUI
 if ctk is not None:
@@ -48,7 +49,7 @@ class SigmaNexGUI(ctk.CTk if ctk is not None else object):
     def __init__(self):
         if ctk is None:
             raise ImportError(
-                "customtkinter is not available. Please install it with: pip install customtkinter"
+                "customtkinter not available. Install: pip install customtkinter"
             )
 
         super().__init__()

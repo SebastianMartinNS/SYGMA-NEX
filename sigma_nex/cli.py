@@ -1,4 +1,5 @@
 import click
+
 from .config import get_config
 from .core.runner import Runner
 from .data_loader import DataLoader

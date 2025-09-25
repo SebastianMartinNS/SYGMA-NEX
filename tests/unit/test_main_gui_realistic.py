@@ -3,13 +3,13 @@ Test realistici per sigma_nex.gui.main_gui
 Coverage REALE eliminando mock eccessivi e test vuoti
 """
 
-import pytest
-import sys
 import os
-import threading
+import sys
 import time
-from unittest.mock import Mock, patch, MagicMock, call
 from pathlib import Path
+from unittest.mock import Mock, patch
+
+import pytest
 
 
 class TestSigmaNexGUIRealistic:
@@ -52,7 +52,7 @@ class TestSigmaNexGUIRealistic:
             with pytest.raises(ImportError) as exc_info:
                 SigmaNexGUI()
 
-            assert "customtkinter is not available" in str(exc_info.value)
+            assert "customtkinter not available" in str(exc_info.value)
 
     def test_gui_initialization_with_config_error(self):
         """Test inizializzazione con errore REALE di configurazione"""
@@ -127,7 +127,8 @@ class TestSigmaNexGUIRealistic:
                         # Test run_selfcheck event handler REALE
                         gui.run_selfcheck()
 
-                        # Verifica che run_background sia chiamato con la funzione corretta
+                        # Verifica che run_background sia chiamato con la funzione
+                        # corretta
                         gui.run_background.assert_called_once()
                         called_func = gui.run_background.call_args[0][0]
 
@@ -518,7 +519,6 @@ class TestGUIComponentsReal:
     @pytest.mark.skip(reason="GUI test requires display environment")
     def test_gui_components_creation(self):
         """Test creazione componenti GUI - SKIPPED per environment senza display"""
-        pass
 
     def test_gui_file_operations(self):
         """Test operazioni con file reali"""
@@ -603,7 +603,8 @@ class TestGUIBackgroundExecution:
                         with patch("threading.Thread") as mock_thread:
                             gui.run_background(failing_func)
 
-                            # Execute wrapper with exception - dovrebbe stampare l'errore ma non rilanciarlo
+                            # Execute wrapper with exception - dovrebbe stampare
+                            # l'errore ma non rilanciarlo
                             wrapper_func = mock_thread.call_args[1]["target"]
                             try:
                                 wrapper_func()

@@ -4,11 +4,12 @@ SIGMA-NEX Configuration and Path Management
 Centralized path management and configuration for the SIGMA-NEX project.
 """
 
-import os
-import yaml
 import json
+import os
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
+import yaml
 
 
 class SigmaConfig:
@@ -106,7 +107,7 @@ class SigmaConfig:
 
     # --- lightweight mutation helpers used by tests ---
     def set(self, key: str, value: Any) -> None:
-        """Set a configuration value using dotted keys, creating nested dicts as needed."""
+        """Set configuration value using dotted keys, creating nested dicts."""
         cfg = self.config  # ensure loaded
         if not isinstance(key, str) or not key:
             return
@@ -119,7 +120,7 @@ class SigmaConfig:
         cur[parts[-1]] = value
 
     def save(self) -> None:
-        """Persist current configuration to disk, creating parent directory if needed."""
+        """Persist current configuration to disk, creating parent dirs."""
         try:
             Path(self.config_path).parent.mkdir(parents=True, exist_ok=True)
             with open(self.config_path, "w", encoding="utf-8") as f:

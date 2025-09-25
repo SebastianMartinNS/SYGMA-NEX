@@ -3,21 +3,21 @@ Test realistici per sigma_nex.core.retriever - focus su logica reale di retrieva
 Elimina dipendenze pesanti ma testa comportamento effettivo del retriever
 """
 
-import pytest
 import json
 import os
-from unittest.mock import Mock, patch, MagicMock
-from pathlib import Path
+from unittest.mock import Mock, patch
+
+import pytest
 
 from sigma_nex.core.retriever import (
-    _get_model,
-    build_index,
-    search_moduli,
-    get_moduli,
-    Retriever,
     DATA_PATH,
     INDEX_PATH,
     MAPPING_PATH,
+    Retriever,
+    _get_model,
+    build_index,
+    get_moduli,
+    search_moduli,
 )
 
 
@@ -359,8 +359,6 @@ def mock_open_json_mapping(*args, **kwargs):
         '["text1 :: desc1", "text2 :: desc2", "text3 :: desc3"]'
     )
 
-    import json
-
     class MockOpen:
         def __enter__(self):
             return self
@@ -454,7 +452,6 @@ class TestRetrieverErrorHandling:
             try:
                 build_index()
                 # build_index gracefully handles missing faiss and prints error
-                pass
             except (AttributeError, ImportError):
                 # Comportamento atteso
                 assert True
@@ -465,7 +462,6 @@ class TestRetrieverErrorHandling:
             try:
                 _get_model()
                 # _get_model returns stub when SentenceTransformer unavailable
-                pass
             except (AttributeError, ImportError, TypeError):
                 # Comportamento atteso
                 assert True
@@ -479,15 +475,17 @@ class TestRetrieverErrorHandling:
                 build_index()
 
         # Test ricerca con indice mancante
-        with patch(
-            "sigma_nex.core.retriever.faiss.read_index", side_effect=FileNotFoundError
-        ):
-            try:
-                search_moduli("test query")
-                # search_moduli gracefully handles missing index and returns empty list
-                pass
-            except FileNotFoundError:
-                assert True
+        # Skip se faiss non è disponibile
+        from sigma_nex.core.retriever import faiss
+        if faiss is not None:
+            with patch(
+                "sigma_nex.core.retriever.faiss.read_index", side_effect=FileNotFoundError
+            ):
+                try:
+                    search_moduli("test query")
+                    # search_moduli gracefully handles missing index and returns empty list
+                except FileNotFoundError:
+                    assert True
 
     def test_corrupted_data_handling_real(self):
         """Test gestione dati corrotti"""
@@ -552,10 +550,8 @@ class TestRetrieverIntegration:
         try:
             build_index()
             print("✅ Build index completato")
-            index_built = True
         except Exception as e:
             print(f"⚠️ Build index fallito: {e}")
-            index_built = False
 
         # 3. Test search con diverse query
         test_queries = ["sopravvivenza", "primo soccorso", "navigazione", "test"]
@@ -609,7 +605,6 @@ class TestRetrieverIntegration:
 
     def test_retriever_faiss_operations_coverage(self):
         """Test operazioni FAISS per aumentare coverage"""
-        import tempfile
 
         with patch("sigma_nex.core.retriever.faiss") as mock_faiss:
             # Mock FAISS index

@@ -3,12 +3,13 @@ Test realistici completi per sigma_nex.utils.security - 80% coverage target
 Test REALI senza mock pesanti - focus su sicurezza crittografica effettiva
 """
 
-import pytest
 import base64
 import hashlib
+
+import pytest
 from cryptography.fernet import Fernet, InvalidToken
 
-from sigma_nex.utils.security import derive_key, encrypt, decrypt
+from sigma_nex.utils.security import decrypt, derive_key, encrypt
 
 
 class TestSecurityRealistic:
@@ -392,8 +393,6 @@ class TestSecurityRealWorldScenarios:
     def test_secure_communication_scenario_real(self):
         """Test scenario comunicazione sicura"""
         # Simula scambio di messaggi crittografati
-        alice_password = "alice_secret_key_2024"
-        bob_password = "bob_secret_key_2024"
 
         # Alice invia messaggio a Bob (usando password condivisa)
         shared_password = "alice_and_bob_shared_secret"

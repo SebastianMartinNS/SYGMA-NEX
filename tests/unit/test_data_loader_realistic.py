@@ -3,12 +3,12 @@ Test realistici per sigma_nex.data_loader - focus su logica reale di caricamento
 Testa comportamento effettivo del DataLoader con file reali e simulati
 """
 
-import pytest
 import json
-import tempfile
 import os
+import tempfile
 from pathlib import Path
-from unittest.mock import Mock, patch, mock_open
+
+import pytest
 
 from sigma_nex.data_loader import DataLoader, load_json_data
 
@@ -177,8 +177,7 @@ class TestDataLoaderRealistic:
                     ],
                     "fallback": "1. Scava per trovare radici amidacee",
                 },
-            ]
-        }
+            ]}
 
         with tempfile.NamedTemporaryFile(
             mode="w", suffix=".json", delete=False, encoding="utf-8"

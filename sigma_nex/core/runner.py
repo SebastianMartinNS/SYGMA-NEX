@@ -4,28 +4,29 @@ SIGMA-NEX Core Runner
 Optimized runner with memory management and security improvements.
 """
 
-import re
-import subprocess
-import tempfile
 import os
+import re
+import shutil
+import subprocess
 import sys
+import tempfile
 import threading
 import time
-import shutil
+from collections import deque
+from typing import Any, Dict, Optional
+
 import click
 import requests
 from click import echo
-from collections import deque
-from typing import List, Optional, Dict, Any
 
-from .context import build_prompt
-from .translate import translate_it_to_en, translate_en_to_it
 from ..utils.validation import (
+    ValidationError,
     sanitize_text_input,
     validate_file_path,
     validate_prompt,
-    ValidationError,
 )
+from .context import build_prompt
+from .translate import translate_en_to_it, translate_it_to_en
 
 # Pattern for removing ANSI codes from terminal
 ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;?]*[ -/]*[@-~]")
@@ -75,7 +76,8 @@ class Runner:
         self.model_name = self.model  # For test compatibility
 
         # Use deque for efficient memory management of history
-        # Respect max_history as maximum number of items stored (tests expect exact limit)
+        # Respect max_history as maximum number of items stored (tests expect
+        # exact limit)
         self.history = deque(maxlen=self.max_history)
 
         # Temporary file cleanup registry
@@ -183,9 +185,10 @@ class Runner:
             block_full = "▓"
             block_empty = "░"
             pos = 0
+            max_iterations = 5000  # Max ~6.5 minutes at 0.08s per iteration
 
             try:
-                while not stop_event.is_set():
+                while not stop_event.is_set() and pos < max_iterations:
                     filled = pos % (width + 1)
                     empty = width - filled
                     bar = f"[{block_full * filled}{block_empty * empty}] Processing..."
@@ -256,10 +259,10 @@ class Runner:
         return ANSI_ESCAPE.sub("", raw).strip()
 
     def _call_model(self, prompt: str) -> str:
-        """Call the model via Ollama HTTP API; raise on errors so callers can surface them.
+        """Call model via Ollama HTTP API; raise on errors for callers.
 
-        Tests patch requests.post and expect exceptions (e.g., Timeout) to propagate as
-        error messages instead of silently falling back to the CLI.
+        Tests patch requests.post and expect exceptions (e.g., Timeout) to
+        propagate as error messages instead of silently falling back to CLI.
         """
         # Prefer HTTP API (test suite mocks requests.post)
         try:
@@ -352,9 +355,7 @@ SIGMA-NEX Statistics:
     def self_check(self) -> None:
         """Verify that Ollama CLI and models are available."""
         if not self._ollama_cli_available:
-            echo(
-                "⚠️ Ollama CLI not found; HTTP API may still be available at localhost:11434"
-            )
+            echo("⚠️ Ollama CLI not found; HTTP API may be available at :11434")
             return
         try:
             result = subprocess.run(

@@ -4,23 +4,20 @@ SIGMA-NEX API Server
 Optimized FastAPI server with async performance and security improvements.
 """
 
-import os
-import sys
-import json
-import datetime
 import asyncio
-import socket
-from pathlib import Path
-from typing import List, Optional, Dict, Any
+import datetime
+import json
 import logging
+import socket
+import sys
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 try:
     import requests
     import uvicorn
-    from fastapi import FastAPI, Request, HTTPException, Depends
-    from fastapi.responses import JSONResponse, FileResponse
+    from fastapi import FastAPI, HTTPException, Request
     from fastapi.middleware.cors import CORSMiddleware
-    from fastapi.security import HTTPBasic, HTTPBasicCredentials
     from pydantic import BaseModel, Field
 
     FASTAPI_AVAILABLE = True
@@ -31,10 +28,10 @@ except ImportError:
 from .config import get_config, load_config  # re-export per compat test
 from .core.context import build_prompt
 from .utils.validation import (
+    ValidationError,
+    sanitize_log_data,
     sanitize_text_input,
     validate_user_id,
-    sanitize_log_data,
-    ValidationError,
 )
 
 # Safe import del Runner
@@ -91,7 +88,7 @@ class SigmaServer:
     def __init__(self, config_path: Optional[str] = None):
         if not FASTAPI_AVAILABLE:
             raise RuntimeError(
-                "FastAPI dependencies not available. Install with: pip install fastapi uvicorn"
+                "FastAPI not available. Install: pip install fastapi uvicorn"
             )
 
         # Get config instance and convert to dict for tests compatibility

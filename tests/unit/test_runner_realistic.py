@@ -3,14 +3,14 @@ Test realistici per sigma_nex.core.runner
 Coverage REALE eliminando mock eccessivi
 """
 
-import pytest
 import os
-import sys
 import subprocess
+import sys
 import tempfile
 from collections import deque
-from unittest.mock import Mock, patch, MagicMock
-from pathlib import Path
+from unittest.mock import Mock, patch
+
+import pytest
 
 from sigma_nex.core.runner import Runner
 
@@ -359,7 +359,8 @@ class TestRunnerRealistic:
 
                 # Verifica che il file sia stato processato
                 assert isinstance(result, str)
-                # Il metodo dovrebbe chiamare _send_with_progress o restituire un messaggio
+                # Il metodo dovrebbe chiamare _send_with_progress o restituire un
+                # messaggio
                 assert mock_send.called or "Self-heal" in result
         finally:
             # Cleanup
