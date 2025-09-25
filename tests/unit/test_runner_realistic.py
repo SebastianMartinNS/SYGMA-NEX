@@ -107,8 +107,10 @@ class TestRunnerRealistic:
         runner = Runner(test_config)
 
         # Force subprocess call by mocking shutil.which to return valid path
-        with patch("subprocess.run") as mock_run, \
-             patch("shutil.which", return_value="/usr/bin/ollama"):
+        with (
+            patch("subprocess.run") as mock_run,
+            patch("shutil.which", return_value="/usr/bin/ollama"),
+        ):
             # Simula ollama list success
             mock_result = Mock()
             mock_result.returncode = 0
@@ -137,7 +139,9 @@ class TestRunnerRealistic:
 
     def test_send_with_progress_subprocess_real(self, test_config):
         """Test _send_with_progress con thread e subprocess mockato"""
-        with patch("shutil.which", return_value="/usr/bin/ollama"):  # Ollama CLI disponibile
+        with patch(
+            "shutil.which", return_value="/usr/bin/ollama"
+        ):  # Ollama CLI disponibile
             runner = Runner(test_config)
 
             # Test progress bar threading con subprocess mockato
