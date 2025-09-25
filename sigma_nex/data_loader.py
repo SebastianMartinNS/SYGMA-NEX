@@ -1,6 +1,7 @@
 import json
 import click
 
+
 class DataLoader:
     """
     Classe responsabile del caricamento dei moduli operativi da un file JSON.
@@ -22,7 +23,7 @@ class DataLoader:
         """
         try:
             # Apertura del file JSON con codifica UTF-8
-            with open(path, 'r', encoding='utf-8') as f:
+            with open(path, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
             # Estrazione dell'elenco dei moduli dal campo "modules"
@@ -45,7 +46,7 @@ def load_json_data(path: str):
     In caso di errori, restituisce una lista vuota per compatibilità con i test.
     """
     try:
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
         return []
