@@ -18,7 +18,7 @@ setup(
         "Documentazione": "https://github.com/tuo-username/sigma-nex/wiki",
         "Issue Tracker": "https://github.com/tuo-username/sigma-nex/issues",
     },
-    license="MIT",
+    license="CC BY-NC 4.0",
     packages=find_packages(exclude=["tests", "data"]),
     include_package_data=True,
     install_requires=[
@@ -36,7 +36,7 @@ setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "License :: Other/Proprietary License",
         "Operating System :: OS Independent",
         "Environment :: Console",
         "Intended Audience :: Developers",

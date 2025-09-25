@@ -2,7 +2,7 @@
 
 ![SIGMA-NEX](https://img.shields.io/badge/SIGMA--NEX-v0.3.1-blue?style=for-the-badge&logo=robot)
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-blue?style=for-the-badge)
 ![Build Status](https://img.shields.io/badge/Build-Passing-success?style=for-the-badge)
 ![Coverage](https://img.shields.io/badge/Coverage-95%25-brightgreen?style=for-the-badge)
 
@@ -351,17 +351,24 @@ Vedi [CHANGELOG.md](CHANGELOG.md) per le modifiche dettagliate.
 
 ## Licenza
 
-**MIT License** - Vedi [LICENSE](LICENSE) per i dettagli completi.
+**Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**
 
-```
-Copyright (c) 2024 SIGMA-NEX Project
+Questo progetto è open source per uso educativo, di ricerca e personale. L'uso commerciale richiede autorizzazione esplicita.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software...
-```
+**Puoi:**
+- ✅ Condividere il progetto
+- ✅ Modificare e adattare il codice
+- ✅ Usarlo per scopi educativi e di ricerca
+- ✅ Creare versioni derivate (non commerciali)
+
+**Non puoi:**
+- ❌ Usarlo per scopi commerciali
+- ❌ Vendere o monetizzare il software
+- ❌ Rimuovere l'attribuzione al progetto originale
+
+**Contatti per Licenze Commerciali:** rootedlab6@gmail.com
+
+Vedi [LICENSE](LICENSE) per i termini completi della licenza.
 
 ## Disclaimer e Sicurezza
 
