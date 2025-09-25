@@ -2,10 +2,11 @@
 Basic integration test that can pass CI/CD.
 """
 
-import pytest
-import tempfile
 import json
+import tempfile
 from pathlib import Path
+
+import pytest
 
 from sigma_nex.config import SigmaConfig
 from sigma_nex.data_loader import load_json_data
@@ -27,7 +28,7 @@ class TestBasicIntegration:
             test_file = Path(temp_dir) / "test.json"
             test_data = {"test": "value", "modules": [{"name": "test"}]}
             test_file.write_text(json.dumps(test_data))
-            
+
             result = load_json_data(str(test_file))
             assert result is not None
             assert result["test"] == "value"
@@ -42,11 +43,11 @@ class TestBasicIntegration:
         """Test config operations without saving to disk."""
         with tempfile.TemporaryDirectory() as temp_dir:
             config = SigmaConfig(temp_dir)
-            
+
             # Test nested keys
             config.set("nested.key", "value")
             assert config.get("nested.key") == "value"
-            
+
             # Test default values
             assert config.get("nonexistent", "default") == "default"
 
@@ -56,12 +57,10 @@ class TestBasicIntegration:
             # Test framework structure
             framework_file = Path(temp_dir) / "framework.json"
             framework_data = {
-                "modules": [
-                    {"name": "test_module", "content": "test content"}
-                ]
+                "modules": [{"name": "test_module", "content": "test content"}]
             }
             framework_file.write_text(json.dumps(framework_data))
-            
+
             result = load_json_data(str(framework_file))
             assert "modules" in result
             assert len(result["modules"]) == 1
@@ -78,15 +77,15 @@ class TestSystemComponents:
             data_file = Path(temp_dir) / "data.json"
             data_content = {"test": "integration", "modules": []}
             data_file.write_text(json.dumps(data_content))
-            
+
             # Create config
             config = SigmaConfig(temp_dir)
             config.set("data.path", str(data_file))
-            
+
             # Test that data can be loaded using path from config
             data_path = config.get("data.path")
             loaded_data = load_json_data(data_path)
-            
+
             assert loaded_data is not None
             assert loaded_data["test"] == "integration"
 
@@ -94,11 +93,11 @@ class TestSystemComponents:
         """Test error handling across components."""
         with tempfile.TemporaryDirectory() as temp_dir:
             config = SigmaConfig(temp_dir)
-            
+
             # Test config with invalid data
             config.set("test.value", None)
             assert config.get("test.value") is None
-            
+
             # Test data loader with invalid file
             invalid_data = load_json_data("/invalid/path")
             assert invalid_data == []  # Should return empty list
@@ -114,15 +113,15 @@ class TestRealWorldScenarios:
             config = SigmaConfig(temp_dir)
             config.set("model", "mistral:latest")
             config.set("temperature", 0.7)
-            
+
             # 2. Verify configuration
             assert config.get("model") == "mistral:latest"
             assert config.get("temperature") == 0.7
-            
+
             # 3. Create data file
             data_file = Path(temp_dir) / "data.json"
             data_file.write_text('{"modules": [{"name": "test"}]}')
-            
+
             # 4. Load data
             data = load_json_data(str(data_file))
             assert data is not None
@@ -132,7 +131,7 @@ class TestRealWorldScenarios:
         """Test configuration flexibility."""
         with tempfile.TemporaryDirectory() as temp_dir:
             config = SigmaConfig(temp_dir)
-            
+
             # Test various data types
             config.set("string_value", "test")
             config.set("int_value", 42)
@@ -140,7 +139,7 @@ class TestRealWorldScenarios:
             config.set("bool_value", True)
             config.set("list_value", [1, 2, 3])
             config.set("dict_value", {"nested": "value"})
-            
+
             # Verify all values
             assert config.get("string_value") == "test"
             assert config.get("int_value") == 42
