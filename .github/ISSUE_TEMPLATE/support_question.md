@@ -1,9 +1,10 @@
 ---
-name: ❓ Support Question
-description: Chiedi aiuto per l'installazione o l'utilizzo
+name: "❓ Support Question"
+about: Ask!
 title: "[SUPPORT] Breve descrizione del problema"
-labels: ["question", "support"]
-assignees: []
+labels: question
+assignees: ''
+
 ---
 
 ## ❓ Domanda
