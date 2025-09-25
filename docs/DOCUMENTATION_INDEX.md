@@ -155,6 +155,7 @@ sigma diagnose              # Diagnostica completa
 | [Development Guide](development.md) | Complete | 2025-09-24 | 0.3.1 |
 | [Deployment Guide](deployment.md) | Complete | 2025-09-24 | 0.3.1 |
 | [Testing Guide](testing.md) | Complete | 2025-09-24 | 0.3.1 |
+| [CI/CD System](ci-cd-system.md) | Complete | 2025-09-25 | 0.3.1 |
 | [API Reference](api.md) | Complete | 2025-09-24 | 0.3.1 |
 
 ---
