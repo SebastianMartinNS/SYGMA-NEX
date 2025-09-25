@@ -5,7 +5,6 @@ This file provides backward compatibility for the main GUI.
 The main GUI implementation is now in sigma_nex.gui.main_gui.
 """
 
-import os
 import sys
 from pathlib import Path
 

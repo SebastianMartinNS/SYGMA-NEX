@@ -9,9 +9,7 @@ Usage:
     python monitor_ci.py [--verbose] [--json]
 """
 
-import json
 import subprocess
-import sys
 from datetime import datetime
 from pathlib import Path
 

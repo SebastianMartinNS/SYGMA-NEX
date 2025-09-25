@@ -485,7 +485,7 @@ class TestRetrieverErrorHandling:
             ):
                 try:
                     search_moduli("test query")
-                    # search_moduli gracefully handles missing index and returns empty list
+                    # search_moduli gracefully handles missing index
                 except FileNotFoundError:
                     assert True
 
