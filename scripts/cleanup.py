@@ -5,9 +5,9 @@ SIGMA-NEX Project Cleanup Script
 Removes temporary files, build artifacts, and cache directories.
 """
 
+import glob
 import os
 import shutil
-import glob
 from pathlib import Path
 
 
@@ -41,28 +41,23 @@ def main():
         "**/*.pyc",
         "**/*.pyo",
         "**/*.pyd",
-
         # Build artifacts
         "build",
         "dist",
         "*.egg-info",
         "*.spec",
-
         # Temporary files
         "*.tmp",
         "*.temp",
         "*.patch",
         "*.log",
-
         # OS specific
         ".DS_Store",
         "Thumbs.db",
-
         # Editor files
         "*.swp",
         "*.swo",
         "*~",
-
         # Project specific
         "*- Copia.*",
         "*0.1.*",
