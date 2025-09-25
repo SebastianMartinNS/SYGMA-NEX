@@ -188,7 +188,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/sigma-nex
         tags: |
           type=semver,pattern={{version}},value=${{ needs.version.outputs.version }}
           type=semver,pattern={{major}}.{{minor}},value=${{ needs.version.outputs.version }}
@@ -212,7 +212,7 @@ jobs:
       run: |
         docker run --rm \
           -e SIGMA_SKIP_OLLAMA=true \
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.version.outputs.version }} \
+          ${{ env.REGISTRY }}/${{ github.repository_owner }}/sigma-nex:${{ needs.version.outputs.version }} \
           sigma self-check
 
   # 📄 Generate release notes
