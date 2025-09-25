@@ -14,12 +14,13 @@ except Exception as e:
     print(f"[WARNING] Error importing customtkinter: {e}")
 from tkinter import messagebox, filedialog
 
+
 # Imposta la working directory alla root del progetto
 def set_project_root():
-    if getattr(sys, 'frozen', False):
+    if getattr(sys, "frozen", False):
         base_path = os.path.dirname(sys.executable)
     else:
-        base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+        base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 
     os.chdir(base_path)
     # Insert project root at position 0 for imports
@@ -28,6 +29,7 @@ def set_project_root():
     except Exception:
         pass
     print(f"[DEBUG] Working directory impostata a: {base_path}")
+
 
 set_project_root()
 
@@ -41,11 +43,14 @@ if ctk is not None:
     ctk.set_appearance_mode("dark")
     ctk.set_default_color_theme("green")
 
+
 class SigmaNexGUI(ctk.CTk if ctk is not None else object):
     def __init__(self):
         if ctk is None:
-            raise ImportError("customtkinter is not available. Please install it with: pip install customtkinter")
-        
+            raise ImportError(
+                "customtkinter is not available. Please install it with: pip install customtkinter"
+            )
+
         super().__init__()
         self.title("SIGMA-NEX :: Interfaccia Cognitiva")
         self.geometry("760x560")
@@ -63,14 +68,20 @@ class SigmaNexGUI(ctk.CTk if ctk is not None else object):
         self.progress_running = False
 
         # Interfaccia
-        self.title_label = ctk.CTkLabel(self, text="SIGMA-NEX [modalità offline]", font=("Orbitron", 24))
+        self.title_label = ctk.CTkLabel(
+            self, text="SIGMA-NEX [modalità offline]", font=("Orbitron", 24)
+        )
         self.title_label.pack(pady=10)
 
-        self.command_entry = ctk.CTkEntry(self, placeholder_text="Inserisci comando...", width=500)
+        self.command_entry = ctk.CTkEntry(
+            self, placeholder_text="Inserisci comando...", width=500
+        )
         self.command_entry.pack(pady=5)
-        self.command_entry.bind('<Return>', lambda event: self.process_command())
+        self.command_entry.bind("<Return>", lambda event: self.process_command())
 
-        self.send_button = ctk.CTkButton(self, text="Invia", command=self.process_command)
+        self.send_button = ctk.CTkButton(
+            self, text="Invia", command=self.process_command
+        )
         self.send_button.pack(pady=5)
 
         self.output_box = ctk.CTkTextbox(self, width=720, height=260)
@@ -82,13 +93,19 @@ class SigmaNexGUI(ctk.CTk if ctk is not None else object):
         self.button_frame = ctk.CTkFrame(self)
         self.button_frame.pack(pady=5)
 
-        self.selfcheck_button = ctk.CTkButton(self.button_frame, text="Self-Check", command=self.run_selfcheck)
+        self.selfcheck_button = ctk.CTkButton(
+            self.button_frame, text="Self-Check", command=self.run_selfcheck
+        )
         self.selfcheck_button.pack(side="left", padx=5)
 
-        self.selfheal_button = ctk.CTkButton(self.button_frame, text="Self-Heal .py", command=self.run_selfheal)
+        self.selfheal_button = ctk.CTkButton(
+            self.button_frame, text="Self-Heal .py", command=self.run_selfheal
+        )
         self.selfheal_button.pack(side="left", padx=5)
 
-        self.loadfw_button = ctk.CTkButton(self.button_frame, text="Carica Framework", command=self.run_load_framework)
+        self.loadfw_button = ctk.CTkButton(
+            self.button_frame, text="Carica Framework", command=self.run_load_framework
+        )
         self.loadfw_button.pack(side="left", padx=5)
 
         self.exit_button = ctk.CTkButton(self, text="Chiudi", command=self.destroy)
@@ -100,7 +117,9 @@ class SigmaNexGUI(ctk.CTk if ctk is not None else object):
         symbols = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█", "▇", "▆", "▅", "▄", "▃", "▂"]
         idx = 0
         while self.progress_running:
-            self.progress_label.configure(text=f"Elaborazione {symbols[idx % len(symbols)]*5}")
+            self.progress_label.configure(
+                text=f"Elaborazione {symbols[idx % len(symbols)]*5}"
+            )
             self.progress_label.update()
             idx += 1
             self.after(100)
@@ -116,6 +135,7 @@ class SigmaNexGUI(ctk.CTk if ctk is not None else object):
                 func(*args)
             finally:
                 self.stop_progress()
+
         threading.Thread(target=wrapper, daemon=True).start()
 
     # -------------------- Comandi principali --------------------
@@ -143,6 +163,7 @@ class SigmaNexGUI(ctk.CTk if ctk is not None else object):
             self.runner.self_check()
             self.output_box.insert("end", "[✔] Ollama verificato.\n\n")
             self.output_box.see("end")
+
         self.run_background(check)
 
     def run_selfheal(self):
@@ -154,6 +175,7 @@ class SigmaNexGUI(ctk.CTk if ctk is not None else object):
             result = self.runner.self_heal_file(filepath)
             self.output_box.insert("end", f"{result}\n\n")
             self.output_box.see("end")
+
         self.run_background(heal)
 
     def run_load_framework(self):
@@ -163,8 +185,11 @@ class SigmaNexGUI(ctk.CTk if ctk is not None else object):
 
         def load():
             count = DataLoader().load(filepath)
-            self.output_box.insert("end", f"[✔] Caricati {count} moduli dal file {filepath}\n\n")
+            self.output_box.insert(
+                "end", f"[✔] Caricati {count} moduli dal file {filepath}\n\n"
+            )
             self.output_box.see("end")
+
         self.run_background(load)
 
 
@@ -174,7 +199,7 @@ def main():
             print("Error: customtkinter is not available.")
             print("Please install it with: pip install customtkinter")
             return False
-        
+
         app = SigmaNexGUI()
         app.mainloop()
         return True
@@ -187,5 +212,5 @@ def main():
         return False
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

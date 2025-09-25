@@ -1,5 +1,7 @@
 # sigma_nex/core/context.py
-def build_prompt(system_prompt: str, history: list, query: str, retrieval_enabled: bool = True) -> str:
+def build_prompt(
+    system_prompt: str, history: list, query: str, retrieval_enabled: bool = True
+) -> str:
     """
     Costruisce il prompt finale per SIGMA-NEX unendo:
     - il prompt di sistema (interno, non rivelato)
@@ -15,10 +17,11 @@ def build_prompt(system_prompt: str, history: list, query: str, retrieval_enable
         # Recupera moduli rilevanti tramite FAISS (lazy import and safe fallback)
         try:
             from sigma_nex.core.retriever import search_moduli
+
             moduli_rilevanti = search_moduli(query, k=3)
         except Exception:
             moduli_rilevanti = []
-        
+
         for i, mod in enumerate(moduli_rilevanti):
             if isinstance(mod, str):
                 parts = mod.split("::", 1)
@@ -30,7 +33,7 @@ def build_prompt(system_prompt: str, history: list, query: str, retrieval_enable
                     knowledge += f"\n[MODULO {i+1}]\n{mod.strip()}\n"
 
     # Costruisce la conversazione simulando continuità logica
-    conversation = '\n'.join(history + [f'Utente: {query}', 'Assistant:'])
+    conversation = "\n".join(history + [f"Utente: {query}", "Assistant:"])
 
     # Restituisce il prompt finale completo
     if knowledge:
