@@ -25,6 +25,12 @@ class SigmaConfig:
 
     def _find_project_root(self) -> Path:
         """Find the project root directory safely."""
+        # First try to use an environment variable if set
+        if "SIGMA_NEX_ROOT" in os.environ:
+            env_root = Path(os.environ["SIGMA_NEX_ROOT"])
+            if env_root.exists() and (env_root / "config.yaml").exists():
+                return env_root
+
         # Try walking up from CWD for a limited number of levels
         current = Path.cwd()
         for _ in range(10):
@@ -33,8 +39,35 @@ class SigmaConfig:
             if current == current.parent:
                 break
             current = current.parent
-        # Fallback to repository root (two levels up from this file)
-        return Path(__file__).parent.parent.parent
+
+        # Try walking up from the package location
+        current = Path(__file__).parent
+        for _ in range(10):
+            if (current / "config.yaml").exists():
+                return current
+            if current == current.parent:
+                break
+            current = current.parent
+
+        # Check user config directory
+        user_config_dir = Path.home() / ".config" / "sigma-nex"
+        if (user_config_dir / "config.yaml").exists():
+            return user_config_dir
+
+        # Check common installation locations
+        possible_locations = [
+            Path.home() / ".sigma-nex",
+            Path("/opt/sigma-nex"),
+            Path("C:/Program Files/sigma-nex") if os.name == "nt" else None,
+        ]
+
+        for location in possible_locations:
+            if location and location.exists() and (location / "config.yaml").exists():
+                return location
+
+        # Fallback to repository root (relative to this file)
+        fallback = Path(__file__).parent.parent
+        return fallback
 
     @property
     def config(self) -> Dict[str, Any]:

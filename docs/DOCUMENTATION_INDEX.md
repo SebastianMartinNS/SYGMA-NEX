@@ -58,6 +58,14 @@ Questo file fornisce un indice completo di tutta la documentazione SIGMA-NEX org
 | Documento | Descrizione | Quando Usare |
 |-----------|-------------|--------------|
 | [Troubleshooting Guide](guides/troubleshooting.md) | Risoluzione problemi comuni | Quando qualcosa non funziona |
+| [Global Config Troubleshooting](troubleshooting_global_config.md) | Risoluzione problemi configurazione globale | Problemi con `sigma` da directory diverse |
+
+## System Analysis & Technical Documentation
+
+| Documento | Descrizione | Target |
+|-----------|-------------|---------|
+| [CI/CD System Analysis](ci-cd-analysis.md) | Analisi completa sistema CI/CD | DevOps/Technical Lead |
+| [New Files Documentation](new_files_documentation.md) | Documentazione nuove funzionalità | Sviluppatori/Maintainer |
 
 ## Usage by Role
 
