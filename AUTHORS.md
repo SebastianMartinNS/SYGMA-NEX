@@ -9,7 +9,7 @@
 ## Project Information
 - **Project**: SIGMA-NEX - Sistema di Intelligenza Artificiale Autonomo
 - **Repository**: https://github.com/SebastianMartinNS/SYGMA-NEX
-- **License**: MIT License
+- **License**: CC BY-NC 4.0 (Creative Commons Attribution-NonCommercial)
 - **Started**: 2025
 - **Current Version**: 0.3.1
 
@@ -54,4 +54,4 @@ SIGMA-NEX represents a unique innovation in offline-first AI systems for emergen
 
 ---
 
-**© 2025 Martin Sebastian. Released under MIT License.**
+**© 2025 Martin Sebastian. Released under CC BY-NC 4.0 License (Non-Commercial Use Only).**

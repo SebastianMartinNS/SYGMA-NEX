@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.3] - 2025-09-25
+
+### Changed
+- **License Update**: Migrated from MIT License to Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+- **Commercial Restrictions**: Software now restricted to educational, research, and personal use only
+- **Documentation Updates**: Updated README.md, AUTHORS.md, setup.py, and pyproject.toml to reflect new license
+- **Attribution Requirements**: Added clear attribution requirements for any redistribution or derivative works
+
+### Legal
+- **Open Source Status**: Remains open source but with non-commercial restrictions
+- **Commercial Licensing**: Commercial use now requires explicit written permission from copyright holder
+- **Clear Terms**: Added professional license terms with warranty disclaimers and attribution requirements
+
 ## [0.3.2] - 2025-09-25
 
 ### Fixed
