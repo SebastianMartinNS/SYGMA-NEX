@@ -1,4 +1,9 @@
+<div align="center">
+
+![SIGMA-NEX Logo](assets/logo.jpg)
+
 # SIGMA-NEX
+**Sistema di Intelligenza Artificiale Autonomo per la Sopravvivenza Offline-First**
 
 ![SIGMA-NEX](https://img.shields.io/badge/SIGMA--NEX-v0.3.1-blue?style=for-the-badge&logo=robot)
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
@@ -6,7 +11,7 @@
 ![Build Status](https://img.shields.io/badge/Build-Passing-success?style=for-the-badge)
 ![Coverage](https://img.shields.io/badge/Coverage-95%25-brightgreen?style=for-the-badge)
 
-**Sistema di Intelligenza Artificiale Autonomo per la Sopravvivenza Offline-First**
+</div>
 
 Un agente cognitivo avanzato progettato per scenari critici, blackout e ambienti ostili
 
