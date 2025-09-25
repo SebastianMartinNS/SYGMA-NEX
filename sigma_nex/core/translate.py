@@ -36,9 +36,9 @@ def _check_transformers():
 
     if _transformers_available is None:
         try:
-            tfm = importlib.import_module('transformers')
-            MarianMTModel = getattr(tfm, 'MarianMTModel')
-            MarianTokenizer = getattr(tfm, 'MarianTokenizer')
+            tfm = importlib.import_module("transformers")
+            MarianMTModel = getattr(tfm, "MarianMTModel")
+            MarianTokenizer = getattr(tfm, "MarianTokenizer")
             _transformers_available = True
         except Exception:
             _transformers_available = False
@@ -52,14 +52,11 @@ def _get_model_paths():
     cfg = get_config() if callable(get_config) else None  # type: ignore[misc]
     base_path: Path
     if cfg is not None:
-        base_path = cfg.get_path('translate_models', 'sigma_nex/core/models/translate')
+        base_path = cfg.get_path("translate_models", "sigma_nex/core/models/translate")
     else:
-        base_path = Path('sigma_nex/core/models/translate')
+        base_path = Path("sigma_nex/core/models/translate")
 
-    return {
-        'it-en': base_path / "it-en",
-        'en-it': base_path / "en-it"
-    }
+    return {"it-en": base_path / "it-en", "en-it": base_path / "en-it"}
 
 
 # Thread-safe model cache
@@ -83,7 +80,7 @@ def _load_model(direction: str) -> Optional[Tuple]:
     except Exception:
         model_path = None
 
-    if not model_path or not getattr(model_path, 'exists', lambda: False)():
+    if not model_path or not getattr(model_path, "exists", lambda: False)():
         print(f"[WARNING] Translation model not found at {model_path}")
         return None
 
@@ -105,25 +102,25 @@ def _load_model(direction: str) -> Optional[Tuple]:
 def _chunk_translate(text: str, tokenizer, model, max_tokens: int = 500) -> str:
     """
     Split text into chunks and translate each chunk separately.
-    
+
     Args:
         text: Text to translate
         tokenizer: Tokenizer instance
         model: Model instance
         max_tokens: Maximum tokens per chunk
-        
+
     Returns:
         Translated text
     """
     # Split into sentences
-    sentences = re.split(r'(?<=[.!?]) +', text)
+    sentences = re.split(r"(?<=[.!?]) +", text)
     chunks = []
     current_chunk = ""
 
     for sentence in sentences:
         test_chunk = (current_chunk + " " + sentence).strip()
         try:
-            if len(tokenizer(test_chunk)['input_ids']) < max_tokens:
+            if len(tokenizer(test_chunk)["input_ids"]) < max_tokens:
                 current_chunk = test_chunk
             else:
                 if current_chunk:
@@ -137,7 +134,7 @@ def _chunk_translate(text: str, tokenizer, model, max_tokens: int = 500) -> str:
                 if current_chunk:
                     chunks.append(current_chunk.strip())
                 current_chunk = sentence
-    
+
     if current_chunk:
         chunks.append(current_chunk.strip())
 
@@ -152,7 +149,7 @@ def _chunk_translate(text: str, tokenizer, model, max_tokens: int = 500) -> str:
         except Exception as e:
             print(f"[WARNING] Translation error for chunk: {e}")
             translated_chunks.append(chunk)  # Fallback to original
-    
+
     return " ".join(translated_chunks)
 
 
@@ -160,17 +157,17 @@ def translate_it_to_en(text: str) -> str:
     """Translate Italian text to English."""
     if not text or not text.strip():
         return text
-    
-    model_data = _load_model('it-en')
+
+    model_data = _load_model("it-en")
     if not model_data:
         print("[WARNING] Italian to English translation unavailable")
         return text
-    
+
     tokenizer, model = model_data
-    
+
     try:
         # Check if text is short enough for direct translation
-        if len(tokenizer(text)['input_ids']) < 500:
+        if len(tokenizer(text)["input_ids"]) < 500:
             batch = tokenizer([text], return_tensors="pt", padding=True)
             gen = model.generate(**batch)
             return tokenizer.batch_decode(gen, skip_special_tokens=True)[0]
@@ -185,16 +182,16 @@ def translate_en_to_it(text: str) -> str:
     """Translate English text to Italian."""
     if not text or not text.strip():
         return text
-    
-    model_data = _load_model('en-it')
+
+    model_data = _load_model("en-it")
     if not model_data:
         print("[WARNING] English to Italian translation unavailable")
         return text
-    
+
     tokenizer, model = model_data
-    
+
     try:
-        if len(tokenizer(text)['input_ids']) < 500:
+        if len(tokenizer(text)["input_ids"]) < 500:
             batch = tokenizer([text], return_tensors="pt", padding=True)
             gen = model.generate(**batch)
             return tokenizer.batch_decode(gen, skip_special_tokens=True)[0]
@@ -214,8 +211,8 @@ def preload_models() -> None:
     """Preload translation models for better performance."""
     if not _check_transformers():
         return
-    
+
     print("Preloading translation models...")
-    _load_model('it-en')
-    _load_model('en-it')
+    _load_model("it-en")
+    _load_model("en-it")
     print("[SUCCESS] Translation models preloaded")
