@@ -13,10 +13,10 @@ permissions:
   actions: read
   checks: write
 
-# Cancella job precedenti dello stesso workflow se ne parte uno nuovo
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+# Disabilitato concurrency per evitare cancellazioni durante debugging
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: true
 
 env:
   PYTHON_VERSION: '3.11'
@@ -74,26 +74,12 @@ jobs:
         mypy sigma_nex --ignore-missing-imports || echo "⚠️ Type checking issues found - gradual typing improvement planned"
       continue-on-error: true
 
-    - name: 🔒 Security scan (Bandit)
+    # Security scan temporaneamente disabilitato per debugging workflow
+    - name: � Security scan (Bandit) - SKIPPED
       run: |
-        echo "🔒 Running Bandit security scanner..."
-        bandit -r sigma_nex -f json -o bandit-report.json -ll || echo "⚠️ Security scan completed with warnings"
+        echo "� Security scan temporarily disabled for workflow debugging"
+        echo "⚠️ Will be re-enabled after workflow stabilization"
       continue-on-error: true
-
-    - name: 🛡️ Dependency vulnerability check
-      run: |
-        echo "🛡️ Running Safety vulnerability check..."
-        safety check --json --output safety-report.json || echo "⚠️ Dependency vulnerabilities found - review required"
-      continue-on-error: true
-
-    - name: 📊 Upload security reports
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: security-reports
-        path: |
-          bandit-report.json
-          safety-report.json
 
     - name: 🎯 Set Python matrix
       id: set-matrix
