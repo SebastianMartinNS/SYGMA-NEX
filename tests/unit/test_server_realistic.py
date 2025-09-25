@@ -449,7 +449,7 @@ class TestSigmaServerPerformance:
 
         # Test non-medical query
         is_medical = server._is_medical_query("Come cucinare la pasta?")
-        assert is_medical == False
+        assert is_medical is False
 
         # Test client info extraction REALE
         from fastapi import Request

@@ -64,7 +64,7 @@ class TestSigmaNexGUIRealistic:
                 from sigma_nex.gui.main_gui import SigmaNexGUI
 
                 # La GUI dovrebbe gestire l'errore gracefully
-                gui = SigmaNexGUI()
+                SigmaNexGUI()
 
                 # Verifica che l'errore sia stato mostrato
                 mock_error.assert_called_once()
@@ -322,7 +322,7 @@ class TestSigmaNexGUIRealistic:
 
         # Test main() con customtkinter disponibile
         with (
-            patch("sigma_nex.gui.main_gui.ctk") as mock_ctk,
+            patch("sigma_nex.gui.main_gui.ctk"),
             patch("sigma_nex.gui.main_gui.SigmaNexGUI") as mock_gui_class,
         ):
 
@@ -387,8 +387,6 @@ class TestSigmaNexGUIRealistic:
                         gui.after = Mock()  # Mock tkinter after method
 
                         # Mock show_progress per evitare loop infinito
-                        original_show_progress = SigmaNexGUI.show_progress
-
                         def mock_show_progress(self):
                             self.progress_running = True
                             self.progress_label.configure(text="Elaborazione ▄▄▄▄▄")
@@ -476,7 +474,7 @@ class TestMainFunction:
 
     def test_main_success(self):
         """Test main con successo"""
-        with patch("sigma_nex.gui.main_gui.ctk") as mock_ctk:
+        with patch("sigma_nex.gui.main_gui.ctk"):
             with patch("sigma_nex.gui.main_gui.SigmaNexGUI") as mock_gui_class:
 
                 mock_gui = Mock()
@@ -501,7 +499,7 @@ class TestMainFunction:
 
     def test_main_with_import_error(self):
         """Test main con ImportError"""
-        with patch("sigma_nex.gui.main_gui.ctk") as mock_ctk:
+        with patch("sigma_nex.gui.main_gui.ctk"):
             with patch("sigma_nex.gui.main_gui.SigmaNexGUI") as mock_gui_class:
 
                 mock_gui_class.side_effect = ImportError("Test import error")

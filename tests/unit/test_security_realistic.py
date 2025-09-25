@@ -13,7 +13,7 @@ from sigma_nex.utils.security import decrypt, derive_key, encrypt
 
 
 class TestSecurityRealistic:
-    """Test realistici completi per funzioni security - copertura crittografia effettiva"""
+    """Test realistici completi per funzioni security - copertura crittografia"""
 
     def test_derive_key_real(self):
         """Test derivazione chiave crittografica reale"""
@@ -290,12 +290,6 @@ class TestSecurityErrorHandling:
     def test_derive_key_error_handling_real(self):
         """Test gestione errori derivazione chiavi"""
         # derive_key dovrebbe gestire qualsiasi stringa
-        test_inputs = [
-            "",  # Stringa vuota
-            None,  # Dovrebbe fallire
-            123,  # Tipo sbagliato, dovrebbe fallire
-        ]
-
         # String vuota dovrebbe funzionare
         key = derive_key("")
         assert isinstance(key, bytes)

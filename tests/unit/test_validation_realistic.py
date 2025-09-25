@@ -483,21 +483,21 @@ class TestIsSafeCommandRealistic:
         ]
 
         for cmd in dangerous_commands:
-            assert is_safe_command(cmd) == False
+            assert is_safe_command(cmd) is False
 
     def test_safe_command_edge_cases_real(self):
         """Test casi limite per comandi"""
         # Tipo sbagliato
-        assert is_safe_command(123) == False
-        assert is_safe_command(None) == False
-        assert is_safe_command([]) == False
+        assert is_safe_command(123) is False
+        assert is_safe_command(None) is False
+        assert is_safe_command([]) is False
 
         # Stringa vuota
         assert is_safe_command("")  # Vuoto è sicuro
 
         # Case sensitivity
-        assert is_safe_command("RM -RF /") == False
-        assert is_safe_command("Format C:") == False
+        assert is_safe_command("RM -RF /") is False
+        assert is_safe_command("Format C:") is False
 
 
 class TestSanitizeLogDataRealistic:
@@ -601,7 +601,7 @@ class TestSanitizeLogDataRealistic:
 
         # Booleani
         assert sanitize_log_data(True)
-        assert sanitize_log_data(False) == False
+        assert sanitize_log_data(False) is False
 
         # None
         assert sanitize_log_data(None) is None
