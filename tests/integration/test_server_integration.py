@@ -1,37 +1,24 @@
 """
-Integration tests for server func    def test_server_initialization(self):
-        """Test server initialization with config."""
-        from unittest.mock import patch
-        
-        test_config = {
-            "model": "test:model",
-            "model_name": "test:model",
-            "temperature": 0.7,
-            "max_tokens": 2048
-        }
-        
-        with patch("sigma_nex.server.load_config", return_value=test_config):
-            # Test server creation
-            server = SigmaServer()
-            assert server is not None
-            assert server.config["model"] == "test:model"
+Integration tests for server functionality.
 Tests server class and configuration integration.
 """
 
-import pytest
 import tempfile
 from pathlib import Path
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
+
+import pytest
 
 from sigma_nex.config import SigmaConfig
 
 # Skip server tests if FastAPI is not available
 try:
     from sigma_nex.server import SigmaServer
+
     FASTAPI_AVAILABLE = True
 except ImportError:
     FASTAPI_AVAILABLE = False
-    
+
 pytestmark = pytest.mark.skipif(not FASTAPI_AVAILABLE, reason="FastAPI not available")
 
 
@@ -45,23 +32,20 @@ class TestServerIntegration:
             "model": "test:model",
             "temperature": 0.7,
             "max_tokens": 1000,
-            "server": {
-                "host": "127.0.0.1",
-                "port": 8080
-            }
+            "server": {"host": "127.0.0.1", "port": 8080},
         }
 
     def test_server_initialization(self):
         """Test server initialization with config."""
         from unittest.mock import patch
-        
+
         test_config = {
             "model": "test:model",
             "model_name": "test:model",
             "temperature": 0.7,
-            "max_tokens": 2048
+            "max_tokens": 2048,
         }
-        
+
         with patch("sigma_nex.server.load_config", return_value=test_config):
             # Test server creation
             server = SigmaServer()
@@ -76,7 +60,7 @@ class TestServerIntegration:
             config.set("server.port", 9090)
             config.set("model", "mistral:latest")
             # config.save() # Skipped for test compatibility
-            
+
             server = SigmaServer(temp_dir)
             assert server.config["model"] == "mistral:latest"
 
@@ -86,14 +70,18 @@ class TestServerIntegration:
             config = SigmaConfig(temp_dir)
             config.set("model", "test:model")
             # config.save() # Skipped for test compatibility
-            
+
             server = SigmaServer(temp_dir)
-            
+
             # Test that validation functions are available
             from sigma_nex.utils.validation import sanitize_text_input
+
             test_input = "Test <script>alert('xss')</script> input"
             sanitized = sanitize_text_input(test_input)
             assert "<script>" not in sanitized
+
+            # Verify server is properly initialized
+            assert server.config["model"] == "test:model"
 
     def test_server_component_integration(self):
         """Test server integration with other components."""
@@ -102,9 +90,9 @@ class TestServerIntegration:
             config.set("model", "test:model")
             config.set("temperature", 0.8)
             # config.save() # Skipped for test compatibility
-            
+
             server = SigmaServer(temp_dir)
-            
+
             # Test config access
             assert server.config["temperature"] == 0.8
             assert server.config["model"] == "test:model"
@@ -119,7 +107,7 @@ class TestServerConfigurationScenarios:
             config = SigmaConfig(temp_dir)
             config.set("model", "test:model")
             # config.save() # Skipped for test compatibility
-            
+
             server = SigmaServer(temp_dir)
             assert server is not None
             assert server.config["model"] == "test:model"
@@ -128,27 +116,23 @@ class TestServerConfigurationScenarios:
         """Test server with complete configuration."""
         with tempfile.TemporaryDirectory() as temp_dir:
             config = SigmaConfig(temp_dir)
-            
+
             full_config = {
                 "model": "mistral:latest",
                 "temperature": 0.7,
                 "max_tokens": 1500,
-                "server": {
-                    "host": "127.0.0.1",
-                    "port": 8080,
-                    "debug": False
-                }
+                "server": {"host": "127.0.0.1", "port": 8080, "debug": False},
             }
-            
+
             for key, value in full_config.items():
                 if isinstance(value, dict):
                     for subkey, subvalue in value.items():
                         config.set(f"{key}.{subkey}", subvalue)
                 else:
                     config.set(key, value)
-            
+
             # config.save() # Skipped for test compatibility
-            
+
             server = SigmaServer(temp_dir)
             assert server.config["model"] == "mistral:latest"
             assert server.config["temperature"] == 0.7
@@ -169,7 +153,7 @@ class TestServerConfigurationScenarios:
             config.set("model", "valid:model")
             config.set("temperature", 0.5)  # Valid temperature
             # config.save() # Skipped for test compatibility
-            
+
             server = SigmaServer(temp_dir)
             assert server.config["model"] == "valid:model"
             assert 0.0 <= server.config["temperature"] <= 1.0
@@ -184,7 +168,7 @@ class TestServerErrorHandling:
             # Create invalid config file
             config_path = Path(temp_dir) / "config.yaml"
             config_path.write_text("invalid: yaml: content:")
-            
+
             # Should handle gracefully
             server = SigmaServer(temp_dir)
             assert server is not None
@@ -194,8 +178,10 @@ class TestServerErrorHandling:
         with tempfile.TemporaryDirectory() as temp_dir:
             config = SigmaConfig(temp_dir)
             config.set("model", "test:model")
-            
-            with patch.object(config, 'save', side_effect=PermissionError("Access denied")):
+
+            with patch.object(
+                config, "save", side_effect=PermissionError("Access denied")
+            ):
                 # Should still create server
                 server = SigmaServer(temp_dir)
                 assert server is not None
@@ -214,7 +200,7 @@ class TestServerRealWorldScenarios:
             config.set("server.port", 8080)
             config.set("temperature", 0.7)
             # config.save() # Skipped for test compatibility
-            
+
             # Initialize server
             server = SigmaServer(temp_dir)
             assert server is not None
@@ -228,10 +214,10 @@ class TestServerRealWorldScenarios:
             config1.set("model", "custom:model")
             config1.set("temperature", 0.9)
             # config1.save() # Skipped for test compatibility
-            
+
             server1 = SigmaServer(temp_dir)
             assert server1.config["model"] == "custom:model"
-            
+
             # Second server instance (simulating restart)
             server2 = SigmaServer(temp_dir)
             assert server2.config["model"] == "custom:model"
