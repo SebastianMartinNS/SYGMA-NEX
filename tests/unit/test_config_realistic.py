@@ -106,7 +106,7 @@ class TestSigmaConfigRealistic:
 
         # Dovrebbe fallire gracefully con config vuoto
         assert config.config == {}
-        assert config.get("debug") == False  # Default value
+        assert config.get("debug") is False  # Default value
         assert config.get("model_name") == "mistral"  # Default value
 
     def test_config_loading_invalid_yaml_real(self):
@@ -189,7 +189,7 @@ class TestSigmaConfigRealistic:
             config.project_root = Path(temp_dir)
 
             # Mock print per catturare warning
-            with patch("builtins.print") as mock_print:
+            with patch("builtins.print"):
                 framework = config.framework
 
                 # Dovrebbe essere dict vuoto
@@ -339,7 +339,7 @@ class TestSigmaConfigRealistic:
         config = SigmaConfig()
 
         # Test defaults predefiniti
-        assert config.get("debug") == False
+        assert config.get("debug") is False
         assert config.get("model_name") == "mistral"
         assert config.get("temperature") == 0.7
         assert config.get("max_history") == 100
@@ -672,7 +672,7 @@ class TestConfigErrorHandling:
 
                 # Dovrebbe fallback a defaults
                 assert (
-                    config.get("debug") == False
+                    config.get("debug") is False
                 )  # Default, non True dal file corrotto
                 assert config.get("model_name") == "mistral"  # Default
 
