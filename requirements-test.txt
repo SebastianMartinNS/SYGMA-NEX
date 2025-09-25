@@ -1,11 +1,21 @@
 # Test Dependencies for SIGMA-NEX Project
 
+# Core testing framework
 pytest>=7.4.0
 pytest-cov>=4.1.0
 pytest-mock>=3.11.1
 pytest-asyncio>=0.21.1
 pytest-xvfb>=3.0.0  # For GUI testing headless
+pytest-benchmark>=4.0.0  # For performance tests
 coverage>=7.3.0
+
+# Code quality and formatting tools
+black>=23.0.0
+isort>=5.12.0
+flake8>=6.0.0
+mypy>=1.5.0
+bandit>=1.7.5  # Security scanning
+safety>=2.3.5  # Vulnerability scanning
 
 # Minimal runtime deps required by unit tests
 click>=8.1.0

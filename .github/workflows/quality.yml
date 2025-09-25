@@ -1,0 +1,317 @@
+name: 🎯 Code Quality Improvement
+
+on:
+  workflow_dispatch:
+    inputs:
+      fix_type:
+        description: 'Type of fixes to apply'
+        required: true
+        default: 'formatting'
+        type: choice
+        options:
+          - formatting
+          - imports
+          - linting
+          - typing
+          - all
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly on Monday at 2 AM
+
+# Allow manual cancellation
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  # 🔧 Code Quality Assessment
+  assess:
+    name: 🔧 Quality Assessment
+    runs-on: ubuntu-latest
+    outputs:
+      formatting-issues: ${{ steps.check.outputs.formatting-issues }}
+      import-issues: ${{ steps.check.outputs.import-issues }}
+      linting-issues: ${{ steps.check.outputs.linting-issues }}
+      typing-issues: ${{ steps.check.outputs.typing-issues }}
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-test.txt
+        pip install -e .
+
+    - name: 🔍 Assess code quality
+      id: check
+      run: |
+        echo "=== 🎨 FORMATTING ASSESSMENT ==="
+        if black --check sigma_nex tests; then
+          echo "✅ Black formatting: PASS"
+          echo "formatting-issues=false" >> $GITHUB_OUTPUT
+        else
+          echo "❌ Black formatting: FAIL"
+          echo "formatting-issues=true" >> $GITHUB_OUTPUT
+        fi
+        
+        echo -e "\n=== 📏 IMPORT SORTING ASSESSMENT ==="
+        if isort --check-only sigma_nex tests; then
+          echo "✅ Import sorting: PASS"
+          echo "import-issues=false" >> $GITHUB_OUTPUT
+        else
+          echo "❌ Import sorting: FAIL"
+          echo "import-issues=true" >> $GITHUB_OUTPUT
+        fi
+        
+        echo -e "\n=== 🔍 LINTING ASSESSMENT ==="
+        if flake8 sigma_nex tests --max-line-length=88 --count; then
+          echo "✅ Flake8 linting: PASS"
+          echo "linting-issues=false" >> $GITHUB_OUTPUT
+        else
+          echo "❌ Flake8 linting: FAIL"
+          echo "linting-issues=true" >> $GITHUB_OUTPUT
+        fi
+        
+        echo -e "\n=== 🏷️ TYPE CHECKING ASSESSMENT ==="
+        if mypy sigma_nex --ignore-missing-imports; then
+          echo "✅ MyPy typing: PASS"
+          echo "typing-issues=false" >> $GITHUB_OUTPUT
+        else
+          echo "❌ MyPy typing: FAIL"
+          echo "typing-issues=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: 📊 Generate quality report
+      run: |
+        echo "# 📊 Code Quality Report" > quality-report.md
+        echo "" >> quality-report.md
+        echo "Generated on: $(date)" >> quality-report.md
+        echo "" >> quality-report.md
+        
+        # Black formatting
+        echo "## 🎨 Code Formatting (Black)" >> quality-report.md
+        if [ "${{ steps.check.outputs.formatting-issues }}" = "true" ]; then
+          echo "❌ **Issues found**" >> quality-report.md
+          echo "\`\`\`" >> quality-report.md
+          black --check --diff sigma_nex tests >> quality-report.md 2>&1 || true
+          echo "\`\`\`" >> quality-report.md
+        else
+          echo "✅ **All files properly formatted**" >> quality-report.md
+        fi
+        echo "" >> quality-report.md
+        
+        # Import sorting
+        echo "## 📏 Import Sorting (isort)" >> quality-report.md
+        if [ "${{ steps.check.outputs.import-issues }}" = "true" ]; then
+          echo "❌ **Issues found**" >> quality-report.md
+          echo "\`\`\`" >> quality-report.md
+          isort --check-only --diff sigma_nex tests >> quality-report.md 2>&1 || true
+          echo "\`\`\`" >> quality-report.md
+        else
+          echo "✅ **All imports properly sorted**" >> quality-report.md
+        fi
+        echo "" >> quality-report.md
+        
+        # Linting summary
+        echo "## 🔍 Code Linting (flake8)" >> quality-report.md
+        if [ "${{ steps.check.outputs.linting-issues }}" = "true" ]; then
+          echo "❌ **Issues found**" >> quality-report.md
+          echo "\`\`\`" >> quality-report.md
+          flake8 sigma_nex tests --max-line-length=88 --statistics >> quality-report.md 2>&1 || true
+          echo "\`\`\`" >> quality-report.md
+        else
+          echo "✅ **No linting issues**" >> quality-report.md
+        fi
+
+    - name: 📤 Upload quality report
+      uses: actions/upload-artifact@v3
+      with:
+        name: quality-report
+        path: quality-report.md
+
+  # 🛠️ Auto-fix issues (if requested)
+  fix:
+    name: 🛠️ Auto-fix Issues
+    needs: assess
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.fix_type != ''
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-test.txt
+        pip install -e .
+
+    - name: 🎨 Fix formatting issues
+      if: |
+        (github.event.inputs.fix_type == 'formatting' || github.event.inputs.fix_type == 'all') &&
+        needs.assess.outputs.formatting-issues == 'true'
+      run: |
+        echo "🎨 Applying Black formatting..."
+        black sigma_nex tests
+        git add -A
+
+    - name: 📏 Fix import sorting
+      if: |
+        (github.event.inputs.fix_type == 'imports' || github.event.inputs.fix_type == 'all') &&
+        needs.assess.outputs.import-issues == 'true'
+      run: |
+        echo "📏 Fixing import sorting..."
+        isort sigma_nex tests
+        git add -A
+
+    - name: 🔧 Apply basic linting fixes
+      if: |
+        (github.event.inputs.fix_type == 'linting' || github.event.inputs.fix_type == 'all') &&
+        needs.assess.outputs.linting-issues == 'true'
+      run: |
+        echo "🔧 Applying basic linting fixes..."
+        # Remove trailing whitespaces
+        find sigma_nex tests -name "*.py" -exec sed -i 's/[[:space:]]*$//' {} \;
+        # Add newlines at end of files
+        find sigma_nex tests -name "*.py" -exec bash -c 'if [ -n "$(tail -c1 "$1")" ]; then echo >> "$1"; fi' _ {} \;
+        git add -A
+
+    - name: 📝 Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        if ! git diff --cached --quiet; then
+          git commit -m "🤖 Auto-fix: ${{ github.event.inputs.fix_type }} improvements
+          
+          - Applied ${{ github.event.inputs.fix_type }} fixes via GitHub Actions
+          - Automated code quality improvements
+          - Files processed: $(git diff --cached --name-only | wc -l)
+          
+          Co-authored-by: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          
+          git push origin ${{ github.ref_name }}
+          echo "✅ Changes committed and pushed"
+        else
+          echo "ℹ️ No changes to commit"
+        fi
+
+  # 📈 Quality metrics
+  metrics:
+    name: 📈 Quality Metrics
+    needs: assess
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-test.txt
+        pip install -e .
+
+    - name: 📊 Generate detailed metrics
+      run: |
+        echo "# 📊 Detailed Quality Metrics" > metrics.md
+        echo "" >> metrics.md
+        echo "## 📁 File Statistics" >> metrics.md
+        echo "- Python files: $(find sigma_nex -name '*.py' | wc -l)" >> metrics.md
+        echo "- Test files: $(find tests -name '*.py' | wc -l)" >> metrics.md
+        echo "- Total lines of code: $(find sigma_nex tests -name '*.py' -exec wc -l {} \; | awk '{sum += $1} END {print sum}')" >> metrics.md
+        echo "" >> metrics.md
+        
+        echo "## 🎨 Formatting Issues" >> metrics.md
+        if [ "${{ needs.assess.outputs.formatting-issues }}" = "true" ]; then
+          echo "- Files needing formatting: $(black --check sigma_nex tests 2>&1 | grep 'would reformat' | wc -l || echo '0')" >> metrics.md
+        else
+          echo "- ✅ All files properly formatted" >> metrics.md
+        fi
+        
+        echo "## 🔍 Linting Issues" >> metrics.md
+        if [ "${{ needs.assess.outputs.linting-issues }}" = "true" ]; then
+          echo "\`\`\`" >> metrics.md
+          flake8 sigma_nex tests --max-line-length=88 --statistics >> metrics.md 2>&1 || true
+          echo "\`\`\`" >> metrics.md
+        else
+          echo "- ✅ No linting issues found" >> metrics.md
+        fi
+
+    - name: 📤 Upload metrics
+      uses: actions/upload-artifact@v3
+      with:
+        name: quality-metrics
+        path: metrics.md
+
+  # 🎯 Summary
+  summary:
+    name: 🎯 Quality Summary
+    needs: [assess, metrics]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: 📋 Quality Gate Summary
+      run: |
+        echo "## 🎯 Code Quality Gate Summary"
+        echo ""
+        echo "### Status Overview:"
+        
+        if [ "${{ needs.assess.outputs.formatting-issues }}" = "false" ]; then
+          echo "✅ **Formatting**: PASS"
+        else
+          echo "❌ **Formatting**: NEEDS WORK"
+        fi
+        
+        if [ "${{ needs.assess.outputs.import-issues }}" = "false" ]; then
+          echo "✅ **Import Sorting**: PASS"
+        else
+          echo "❌ **Import Sorting**: NEEDS WORK"
+        fi
+        
+        if [ "${{ needs.assess.outputs.linting-issues }}" = "false" ]; then
+          echo "✅ **Linting**: PASS"
+        else
+          echo "❌ **Linting**: NEEDS WORK"
+        fi
+        
+        if [ "${{ needs.assess.outputs.typing-issues }}" = "false" ]; then
+          echo "✅ **Type Checking**: PASS"
+        else
+          echo "❌ **Type Checking**: NEEDS WORK"
+        fi
+        
+        echo ""
+        echo "### Next Steps:"
+        echo "1. Run this workflow with 'all' option to auto-fix issues"
+        echo "2. Review and commit the automated fixes"
+        echo "3. Address remaining manual issues"
+        echo "4. Re-run quality checks to verify improvements"
