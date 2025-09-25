@@ -104,7 +104,7 @@ class TestRunnerRealistic:
 
     def test_subprocess_operations_real(self, test_config):
         """Test operazioni subprocess REALI nel Runner"""
-        # Mock shutil.which BEFORE creating runner so _ollama_cli_available is set correctly
+        # Mock shutil.which BEFORE creating runner
         with patch("shutil.which", return_value="/usr/bin/ollama"):
             runner = Runner(test_config)
 

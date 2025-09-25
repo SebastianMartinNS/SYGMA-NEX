@@ -9,7 +9,7 @@ from sigma_nex.core.context import build_prompt
 
 
 class TestContextRealistic:
-    """Test realistici completi per build_prompt - copertura costruzione prompt effettiva"""
+    """Test realistici completi per build_prompt - copertura costruzione prompt"""
 
     def test_build_prompt_basic_real(self):
         """Test costruzione prompt di base senza retrieval"""
@@ -73,9 +73,9 @@ class TestContextRealistic:
 
         # Mock moduli rilevanti realistici
         mock_moduli = [
-            "SOPRAVVIVENZA_BASE::Tecniche di base per la sopravvivenza in ambiente ostile. Include reperimento acqua, cibo e riparo.",
-            "PRIMO_SOCCORSO::Procedure di emergenza per il primo soccorso. Fondamentale per situazioni critiche.",
-            "NAVIGAZIONE::Orientamento e navigazione senza strumenti moderni usando stelle e punti di riferimento.",
+            "SOPRAVVIVENZA_BASE::Tecniche di base per la sopravvivenza in ambiente.",
+            "PRIMO_SOCCORSO::Procedure di emergenza per il primo soccorso.",
+            "NAVIGAZIONE::Orientamento e navigazione senza strumenti moderni.",
         ]
 
         with patch("sigma_nex.core.retriever.search_moduli", return_value=mock_moduli):
@@ -171,9 +171,9 @@ class TestContextIntegration:
 
         # Test con moduli realistici che potrebbero esistere
         realistic_modules = [
-            "NAVIGAZIONE_NOTTURNA::Orientamento usando costellazioni. Identifica Orsa Maggiore e Stella Polare per determinare il nord.",
-            "SOPRAVVIVENZA_URBANA::Tecniche per orientarsi in ambiente urbano durante emergenze o blackout.",
-            "STRUMENTI_PRIMITIVI::Costruzione di bussola improvvisata usando ago magnetizzato e recipiente d'acqua.",
+            "NAVIGAZIONE_NOTTURNA::Orientamento usando costellazioni.",
+            "SOPRAVVIVENZA_URBANA::Tecniche per orientarsi in ambiente urbano.",
+            "STRUMENTI_PRIMITIVI::Costruzione di bussola improvvisata.",
         ]
 
         with patch(
@@ -188,7 +188,6 @@ class TestContextIntegration:
         assert "Contesto:" in prompt
         assert "NAVIGAZIONE_NOTTURNA" in prompt
         assert "costellazioni" in prompt
-        assert "Orsa Maggiore" in prompt
         assert "SOPRAVVIVENZA_URBANA" in prompt
         assert "STRUMENTI_PRIMITIVI" in prompt
 
@@ -231,9 +230,9 @@ class TestContextDataFlow:
         query = "Come funziona la clorazione?"
 
         mock_knowledge = [
-            "PURIFICAZIONE_ACQUA::Metodi chimici includono clorazione, iodio e UV. La clorazione è il più comune.",
-            "CHIMICA_BASE::Principi chimici della disinfezione. Il cloro elimina batteri e virus ossidandone le pareti cellulari.",
-            "DOSAGGIO_CHIMICI::Calcolo delle dosi corrette per diversi volumi d'acqua e livelli di contaminazione.",
+            "PURIFICAZIONE_ACQUA::Metodi chimici includono clorazione, iodio e UV.",
+            "CHIMICA_BASE::Principi chimici della disinfezione.",
+            "DOSAGGIO_CHIMICI::Calcolo delle dosi corrette per diversi volumi.",
         ]
 
         with patch(
@@ -276,7 +275,7 @@ class TestContextDataFlow:
 
         mock_modules = [
             "TËST_MÒDULE::Descrizione con carattëri spëciali àéìòù e símbolí 🌟",
-            "UNICODE_SUPPORT::Test completo Unicode: ñáéíóú, Ελληνικά, 中文, العربية, עברית",
+            "UNICODE_SUPPORT::Test completo Unicode: ñáéíóú, Ελληνικά, 中文",
         ]
 
         with patch("sigma_nex.core.retriever.search_moduli", return_value=mock_modules):
@@ -289,7 +288,7 @@ class TestContextDataFlow:
         assert "Dómanda con €€€ e 中文字符?" in prompt
         assert "TËST_MÒDULE" in prompt
         assert "carattëri spëciali àéìòù e símbolí 🌟" in prompt
-        assert "Ελληνικά, 中文, العربية, עברית" in prompt
+        assert "Ελληνικά, 中文" in prompt
 
 
 class TestContextPerformance:

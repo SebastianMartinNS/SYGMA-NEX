@@ -31,7 +31,7 @@ class TestEndToEndWorkflows:
                 "modules": [
                     {
                         "name": "emergency",
-                        "content": "In case of emergency, stay calm and assess the situation",
+                        "content": "In case of emergency, stay calm and assess",
                     }
                 ]
             }

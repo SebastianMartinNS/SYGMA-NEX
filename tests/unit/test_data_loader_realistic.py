@@ -159,7 +159,7 @@ class TestDataLoaderRealistic:
                     "numero": 1,
                     "nome": "idratazione",
                     "priorita": "alta",
-                    "descrizione": "Strategie per trovare, purificare e conservare acqua potabile",
+                    "descrizione": "Strategie per trovare e purificare acqua potabile",
                     "comandi": [
                         "1. Raccogli materiali naturali",
                         "2. Costruisci un filtro a strati",
