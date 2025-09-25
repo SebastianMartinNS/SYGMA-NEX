@@ -17,6 +17,12 @@ on:
   schedule:
     - cron: '0 2 * * 1'  # Weekly on Monday at 2 AM
 
+# GitHub token permissions  
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
 # Allow manual cancellation
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -135,7 +141,7 @@ jobs:
         fi
 
     - name: 📤 Upload quality report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: quality-report
         path: quality-report.md
@@ -266,7 +272,7 @@ jobs:
         fi
 
     - name: 📤 Upload metrics
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: quality-metrics
         path: metrics.md

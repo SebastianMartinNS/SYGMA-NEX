@@ -7,6 +7,12 @@ on:
   pull_request:
     branches: [ master, develop ]
 
+# GitHub token permissions
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
 # Cancella job precedenti dello stesso workflow se ne parte uno nuovo
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -81,7 +87,7 @@ jobs:
       continue-on-error: true
 
     - name: 📊 Upload security reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: security-reports
@@ -187,7 +193,7 @@ jobs:
         SIGMA_SKIP_OLLAMA: "true"
 
     - name: 📊 Upload benchmark results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: benchmark-results
         path: benchmark-results.json
@@ -334,12 +340,7 @@ jobs:
         draft: false
         prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
 
-    - name: 📤 Publish to PyPI
-      if: ${{ !contains(github.ref, 'alpha') && !contains(github.ref, 'beta') && !contains(github.ref, 'rc') }}
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-      run: twine upload dist/*
+
 
   # 📊 Quality gate finale
   quality-gate:
