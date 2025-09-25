@@ -21,6 +21,12 @@ on:
         default: false
         type: boolean
 
+# GitHub token permissions
+permissions:
+  contents: write
+  packages: write
+  pull-requests: write
+
 env:
   PYTHON_VERSION: '3.11'
   REGISTRY: ghcr.io
@@ -142,7 +148,7 @@ jobs:
         unzip -l dist/*.whl | head -20
 
     - name: 📤 Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: python-packages
         path: dist/
@@ -302,7 +308,7 @@ jobs:
         echo "release_notes=final_release_notes.md" >> $GITHUB_OUTPUT
 
     - name: 📤 Upload release notes
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: release-notes
         path: final_release_notes.md
