@@ -208,7 +208,10 @@ jobs:
         git config --local user.name "GitHub Action"
         
         if ! git diff --cached --quiet; then
-          git commit -m "🤖 Auto-fix: ${{ github.event.inputs.fix_type }} improvements
+          # Pull latest changes first to avoid conflicts
+          git pull --rebase origin ${{ github.ref_name }} || echo "No remote changes to pull"
+          
+          git commit -m "auto-fix: ${{ github.event.inputs.fix_type }} improvements
           
           - Applied ${{ github.event.inputs.fix_type }} fixes via GitHub Actions
           - Automated code quality improvements
@@ -216,8 +219,17 @@ jobs:
           
           Co-authored-by: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
           
-          git push origin ${{ github.ref_name }}
-          echo "✅ Changes committed and pushed"
+          # Try push with retry mechanism
+          for i in {1..3}; do
+            if git push origin ${{ github.ref_name }}; then
+              echo "✅ Changes committed and pushed"
+              break
+            else
+              echo "⚠️ Push failed, attempt $i/3. Pulling latest changes..."
+              git pull --rebase origin ${{ github.ref_name }}
+              sleep 2
+            fi
+          done
         else
           echo "ℹ️ No changes to commit"
         fi
