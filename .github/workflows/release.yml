@@ -349,7 +349,7 @@ jobs:
     - name: 📤 Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ secrets.PYPI_API_TOKEN }}
         verbose: true
 
   # 📧 Notification
@@ -379,16 +379,16 @@ jobs:
         echo "❌ Release failed for SIGMA-NEX ${{ needs.version.outputs.version }}"
         echo "Check the logs for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-    # Opzionale: Invia notifica su Discord/Slack
-    - name: 📢 Discord notification
-      if: ${{ needs.github-release.result == 'success' }}
-      uses: Ilshidur/action-discord@master
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        args: |
-          🚀 **SIGMA-NEX ${{ needs.version.outputs.version }}** è stato rilasciato!
-          
-          📦 **Download**: https://github.com/SebastianMartinNS/SYGMA-NEX/releases/tag/${{ needs.version.outputs.tag }}
-          🐳 **Docker**: `docker pull ghcr.io/sebastianmartinns/sygma-nex:${{ needs.version.outputs.version }}`
-          📖 **Changelog**: Controlla le release notes per i dettagli!
+    # Opzionale: Invia notifica su Discord/Slack (richiede DISCORD_WEBHOOK secret)
+    # - name: 📢 Discord notification
+    #   if: ${{ needs.github-release.result == 'success' && secrets.DISCORD_WEBHOOK }}
+    #   uses: Ilshidur/action-discord@master
+    #   env:
+    #     DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+    #   with:
+    #     args: |
+    #       🚀 **SIGMA-NEX ${{ needs.version.outputs.version }}** è stato rilasciato!
+    #       
+    #       📦 **Download**: https://github.com/SebastianMartinNS/SYGMA-NEX/releases/tag/${{ needs.version.outputs.tag }}
+    #       🐳 **Docker**: `docker pull ghcr.io/sebastianmartinns/sygma-nex:${{ needs.version.outputs.version }}`
+    #       📖 **Changelog**: Controlla le release notes per i dettagli!
