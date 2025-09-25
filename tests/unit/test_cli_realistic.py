@@ -3,14 +3,15 @@ Test realistici completi per sigma_nex.cli - 80% coverage target
 Test REALI senza mock pesanti - focus su funzionalità effettive CLI
 """
 
-import pytest
-import tempfile
 import json
 import os
+import tempfile
 from unittest.mock import Mock, patch
+
+import pytest
 from click.testing import CliRunner
 
-from sigma_nex.cli import main, start, load_framework, self_check
+from sigma_nex.cli import load_framework, main
 
 
 class TestSigmaNexCLIRealistic:
@@ -44,7 +45,6 @@ class TestSigmaNexCLIRealistic:
         runner = CliRunner()
 
         # Test integrazione REALE con get_config senza mock
-        from sigma_nex.config import get_config
 
         # Mock solo interactive per evitare REPL infinito
         with patch("sigma_nex.core.runner.Runner.interactive") as mock_interactive:
@@ -357,9 +357,9 @@ class TestCLICoreIntegration:
     def test_cli_validation_real_functions(self):
         """Test funzioni validation reali dal CLI"""
         from sigma_nex.utils.validation import (
+            sanitize_log_data,
             sanitize_text_input,
             validate_user_id,
-            sanitize_log_data,
         )
 
         # Test sanitize_text_input REALE

@@ -15,7 +15,12 @@ def run_command(cmd, description):
     """Run a command and handle errors."""
     print(f"{description}...")
     try:
-        result = subprocess.run(cmd, shell=True, check=True, capture_output=True, text=True)
+        result = subprocess.run(
+            cmd,
+            shell=True,
+            check=True,
+            capture_output=True,
+            text=True)
         print(f"✅ {description} completed successfully")
         return True
     except subprocess.CalledProcessError as e:
@@ -30,31 +35,32 @@ def run_command(cmd, description):
 def check_prerequisites():
     """Check if required tools are installed."""
     print("Checking prerequisites...")
-    
+
     # Check Python version
     if sys.version_info < (3, 10):
         print("❌ Python 3.10+ is required")
         return False
-    print(f"✅ Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
-    
+    print(
+        f"✅ Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
+
     # Check if Ollama is installed
     try:
         subprocess.run(["ollama", "--version"], check=True, capture_output=True)
         print("✅ Ollama is installed")
     except (subprocess.CalledProcessError, FileNotFoundError):
         print("⚠️  Ollama not found. Please install from https://ollama.com")
-    
+
     return True
 
 
 def setup_virtual_environment():
     """Set up Python virtual environment."""
     venv_path = Path("venv")
-    
+
     if venv_path.exists():
         print("Virtual environment already exists")
         return True
-    
+
     return run_command(
         f"{sys.executable} -m venv venv",
         "Creating virtual environment"
@@ -65,48 +71,49 @@ def install_dependencies():
     """Install project dependencies."""
     venv_python = "venv\\Scripts\\python" if os.name == "nt" else "venv/bin/python"
     venv_pip = "venv\\Scripts\\pip" if os.name == "nt" else "venv/bin/pip"
-    
+
     commands = [
         (f"{venv_pip} install --upgrade pip", "Upgrading pip"),
         (f"{venv_pip} install -e .", "Installing SIGMA-NEX in development mode"),
         (f"{venv_pip} install -e .[dev]", "Installing development dependencies"),
     ]
-    
+
     for cmd, desc in commands:
         if not run_command(cmd, desc):
             return False
-    
+
     return True
 
 
 def setup_pre_commit():
     """Set up pre-commit hooks."""
     venv_python = "venv\\Scripts\\python" if os.name == "nt" else "venv/bin/python"
-    
+
     commands = [
         (f"{venv_python} -m pip install pre-commit", "Installing pre-commit"),
-        (f"venv\\Scripts\\pre-commit install" if os.name == "nt" else "venv/bin/pre-commit install", 
+        (f"venv\\Scripts\\pre-commit install" if os.name == "nt" else "venv/bin/pre-commit install",
          "Setting up pre-commit hooks"),
     ]
-    
+
     for cmd, desc in commands:
         if not run_command(cmd, desc):
             return False
-    
+
     return True
 
 
 def pull_ollama_models():
     """Pull required Ollama models."""
     models = ["mistral", "medllama2"]
-    
+
     for model in models:
         print(f"Pulling Ollama model: {model}")
         try:
             subprocess.run(["ollama", "pull", model], check=True)
             print(f"✅ Model {model} downloaded successfully")
         except subprocess.CalledProcessError:
-            print(f"⚠️  Could not download model {model}. You may need to install it manually.")
+            print(
+                f"⚠️  Could not download model {model}. You may need to install it manually.")
         except FileNotFoundError:
             print("⚠️  Ollama not found. Skipping model download.")
             break
@@ -125,7 +132,7 @@ SIGMA_API_PORT=8000
 """
         env_file.write_text(env_content)
         print("✅ Created .env file")
-    
+
     # Create development config
     dev_config = Path("config.dev.yaml")
     if not dev_config.exists():
@@ -143,26 +150,26 @@ def main():
     """Main setup function."""
     print("SIGMA-NEX Development Setup")
     print("=" * 40)
-    
+
     if not check_prerequisites():
         print("\n❌ Prerequisites check failed. Please install required tools.")
         return 1
-    
+
     steps = [
         setup_virtual_environment,
         install_dependencies,
         setup_pre_commit,
         create_dev_config,
     ]
-    
+
     for step in steps:
         if not step():
             print(f"\n❌ Setup failed at step: {step.__name__}")
             return 1
-    
+
     # Optional step - doesn't fail setup if it doesn't work
     pull_ollama_models()
-    
+
     print("\nDevelopment environment setup completed!")
     print("\nNext steps:")
     print("1. Activate the virtual environment:")
@@ -173,7 +180,7 @@ def main():
     print("2. Run tests: pytest")
     print("3. Start development: sigma start")
     print("4. Check the docs/ folder for more information")
-    
+
     return 0
 
 

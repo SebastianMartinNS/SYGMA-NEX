@@ -4,17 +4,14 @@ SIGMA-NEX Input Validation and Security Utilities
 Centralized input validation and security functions.
 """
 
-import re
-import os
 import html
+import re
 from pathlib import Path
 from typing import Any, Optional, Union
 
 
 class ValidationError(ValueError):
     """Custom exception for validation errors."""
-
-    pass
 
 
 def sanitize_text_input(text: str, max_length: int = 10000) -> str:
@@ -281,7 +278,7 @@ def is_safe_command(command: str) -> bool:
 
 def sanitize_log_data(data: Any) -> Any:
     """
-    Sanitize data before logging to prevent log injection and redact sensitive information.
+    Sanitize data before logging to prevent injection and redact secrets.
 
     Args:
         data: Data to sanitize (dict, list, or other types)

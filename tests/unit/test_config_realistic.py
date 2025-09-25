@@ -3,15 +3,16 @@ Test realistici completi per sigma_nex.config - 80% coverage target
 Test REALI senza mock pesanti - focus su gestione configurazione effettiva
 """
 
+import json
+import os
+import tempfile
+from pathlib import Path
+from unittest.mock import patch
+
 import pytest
 import yaml
-import json
-import tempfile
-import os
-from pathlib import Path
-from unittest.mock import Mock, patch
 
-from sigma_nex.config import SigmaConfig, get_config, load_config, _config_instance
+from sigma_nex.config import SigmaConfig, get_config, load_config
 
 
 class TestSigmaConfigRealistic:
@@ -63,7 +64,8 @@ class TestSigmaConfigRealistic:
                 # Dovrebbe usare fallback - verifica che sia un path ragionevole
                 # Il fallback dovrebbe essere un directory path valido
                 assert config.project_root.exists()
-                # In ambiente diversi il path può variare, verifica che non sia None/vuoto
+                # In ambiente diversi il path può variare, verifica che non sia
+                # None/vuoto
                 assert config.project_root != Path(".")
 
             finally:
@@ -89,10 +91,10 @@ class TestSigmaConfigRealistic:
 
             # Verifica caricamento corretto
             assert config.config == config_data
-            assert config.get("debug") == True
+            assert config.get("debug")
             assert config.get("model_name") == "llama2"
             assert config.get("temperature") == 0.8
-            assert config.get("translation.enabled") == True
+            assert config.get("translation.enabled")
             assert config.get("translation.target_lang") == "it"
 
         finally:
@@ -264,7 +266,7 @@ class TestSigmaConfigRealistic:
         config.set("debug", True)
         config.set("model_name", "custom_model")
 
-        assert config.get("debug") == True
+        assert config.get("debug")
         assert config.get("model_name") == "custom_model"
 
         # Set valori annidati (dotted keys)
@@ -273,7 +275,7 @@ class TestSigmaConfigRealistic:
         config.set("server.host", "localhost")
         config.set("server.port", 8080)
 
-        assert config.get("translation.enabled") == True
+        assert config.get("translation.enabled")
         assert config.get("translation.target_lang") == "es"
         assert config.get("server.host") == "localhost"
         assert config.get("server.port") == 8080
@@ -281,7 +283,7 @@ class TestSigmaConfigRealistic:
         # Verifica struttura annidata
         translation_config = config.get("translation")
         assert isinstance(translation_config, dict)
-        assert translation_config["enabled"] == True
+        assert translation_config["enabled"]
         assert translation_config["target_lang"] == "es"
 
     def test_set_edge_cases_real(self):
@@ -342,7 +344,7 @@ class TestSigmaConfigRealistic:
         assert config.get("temperature") == 0.7
         assert config.get("max_history") == 100
         assert config.get("max_tokens") == 2048
-        assert config.get("retrieval_enabled") == True
+        assert config.get("retrieval_enabled")
 
         # Test default personalizzato
         assert config.get("nonexistent_key", "custom_default") == "custom_default"
@@ -351,7 +353,7 @@ class TestSigmaConfigRealistic:
         config.set("debug", True)
         config.set("temperature", 0.9)
 
-        assert config.get("debug") == True
+        assert config.get("debug")
         assert config.get("temperature") == 0.9
 
     def test_get_dotted_keys_real(self):
@@ -367,7 +369,7 @@ class TestSigmaConfigRealistic:
         # Test accesso dotted
         assert config.get("server.host") == "localhost"
         assert config.get("server.port") == 8080
-        assert config.get("server.ssl.enabled") == True
+        assert config.get("server.ssl.enabled")
         assert config.get("server.ssl.cert_path") == "/path/to/cert"
 
         # Test chiave inesistente
@@ -410,13 +412,13 @@ class TestGlobalConfigRealistic:
         try:
             # Prima chiamata con percorso personalizzato
             config = get_config(config_path=temp_path)
-            assert config.get("custom") == True
+            assert config.get("custom")
             assert config.get("model") == "custom_model"
 
             # Seconda chiamata senza percorso dovrebbe usare stessa istanza
             config2 = get_config()
             assert config is config2
-            assert config2.get("custom") == True
+            assert config2.get("custom")
 
         finally:
             os.unlink(temp_path)
@@ -452,7 +454,7 @@ class TestGlobalConfigRealistic:
 
             # Verifica configurazione caricata
             assert result["system_prompt"] == "You are SIGMA-NEX"
-            assert result["debug"] == True
+            assert result["debug"]
             assert result["model_name"] == "legacy_model"
 
             # Verifica framework incluso
@@ -532,7 +534,7 @@ class TestConfigIntegration:
 
                 # Verifica config
                 assert config.get("model_name") == "integration_test"
-                assert config.get("framework_custom") == True
+                assert config.get("framework_custom")
 
                 # Verifica framework - dovrebbe essere quello del temp dir
                 framework = config.framework

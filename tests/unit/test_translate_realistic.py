@@ -3,20 +3,14 @@ Test realistici per sigma_nex.core.translate - focus su logica reale di traduzio
 Elimina dipendenze pesanti ma testa comportamento effettivo del traduttore
 """
 
-import pytest
-import threading
-import time
-from unittest.mock import Mock, patch
-from pathlib import Path
-
 from sigma_nex.core.translate import (
     _check_transformers,
-    translate_it_to_en,
-    translate_en_to_it,
-    is_translation_available,
-    preload_models,
     _get_model_paths,
     _load_model,
+    is_translation_available,
+    preload_models,
+    translate_en_to_it,
+    translate_it_to_en,
 )
 
 

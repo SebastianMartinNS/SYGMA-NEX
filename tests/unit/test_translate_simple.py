@@ -3,15 +3,14 @@ Test estesi per sigma_nex.core.translate - versione semplificata
 Mirati ad aumentare la copertura delle funzioni effettivamente disponibili
 """
 
-import pytest
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 
 from sigma_nex.core.translate import (
-    translate_it_to_en,
-    translate_en_to_it,
     is_translation_available,
     preload_models,
+    translate_en_to_it,
+    translate_it_to_en,
 )
 
 

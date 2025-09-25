@@ -3,8 +3,7 @@ Test realistici completi per sigma_nex.core.context - 80% coverage target
 Test REALI senza mock pesanti - focus su costruzione prompt effettiva
 """
 
-import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 from sigma_nex.core.context import build_prompt
 

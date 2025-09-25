@@ -46,4 +46,3 @@ setup(
         'ollama': []  # nota: ollama deve essere installato manualmente
     },
 )
-

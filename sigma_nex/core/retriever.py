@@ -173,9 +173,9 @@ def search_moduli(query: str, k: int = 3):
         # Prefer patched global model if available
         mdl = model if model is not None else _get_model()
         query_vec = mdl.encode([query], convert_to_numpy=True)
-        _D, I = index.search(query_vec, k)
+        _D, indices = index.search(query_vec, k)
 
-        return [texts[i] for i in I[0]]
+        return [texts[i] for i in indices[0]]
 
     except Exception as e:
         print(f"[ERRORE FAISS] Ricerca fallita: {e}")

@@ -1,5 +1,6 @@
 """
-SIGMA-NEX: Sistema di Intelligenza Artificiale Autonomo per la Sopravvivenza Offline-First
+SIGMA-NEX: Sistema di Intelligenza Artificiale Autonomo per la
+Sopravvivenza Offline-First
 """
 
 __version__ = "0.3.1"

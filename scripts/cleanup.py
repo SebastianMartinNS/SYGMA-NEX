@@ -33,7 +33,7 @@ def remove_patterns(patterns, root_dir="."):
 def main():
     """Main cleanup function."""
     print("🧹 Starting SIGMA-NEX project cleanup...")
-    
+
     # Patterns to remove
     cleanup_patterns = [
         # Python cache
@@ -41,28 +41,28 @@ def main():
         "**/*.pyc",
         "**/*.pyo",
         "**/*.pyd",
-        
+
         # Build artifacts
         "build",
-        "dist", 
+        "dist",
         "*.egg-info",
         "*.spec",
-        
+
         # Temporary files
         "*.tmp",
         "*.temp",
         "*.patch",
         "*.log",
-        
+
         # OS specific
         ".DS_Store",
         "Thumbs.db",
-        
+
         # Editor files
         "*.swp",
         "*.swo",
         "*~",
-        
+
         # Project specific
         "*- Copia.*",
         "*0.1.*",
@@ -70,9 +70,9 @@ def main():
         "*.exe",
         "*.zip",
     ]
-    
+
     removed = remove_patterns(cleanup_patterns)
-    
+
     print(f"\n✅ Cleanup completed! Removed {len(removed)} items.")
     print("\nProject is now clean and organized!")
 

@@ -3,18 +3,16 @@ Test realistici per sigma_nex.server - focus su logica reale del server
 Elimina mock eccessivi e testa comportamento effettivo del server
 """
 
+from sigma_nex.server import SigmaServer
+from unittest.mock import Mock, patch
+
 import pytest
-import json
 import requests
-from pathlib import Path
-from unittest.mock import Mock, patch, AsyncMock
-from fastapi.testclient import TestClient
 from fastapi import HTTPException
+from fastapi.testclient import TestClient
 
 # FastAPI TestClient disponibile solo se fastapi è installato
 pytest.importorskip("fastapi")
-
-from sigma_nex.server import SigmaServer
 
 
 class TestSigmaServerRealistic:
@@ -61,7 +59,7 @@ class TestSigmaServerRealistic:
         with patch.dict("sys.modules", {"fastapi": None}):
             with patch("sigma_nex.server.FASTAPI_AVAILABLE", False):
                 with pytest.raises(
-                    RuntimeError, match="FastAPI dependencies not available"
+                    RuntimeError, match="FastAPI not available"
                 ):
                     SigmaServer()
 
@@ -205,7 +203,6 @@ class TestSigmaServerCoreIntegration:
         from sigma_nex.utils.validation import (
             sanitize_text_input,
             validate_user_id,
-            sanitize_log_data,
         )
 
         # Test sanitize_text_input come usato nel server
@@ -449,7 +446,7 @@ class TestSigmaServerPerformance:
         medical_keywords = ["medicina", "ferita", "disinfettante", "antibiotico"]
         for keyword in medical_keywords:
             is_medical = server._is_medical_query(f"Come uso {keyword}?")
-            assert is_medical == True
+            assert is_medical
 
         # Test non-medical query
         is_medical = server._is_medical_query("Come cucinare la pasta?")
@@ -457,7 +454,6 @@ class TestSigmaServerPerformance:
 
         # Test client info extraction REALE
         from fastapi import Request
-        from starlette.datastructures import Address
 
         mock_request = Mock(spec=Request)
         mock_request.client = Mock()

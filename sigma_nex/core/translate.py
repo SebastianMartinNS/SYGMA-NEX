@@ -1,20 +1,14 @@
 """
 SIGMA-NEX Translation Module
 
-Optimized translation with lazy loading and path                 print(f"Loading translation model: {direction}")
-                tokenizer = MarianTokenizer.from_pretrained(str(model_path))
-                model = MarianMTModel.from_pretrained(str(model_path))
-                _models[direction] = (tokenizer, model)
-                print(f"[SUCCESS] Translation model loaded: {direction}")
-            except Exception as e:
-                print(f"[ERROR] loading translation model {direction}: {e}")ent.
+Optimized translation with lazy loading and path management.
 """
 
-import threading
-import re
 import importlib
-from typing import Dict, Tuple, Optional
+import re
+import threading
 from pathlib import Path
+from typing import Dict, Optional, Tuple
 
 # Lazy imports to improve startup time
 MarianMTModel = None
