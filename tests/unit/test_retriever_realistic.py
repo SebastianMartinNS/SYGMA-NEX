@@ -38,19 +38,29 @@ class TestRetrieverRealistic:
 
     def test_get_model_loading_real(self):
         """Test caricamento modello con fallback realistico"""
-        # Mock SentenceTransformer per evitare download pesante
-        with patch("sigma_nex.core.retriever.SentenceTransformer") as mock_st:
-            mock_model = Mock()
-            mock_st.return_value = mock_model
+        # Reset global model cache to ensure clean test
+        import sigma_nex.core.retriever as retriever_module
 
-            # Test che _get_model carichi il modello
-            model = _get_model()
+        original_model = retriever_module._model
+        retriever_module._model = None
 
-            # Dovrebbe restituire il modello mockato
-            assert model == mock_model
+        try:
+            # Mock SentenceTransformer per evitare download pesante
+            with patch("sigma_nex.core.retriever.SentenceTransformer") as mock_st:
+                mock_model = Mock()
+                mock_st.return_value = mock_model
 
-            # Verifica che SentenceTransformer sia stato chiamato con path corretto
-            mock_st.assert_called_once()
+                # Test che _get_model carichi il modello
+                model = _get_model()
+
+                # Dovrebbe restituire il modello mockato
+                assert model == mock_model
+
+                # Verifica che SentenceTransformer sia stato chiamato con path corretto
+                mock_st.assert_called_once()
+        finally:
+            # Restore original model cache
+            retriever_module._model = original_model
 
     def test_get_model_caching_real(self):
         """Test caching del modello - test reale senza mock eccessivi"""

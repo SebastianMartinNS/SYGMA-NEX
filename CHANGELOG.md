@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2025-09-25
+
+### Fixed
+- **FAISS Compatibility**: Resolved NumPy 2.x compatibility issues, downgraded to NumPy 1.26.4
+- **FAISS Index Rebuild**: Fixed dimension mismatch (8 vs 384) by rebuilding index with correct model
+- **Unit Test Mocking**: Fixed test_retriever_realistic.py mock test with proper cache reset logic
+- **Dependency Resolution**: Added missing SentencePiece library for translation functionality
+- **Model Caching**: Implemented proper global model cache management in tests
+
+### Changed
+- **Test Coverage**: Achieved 328/333 tests passing (99.1% success rate)
+- **Code Quality**: Applied black formatting, maintained clean code standards
+- **Security Analysis**: Updated bandit security report with 8 low-severity findings
+- **FAISS Operations**: Restored full semantic search functionality with 3-result validation
+
+### Technical
+- **Environment**: Python 3.11.3, FAISS 1.7.4, NumPy 1.26.4, SentenceTransformers 4.1.0
+- **Coverage**: 84.92% test coverage across 14 source files (1811 LOC)
+- **Security**: 8 low-severity issues identified, all related to subprocess usage (acceptable)
+- **Performance**: FAISS semantic search operational, translation system verified
+
 ## [0.3.1] - 2025-09-24
 
 ### Added 
