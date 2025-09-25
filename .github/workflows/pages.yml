@@ -32,20 +32,54 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install sphinx sphinx-rtd-theme myst-parser
+          echo "No special dependencies needed for simple docs"
 
       - name: 🔨 Build documentation
         run: |
-          mkdir -p docs/_build
-          # Create basic index.html if sphinx build fails
-          echo "<h1>SIGMA-NEX Documentation</h1><p>Documentation build in progress...</p>" > docs/_build/index.html
-          sphinx-build -b html docs docs/_build/html || echo "Sphinx build failed, using fallback"
-          # Ensure we have content to deploy
-          if [ ! -f "docs/_build/html/index.html" ]; then
-            mkdir -p docs/_build/html
-            echo "<h1>SIGMA-NEX Documentation</h1><p>Documentation build in progress...</p>" > docs/_build/html/index.html
-          fi
+          mkdir -p docs/_build/html
+          # Copy README as main page
+          cp README.md docs/_build/html/index.md
+          # Copy all docs files
+          cp -r docs/* docs/_build/html/ || true
+          # Create simple index.html
+          cat > docs/_build/html/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>SIGMA-NEX Documentation</title>
+              <meta charset="utf-8">
+              <style>
+                  body { font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+                  pre { background: #f6f8fa; padding: 16px; border-radius: 6px; overflow-x: auto; }
+                  code { background: #f6f8fa; padding: 2px 4px; border-radius: 3px; }
+                  h1,h2,h3 { color: #24292e; }
+                  a { color: #0366d6; text-decoration: none; }
+                  a:hover { text-decoration: underline; }
+              </style>
+          </head>
+          <body>
+              <h1>SIGMA-NEX Documentation</h1>
+              <p><strong>Sistema di Intelligenza Artificiale Autonomo per la Sopravvivenza Offline-First</strong></p>
+              
+              <h2>📚 Documentation Links</h2>
+              <ul>
+                  <li><a href="../README.md">Main README</a> - Project overview and quickstart</li>
+                  <li><a href="README.md">Documentation Index</a> - Complete docs navigation</li>
+                  <li><a href="api.md">API Reference</a> - API documentation</li>
+                  <li><a href="installation.md">Installation Guide</a> - Setup instructions</li>
+                  <li><a href="development.md">Development Guide</a> - Contributing guide</li>
+                  <li><a href="testing.md">Testing Guide</a> - Test suite documentation</li>
+              </ul>
+              
+              <h2>🔗 External Links</h2>
+              <ul>
+                  <li><a href="https://github.com/SebastianMartinNS/SYGMA-NEX">GitHub Repository</a></li>
+                  <li><a href="https://github.com/SebastianMartinNS/SYGMA-NEX/releases">Releases</a></li>
+                  <li><a href="https://github.com/SebastianMartinNS/SYGMA-NEX/issues">Issues</a></li>
+              </ul>
+          </body>
+          </html>
+          EOF
 
       - name: 📄 Setup Pages
         uses: actions/configure-pages@v4
