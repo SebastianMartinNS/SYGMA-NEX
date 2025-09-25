@@ -9,9 +9,11 @@ on:
 
 # GitHub token permissions
 permissions:
-  contents: read
+  contents: write  # Upgraded for GitHub Pages deployment
   actions: read
   checks: write
+  pages: write      # Required for GitHub Pages
+  id-token: write   # Required for GitHub Pages
 
 # Disabilitato concurrency per evitare cancellazioni durante debugging
 # concurrency:
@@ -273,12 +275,20 @@ jobs:
         sphinx-build -b html docs docs/_build/html
       continue-on-error: true
 
-    - name: 🌐 Deploy to GitHub Pages
+    - name: 📄 Setup Pages
+      uses: actions/configure-pages@v4
       if: success()
-      uses: peaceiris/actions-gh-pages@v3
+
+    - name: 📤 Upload Pages artifact
+      uses: actions/upload-pages-artifact@v3
+      if: success()
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs/_build/html
+        path: ./docs/_build/html
+
+    - name: 🌐 Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+      if: success()
 
   # 🏷️ Release automation
   release:
