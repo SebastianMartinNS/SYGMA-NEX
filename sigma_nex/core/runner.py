@@ -64,7 +64,7 @@ class Runner:
         # Do not hard fail here to allow tests and non-Ollama flows to run.
         self._ollama_cli_available = bool(shutil.which("ollama"))
 
-        self.model = model_name or config.get("model_name", "mistral")
+        self.model = model_name or config.get("model_name") or config.get("model", "mistral")
         self.system_prompt = config.get("system_prompt", "")
         self.secure = secure
         # If max_history not provided, take it from config (tests expect this)

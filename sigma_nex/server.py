@@ -104,8 +104,8 @@ class SigmaServer:
             base_config = cfg.config.copy()
             defaults = {
                 "max_tokens": 2048,
-                "model": cfg.get("model_name", "mistral"),  # test aspetta 'model'
-                "model_name": "mistral",
+                "model": cfg.get("model_name") or cfg.get("model", "mistral"),  # test aspetta 'model'
+                "model_name": cfg.get("model_name") or cfg.get("model", "mistral"),
                 "debug": False,
                 "temperature": 0.7,
                 "max_history": 100,
