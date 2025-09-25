@@ -37,10 +37,14 @@ class TestSigmaConfigRealistic:
             sub_dir = temp_path / "sigma_nex" / "core"
             sub_dir.mkdir(parents=True)
 
-            # Simula cambio directory
+            # Simula cambio directory e rimuove variabile globale
             original_cwd = os.getcwd()
+            original_env = os.environ.get('SIGMA_NEX_ROOT')
             try:
                 os.chdir(str(sub_dir))
+                # Rimuove temporaneamente la variabile d'ambiente globale
+                if 'SIGMA_NEX_ROOT' in os.environ:
+                    del os.environ['SIGMA_NEX_ROOT']
 
                 config = SigmaConfig()
 
@@ -50,6 +54,9 @@ class TestSigmaConfigRealistic:
 
             finally:
                 os.chdir(original_cwd)
+                # Ripristina la variabile d'ambiente se esisteva
+                if original_env is not None:
+                    os.environ['SIGMA_NEX_ROOT'] = original_env
 
     def test_find_project_root_fallback_real(self):
         """Test fallback quando non trova config.yaml"""
@@ -526,8 +533,12 @@ class TestConfigIntegration:
 
             # Cambia directory temporaneamente per forzare il framework test
             original_cwd = os.getcwd()
+            original_env = os.environ.get('SIGMA_NEX_ROOT')
             try:
                 os.chdir(str(project_root))
+                # Rimuove temporaneamente la variabile d'ambiente globale
+                if 'SIGMA_NEX_ROOT' in os.environ:
+                    del os.environ['SIGMA_NEX_ROOT']
 
                 # Test integrazione
                 config = SigmaConfig(config_path=str(config_path))
@@ -544,6 +555,9 @@ class TestConfigIntegration:
 
             finally:
                 os.chdir(original_cwd)
+                # Ripristina la variabile d'ambiente se esisteva
+                if original_env is not None:
+                    os.environ['SIGMA_NEX_ROOT'] = original_env
 
     def test_config_path_resolution_integration_real(self):
         """Test risoluzione percorsi per integrazione moduli"""

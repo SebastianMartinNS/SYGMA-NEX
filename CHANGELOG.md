@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.4] - 2025-09-25
+
+### Added
+- **🌍 Global Configuration System**: Risolto il problema della perdita del contesto quando si esegue `sigma` da directory diverse
+- **New CLI Command**: `sigma install-config` per installare/rimuovere la configurazione globale
+- **Environment Variable Support**: Supporto per `SIGMA_NEX_ROOT` per definire la root del progetto
+- **Automated Setup Scripts**: 
+  - `scripts/setup_global_windows.bat` per Windows
+  - `scripts/setup_global_unix.sh` per Linux/macOS
+  - `scripts/install_global_config.py` per installazione programmatica
+- **Enhanced Path Resolution**: Sistema intelligente di ricerca dei file di configurazione
+- **Cross-Platform Support**: Gestione delle directory di configurazione specifica per SO
+- **Documentation**: Guida completa per il troubleshooting in `docs/troubleshooting_global_config.md`
+
+### Changed
+- **Configuration Management**: `SigmaConfig._find_project_root()` ora cerca in più posizioni:
+  1. Variabile d'ambiente `SIGMA_NEX_ROOT`
+  2. Directory corrente e parent (fino a 10 livelli)
+  3. Directory del pacchetto
+  4. Directory di configurazione utente
+  5. Posizioni comuni di installazione
+- **Improved Fallback**: Migliore gestione dei fallback quando i file non sono trovati
+- **Documentation Updates**: Aggiornato README.md con istruzioni per l'uso globale
+
+### Fixed
+- **Context Loss**: Risolto il problema principale della perdita del contesto quando si esegue da directory diverse
+- **Path Resolution**: Gestione più robusta dei percorsi assoluti e relativi
+- **Cross-Directory Usage**: `sigma` ora funziona correttamente da qualsiasi directory
+
 ## [0.3.3] - 2025-09-25
 
 ### Added

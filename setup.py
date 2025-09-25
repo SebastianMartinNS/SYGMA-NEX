@@ -32,6 +32,7 @@ setup(
     entry_points={
         "console_scripts": [
             "sigma=sigma_nex.cli:main",
+            "sigma-install-config=scripts.install_global_config:install_global_config",
         ],
     },
     classifiers=[
