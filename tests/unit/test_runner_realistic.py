@@ -135,54 +135,46 @@ class TestRunnerRealistic:
 
             runner.self_check()  # Non dovrebbe raised exception
 
-    def test_send_with_progress_real(self, test_config):
-        """Test _send_with_progress con thread e subprocess REALI"""
-        runner = Runner(test_config)
+    def test_send_with_progress_subprocess_real(self, test_config):
+        """Test _send_with_progress con thread e subprocess mockato"""
+        with patch("shutil.which", return_value="/usr/bin/ollama"):  # Ollama CLI disponibile
+            runner = Runner(test_config)
 
-        # Test progress bar threading REALE
-        with patch("subprocess.Popen") as mock_popen:
-            mock_process = Mock()
-            mock_process.communicate.return_value = (b"Test response", b"")
-            mock_process.returncode = 0
-            mock_popen.return_value = mock_process
+            # Test progress bar threading con subprocess mockato
+            with patch("subprocess.Popen") as mock_popen:
+                mock_process = Mock()
+                mock_process.communicate.return_value = (b"Test response", b"")
+                mock_process.returncode = 0
+                mock_popen.return_value = mock_process
 
-            # Test che usa thread reale per progress
-            result = runner._send_with_progress("test prompt")
+                # Test che usa thread reale per progress
+                result = runner._send_with_progress("test prompt")
 
-            # Verifica subprocess call REALE
-            mock_popen.assert_called_once_with(
-                ["ollama", "run", runner.model, "test prompt"],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                creationflags=runner.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
-            )
+                # Verifica subprocess call
+                expected_creationflags = 0x08000000 if sys.platform == "win32" else 0
+                mock_popen.assert_called_once_with(
+                    ["ollama", "run", runner.model, "test prompt"],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    creationflags=expected_creationflags,
+                )
 
-            assert isinstance(result, str)
+                assert isinstance(result, str)
 
-        # Test timeout nel subprocess REALE
-        with patch("subprocess.Popen") as mock_popen:
-            mock_process = Mock()
-            mock_process.communicate.side_effect = subprocess.TimeoutExpired(
-                "ollama", 300
-            )
-            mock_process.kill = Mock()
-            mock_popen.return_value = mock_process
+            # Test timeout nel subprocess
+            with patch("subprocess.Popen") as mock_popen:
+                mock_process = Mock()
+                mock_process.communicate.side_effect = subprocess.TimeoutExpired(
+                    "ollama", 300
+                )
+                mock_process.kill = Mock()
+                mock_popen.return_value = mock_process
 
-            with pytest.raises(RuntimeError, match="Request timeout"):
-                runner._send_with_progress("test prompt")
+                with pytest.raises(RuntimeError, match="Request timeout"):
+                    runner._send_with_progress("test prompt")
 
-            # Verifica che process.kill sia stato chiamato
-            mock_process.kill.assert_called_once()
-
-        # Test fallback to HTTP when CLI unavailable REALE
-        runner._ollama_cli_available = False
-
-        with patch.object(runner, "_call_model") as mock_call:
-            mock_call.return_value = "HTTP API response"
-
-            result = runner._send_with_progress("test prompt")
-            assert result == "HTTP API response"
-            mock_call.assert_called_once_with("test prompt")
+                # Verifica che process.kill sia stato chiamato
+                mock_process.kill.assert_called_once()
 
     @pytest.mark.skip(reason="Interactive REPL test has assertion issues")
     def test_interactive_repl_real(self, test_config):
@@ -284,41 +276,43 @@ class TestRunnerRealistic:
 
             assert "Ollama HTTP 404" in str(exc_info.value)
 
-    def test_send_with_progress_real(self, test_config):
-        """Test _send_with_progress con logica reale"""
-        runner = Runner(test_config)
+    def test_send_with_progress_http_fallback_real(self, test_config):
+        """Test _send_with_progress con fallback HTTP quando CLI non disponibile"""
+        with patch("shutil.which", return_value=None):  # Ollama CLI non disponibile
+            runner = Runner(test_config)
 
-        # Mock requests.post per evitare connessioni HTTP reali
-        with patch("requests.post") as mock_post:
-            mock_response = Mock()
-            mock_response.status_code = 200
-            mock_response.json.return_value = {"response": "Test response"}
-            mock_post.return_value = mock_response
+            # Mock requests.post per evitare connessioni HTTP reali
+            with patch("requests.post") as mock_post:
+                mock_response = Mock()
+                mock_response.status_code = 200
+                mock_response.json.return_value = {"response": "Test response"}
+                mock_post.return_value = mock_response
 
-            result = runner._send_with_progress("test query")
+                result = runner._send_with_progress("test query")
 
-            # Verifica che la chiamata HTTP è stata fatta
-            assert result == "Test response"
-            mock_post.assert_called_once()
+                # Verifica che la chiamata HTTP è stata fatta
+                assert result == "Test response"
+                mock_post.assert_called_once()
 
     def test_validation_integration_real(self, test_config):
         """Test integrazione validazione con logica reale"""
-        runner = Runner(test_config)
+        with patch("shutil.which", return_value=None):  # Ollama CLI non disponibile
+            runner = Runner(test_config)
 
-        # Mock requests.post per evitare connessioni HTTP reali
-        with patch("requests.post") as mock_post:
-            mock_response = Mock()
-            mock_response.status_code = 200
-            mock_response.json.return_value = {"response": "Response"}
-            mock_post.return_value = mock_response
+            # Mock requests.post per evitare connessioni HTTP reali
+            with patch("requests.post") as mock_post:
+                mock_response = Mock()
+                mock_response.status_code = 200
+                mock_response.json.return_value = {"response": "Response"}
+                mock_post.return_value = mock_response
 
-            result = runner._send_with_progress("test query")
+                result = runner._send_with_progress("test query")
 
-            # Verifica che la chiamata HTTP sia stata fatta correttamente
-            mock_post.assert_called_once()
-            call_args = mock_post.call_args
-            assert call_args[1]["json"]["model"] == runner.model
-            assert result == "Response"
+                # Verifica che la chiamata HTTP sia stata fatta correttamente
+                mock_post.assert_called_once()
+                call_args = mock_post.call_args
+                assert call_args[1]["json"]["model"] == runner.model
+                assert result == "Response"
 
     def test_self_check_real(self, test_config):
         """Test self_check con comportamento reale"""

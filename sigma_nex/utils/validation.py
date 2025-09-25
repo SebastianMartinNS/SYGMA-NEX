@@ -102,9 +102,21 @@ def validate_file_path(
 
     # Check for path traversal attempts (only dangerous patterns)
     file_str = str(file_path)
+    
+    # Block directory traversal attempts
     if ".." in file_str and ("/" in file_str or "\\" in file_str):
         # Only block ".." when it's part of a path (not just in filename)
         if "/.." in file_str or "\\.." in file_str or file_str.startswith(".."):
+            raise ValidationError("Path traversal detected")
+    
+    # Block suspicious absolute paths to system files
+    suspicious_paths = [
+        "/etc/", "/bin/", "/usr/bin/", "/var/", "/root/",
+        "c:\\windows\\", "c:\\program files\\", "\\windows\\system32\\"
+    ]
+    file_lower = file_str.lower()
+    for suspicious in suspicious_paths:
+        if file_lower.startswith(suspicious.lower()):
             raise ValidationError("Path traversal detected")
 
     # Restrict to base directory if specified
