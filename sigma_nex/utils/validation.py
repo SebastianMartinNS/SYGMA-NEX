@@ -100,9 +100,12 @@ def validate_file_path(
     # Now resolve the path
     path = path.resolve()
 
-    # Check for path traversal attempts
-    if ".." in str(file_path) or str(file_path).startswith("/"):
-        raise ValidationError("Path traversal detected")
+    # Check for path traversal attempts (only dangerous patterns)
+    file_str = str(file_path)
+    if ".." in file_str and ("/" in file_str or "\\" in file_str):
+        # Only block ".." when it's part of a path (not just in filename)
+        if "/.." in file_str or "\\.." in file_str or file_str.startswith(".."):
+            raise ValidationError("Path traversal detected")
 
     # Restrict to base directory if specified
     if base_directory:
