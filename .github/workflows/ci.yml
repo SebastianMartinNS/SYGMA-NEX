@@ -249,46 +249,12 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-  # 📄 Documentation build
-  docs:
-    name: 📄 Documentation
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-    
-    steps:
-    - name: 📥 Checkout
-      uses: actions/checkout@v4
-
-    - name: 🐍 Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-
-    - name: 📦 Install documentation dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install sphinx sphinx-rtd-theme myst-parser
-
-    - name: 🔨 Build documentation
-      run: |
-        mkdir -p docs/_build
-        sphinx-build -b html docs docs/_build/html
-      continue-on-error: true
-
-    - name: 📄 Setup Pages
-      uses: actions/configure-pages@v4
-      if: success()
-
-    - name: 📤 Upload Pages artifact
-      uses: actions/upload-pages-artifact@v3
-      if: success()
-      with:
-        path: ./docs/_build/html
-
-    - name: 🌐 Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
-      if: success()
+  # 📄 Documentation build (moved to separate pages.yml workflow)
+  # docs:
+  #   name: 📄 Documentation  
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/master'
+  #   # Moved to .github/workflows/pages.yml to avoid conflicts
 
   # 🏷️ Release automation
   release:
