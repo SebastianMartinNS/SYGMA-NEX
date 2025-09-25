@@ -15,11 +15,21 @@ except Exception:  # pragma: no cover
     SentenceTransformer = None  # type: ignore
 
 # Percorsi file
-DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "Framework_SIGMA.json")
+DATA_PATH = os.path.join(
+    os.path.dirname(__file__), "..", "..", "data", "Framework_SIGMA.json"
+)
 INDEX_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "moduli.index")
-MAPPING_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "moduli.mapping.json")
+MAPPING_PATH = os.path.join(
+    os.path.dirname(__file__), "..", "..", "data", "moduli.mapping.json"
+)
 MODEL_PATH = os.path.join(
-    os.path.dirname(__file__), "..", "..", "sigma_nex", "core", "models", "paraphrase-MiniLM-L6-v2"
+    os.path.dirname(__file__),
+    "..",
+    "..",
+    "sigma_nex",
+    "core",
+    "models",
+    "paraphrase-MiniLM-L6-v2",
 )
 
 # Global model cache (loaded lazily)
@@ -40,9 +50,11 @@ def _get_model():
         return _model
 
     if SentenceTransformer is None:
+
         class _Stub:
             def encode(self, texts, convert_to_numpy=True):
                 import numpy as _np  # local import to avoid hard dependency
+
                 # Return deterministic zero embeddings with small dim
                 arr = _np.zeros((len(texts), 8), dtype=_np.float32)
                 return arr
@@ -58,6 +70,7 @@ def _get_model():
         class _Stub:
             def encode(self, texts, convert_to_numpy=True):
                 import numpy as _np
+
                 return _np.zeros((len(texts), 8), dtype=_np.float32)
 
         _model = _Stub()
@@ -106,6 +119,7 @@ def get_moduli() -> List[dict]:
         print(f"[ERRORE RETRIEVER] Impossibile caricare i moduli: {e}")
         return []
 
+
 def build_index():
     """
     Costruisce l'indice vettoriale FAISS a partire dai moduli presenti nel JSON
@@ -137,6 +151,7 @@ def build_index():
         json.dump(texts, f, ensure_ascii=False, indent=2)
 
     print(f"[INFO] Indice FAISS costruito con {len(moduli)} moduli.")
+
 
 def search_moduli(query: str, k: int = 3):
     """
