@@ -1,8 +1,14 @@
+<div align="center">
+
+![SIGMA-NEX Logo](../assets/logo.jpg)
+
 # DOCUMENTATION INDEX
 
 ## Overview
 
 Questo file fornisce un indice completo di tutta la documentazione SIGMA-NEX organizzata per categoria e livello di utilizzo.
+
+</div>
 
 ## Getting Started (Nuovi Utenti)
 

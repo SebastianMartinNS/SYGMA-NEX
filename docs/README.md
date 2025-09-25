@@ -1,6 +1,12 @@
+<div align="center">
+
+![SIGMA-NEX Logo](../assets/logo.jpg)
+
 # Documentazione SIGMA-NEX
 
 Benvenuto nella documentazione completa di SIGMA-NEX, il Sistema di Intelligenza Artificiale Autonomo per la Sopravvivenza Offline-First.
+
+</div>
 
 ## Indice
 
