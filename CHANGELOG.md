@@ -7,25 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.1] - 2025-09-24
 
-### Added
-- 🧹 **Repository Cleanup**: Rimossi 18 file obsoleti per repository professionale
-- 📚 **Documentazione Professionale**: Documentazione completamente rivista e allineata al codice
-- 🧪 **Test Suite Completa**: Test realistici per tutti i moduli con coverage migliorata
-- 🔧 **Files Management**: `FILES_TO_IGNORE.md` per gestione file da escludere
-- ⚙️ **Configuration**: .gitignore professionale e pytest.ini ottimizzato
+### Added 
+-  **Test Suite Completa**: 
+- 🔧 **Files Management**: 
+- ⚙️ **Configuration**: 
 
 ### Changed
-- 📝 **Documentazione**: Tono professionale, rimozione emoji eccessive
-- 🔄 **Test**: Sostituiti test obsoleti con versioni realistiche
-- 📂 **Struttura**: Repository pulito e organizzato per produzione
+-  **Documentazione**: 
+-  **Test**: 
+-  **Struttura**: Repository pulito e organizzato per produzione
 
 ### Removed
-- 🗑️ **File Obsoleti**: Test temporanei, script locali, configurazioni duplicate
-- 🧪 **Test Deprecati**: test_basic.py, marian_test.py, test_server_medical.py
-- 📦 **Build Scripts**: build_index.py, setup_dev.bat, cleanup.bat
-- ⚙️ **Config Duplicati**: pytest-simple.ini, config.production.yaml
+-  **File Obsoleti**: Test temporanei, script locali, configurazioni duplicate
+-  **Test Deprecati**: test_basic.py, marian_test.py, test_server_medical.py
+-  **Build Scripts**: build_index.py, setup_dev.bat, cleanup.bat
+-  **Config Duplicati**: pytest-simple.ini, config.production.yaml
 
-## [0.2.1] - 2024-12-22
+## [0.2.1] - 2025-XX-XX
 
 ### Added
 - Comprehensive project reorganization and professionalization
@@ -74,32 +72,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2025-01-XX
 
 ### Added
-- ✨ **Professional Documentation Suite**: Complete GitHub documentation overhaul
+-  **Professional Documentation Suite**: Complete GitHub documentation overhaul
   - Comprehensive README.md with architecture diagrams and usage examples
   - CONTRIBUTING.md with detailed contribution guidelines
   - CODE_OF_CONDUCT.md for community standards
   - SECURITY.md for responsible disclosure policy
-- 🔧 **Enhanced VS Code Tasks**: Updated tasks.json for proper venv usage
-- 📦 **Sentence Transformers**: Added sentence-transformers to runtime dependencies
-- 🔄 **SigmaConfig Migration**: Migrated CLI from legacy load_config to SigmaConfig class
-- 🚫 **Retrieval Off Mode**: Implemented configurable retrieval disable via config.yaml
-- 🏗️ **Improved Build System**: Enhanced pyproject.toml with modern packaging standards
+-  **Enhanced VS Code Tasks**: Updated tasks.json for proper venv usage
+-  **Sentence Transformers**: Added sentence-transformers to runtime dependencies
+-  **SigmaConfig Migration**: Migrated CLI from legacy load_config to SigmaConfig class
+-  **Retrieval Off Mode**: Implemented configurable retrieval disable via config.yaml
+-  **Improved Build System**: Enhanced pyproject.toml with modern packaging standards
 
 ### Changed
-- 📚 **Documentation Overhaul**: Complete rewrite of project documentation for professional presentation
-- ⚙️ **Configuration System**: Enhanced SigmaConfig with retrieval_enabled flag
-- 🧪 **Test Suite Updates**: Updated test cases to reflect new context building behavior
-- 🔨 **Development Tools**: Improved task configurations for better developer experience
+-  **Documentation Overhaul**: Complete rewrite of project documentation for professional presentation
+-  **Configuration System**: Enhanced SigmaConfig with retrieval_enabled flag
+-  **Test Suite Updates**: Updated test cases to reflect new context building behavior
+-  **Development Tools**: Improved task configurations for better developer experience
 
 ### Fixed
-- 🐛 **Context Building Logic**: Fixed prompt building to conditionally include knowledge sections
-- ✅ **Test Compatibility**: Updated tests to match new retrieval behavior
-- 🔧 **Build Configuration**: Fixed VS Code task configurations for venv usage
+-  **Context Building Logic**: Fixed prompt building to conditionally include knowledge sections
+-  **Test Compatibility**: Updated tests to match new retrieval behavior
+-  **Build Configuration**: Fixed VS Code task configurations for venv usage
 
 ### Security
-- 🔒 **Enhanced Security Documentation**: Added comprehensive security policy and disclosure guidelines
-- 🛡️ **Input Validation**: Improved input sanitization in context building
-- 📊 **Audit Trail**: Better logging for security-relevant operations
+-  **Enhanced Security Documentation**: Added comprehensive security policy and disclosure guidelines
+-  **Input Validation**: Improved input sanitization in context building
+-  **Audit Trail**: Better logging for security-relevant operations
 
 ---
 
