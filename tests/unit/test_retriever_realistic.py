@@ -477,9 +477,11 @@ class TestRetrieverErrorHandling:
         # Test ricerca con indice mancante
         # Skip se faiss non è disponibile
         from sigma_nex.core.retriever import faiss
+
         if faiss is not None:
             with patch(
-                "sigma_nex.core.retriever.faiss.read_index", side_effect=FileNotFoundError
+                "sigma_nex.core.retriever.faiss.read_index",
+                side_effect=FileNotFoundError,
             ):
                 try:
                     search_moduli("test query")

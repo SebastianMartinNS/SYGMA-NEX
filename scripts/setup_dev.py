@@ -16,11 +16,8 @@ def run_command(cmd, description):
     print(f"{description}...")
     try:
         result = subprocess.run(
-            cmd,
-            shell=True,
-            check=True,
-            capture_output=True,
-            text=True)
+            cmd, shell=True, check=True, capture_output=True, text=True
+        )
         print(f"✅ {description} completed successfully")
         return True
     except subprocess.CalledProcessError as e:
@@ -41,7 +38,8 @@ def check_prerequisites():
         print("❌ Python 3.10+ is required")
         return False
     print(
-        f"✅ Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
+        f"✅ Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    )
 
     # Check if Ollama is installed
     try:
@@ -61,10 +59,7 @@ def setup_virtual_environment():
         print("Virtual environment already exists")
         return True
 
-    return run_command(
-        f"{sys.executable} -m venv venv",
-        "Creating virtual environment"
-    )
+    return run_command(f"{sys.executable} -m venv venv", "Creating virtual environment")
 
 
 def install_dependencies():
@@ -91,8 +86,14 @@ def setup_pre_commit():
 
     commands = [
         (f"{venv_python} -m pip install pre-commit", "Installing pre-commit"),
-        (f"venv\\Scripts\\pre-commit install" if os.name == "nt" else "venv/bin/pre-commit install",
-         "Setting up pre-commit hooks"),
+        (
+            (
+                f"venv\\Scripts\\pre-commit install"
+                if os.name == "nt"
+                else "venv/bin/pre-commit install"
+            ),
+            "Setting up pre-commit hooks",
+        ),
     ]
 
     for cmd, desc in commands:
@@ -113,7 +114,8 @@ def pull_ollama_models():
             print(f"✅ Model {model} downloaded successfully")
         except subprocess.CalledProcessError:
             print(
-                f"⚠️  Could not download model {model}. You may need to install it manually.")
+                f"⚠️  Could not download model {model}. You may need to install it manually."
+            )
         except FileNotFoundError:
             print("⚠️  Ollama not found. Skipping model download.")
             break

@@ -107,7 +107,7 @@ class TestRunnerRealistic:
         # Mock shutil.which BEFORE creating runner so _ollama_cli_available is set correctly
         with patch("shutil.which", return_value="/usr/bin/ollama"):
             runner = Runner(test_config)
-            
+
             # Now test subprocess call
             with patch("subprocess.run") as mock_run:
                 # Simula ollama list success

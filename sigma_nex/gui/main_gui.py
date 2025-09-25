@@ -1,9 +1,10 @@
-from sigma_nex.data_loader import DataLoader
-from sigma_nex.core.runner import Runner
-from sigma_nex.config import load_config
 import os
 import sys
 import threading
+
+from sigma_nex.config import load_config
+from sigma_nex.core.runner import Runner
+from sigma_nex.data_loader import DataLoader
 
 try:
     import customtkinter as ctk

@@ -177,7 +177,8 @@ class TestDataLoaderRealistic:
                     ],
                     "fallback": "1. Scava per trovare radici amidacee",
                 },
-            ]}
+            ]
+        }
 
         with tempfile.NamedTemporaryFile(
             mode="w", suffix=".json", delete=False, encoding="utf-8"

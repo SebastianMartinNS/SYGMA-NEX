@@ -3,13 +3,14 @@ Test realistici per sigma_nex.server - focus su logica reale del server
 Elimina mock eccessivi e testa comportamento effettivo del server
 """
 
-from sigma_nex.server import SigmaServer
 from unittest.mock import Mock, patch
 
 import pytest
 import requests
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
+
+from sigma_nex.server import SigmaServer
 
 # FastAPI TestClient disponibile solo se fastapi è installato
 pytest.importorskip("fastapi")
@@ -58,9 +59,7 @@ class TestSigmaServerRealistic:
         # Mock del modulo per simulare ImportError
         with patch.dict("sys.modules", {"fastapi": None}):
             with patch("sigma_nex.server.FASTAPI_AVAILABLE", False):
-                with pytest.raises(
-                    RuntimeError, match="FastAPI not available"
-                ):
+                with pytest.raises(RuntimeError, match="FastAPI not available"):
                     SigmaServer()
 
     def test_server_runner_unavailable_fallback(self):

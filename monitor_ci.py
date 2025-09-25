@@ -10,8 +10,8 @@ Usage:
 """
 
 import json
-import sys
 import subprocess
+import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -20,10 +20,7 @@ def run_command(cmd: str, capture_output: bool = True) -> str:
     """Execute shell command and return output."""
     try:
         result = subprocess.run(
-            cmd.split(),
-            capture_output=capture_output,
-            text=True,
-            check=True
+            cmd.split(), capture_output=capture_output, text=True, check=True
         )
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
@@ -73,9 +70,9 @@ def check_workflows():
 
         # Check if file is valid YAML
         try:
-            with open(workflow_file, 'r', encoding='utf-8') as f:
+            with open(workflow_file, "r", encoding="utf-8") as f:
                 content = f.read()
-                if 'name:' in content and 'on:' in content:
+                if "name:" in content and "on:" in content:
                     print(f"      ✅ Valid workflow syntax")
                 else:
                     print(f"      ⚠️  Missing required fields")
@@ -119,18 +116,20 @@ def check_dependencies():
 
     # Main requirements
     if Path("requirements.txt").exists():
-        with open("requirements.txt", 'r') as f:
-            main_deps = len([line for line in f if line.strip()
-                            and not line.startswith('#')])
+        with open("requirements.txt", "r") as f:
+            main_deps = len(
+                [line for line in f if line.strip() and not line.startswith("#")]
+            )
         print(f"✅ requirements.txt: {main_deps} dependencies")
     else:
         print("❌ requirements.txt: Not found")
 
     # Test requirements
     if Path("requirements-test.txt").exists():
-        with open("requirements-test.txt", 'r') as f:
-            test_deps = len([line for line in f if line.strip()
-                            and not line.startswith('#')])
+        with open("requirements-test.txt", "r") as f:
+            test_deps = len(
+                [line for line in f if line.strip() and not line.startswith("#")]
+            )
         print(f"✅ requirements-test.txt: {test_deps} dependencies")
     else:
         print("❌ requirements-test.txt: Not found")
@@ -141,7 +140,7 @@ def check_dependencies():
         "isort": "Import sorter",
         "flake8": "Linter",
         "mypy": "Type checker",
-        "pytest": "Test runner"
+        "pytest": "Test runner",
     }
 
     print("🔧 Development tools:")
@@ -168,7 +167,7 @@ def check_quality_status():
         "black --check sigma_nex": "Code formatting",
         "isort --check-only sigma_nex": "Import sorting",
         "flake8 sigma_nex --count": "Linting issues",
-        "pytest tests/unit/ --tb=no -q": "Unit tests"
+        "pytest tests/unit/ --tb=no -q": "Unit tests",
     }
 
     for cmd, description in quality_checks.items():
