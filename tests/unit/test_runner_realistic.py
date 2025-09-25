@@ -104,25 +104,24 @@ class TestRunnerRealistic:
 
     def test_subprocess_operations_real(self, test_config):
         """Test operazioni subprocess REALI nel Runner"""
-        runner = Runner(test_config)
+        # Mock shutil.which BEFORE creating runner so _ollama_cli_available is set correctly
+        with patch("shutil.which", return_value="/usr/bin/ollama"):
+            runner = Runner(test_config)
+            
+            # Now test subprocess call
+            with patch("subprocess.run") as mock_run:
+                # Simula ollama list success
+                mock_result = Mock()
+                mock_result.returncode = 0
+                mock_result.stdout = "mistral:latest\nllama2:latest"
+                mock_run.return_value = mock_result
 
-        # Force subprocess call by mocking shutil.which to return valid path
-        with (
-            patch("subprocess.run") as mock_run,
-            patch("shutil.which", return_value="/usr/bin/ollama"),
-        ):
-            # Simula ollama list success
-            mock_result = Mock()
-            mock_result.returncode = 0
-            mock_result.stdout = "mistral:latest\nllama2:latest"
-            mock_run.return_value = mock_result
+                runner.self_check()  # Dovrebbe chiamare subprocess
 
-            runner.self_check()  # Dovrebbe chiamare subprocess
-
-            # Verifica subprocess call REALE
-            mock_run.assert_called_once_with(
-                ["ollama", "list"], capture_output=True, text=True, timeout=10
-            )
+                # Verifica subprocess call REALE
+                mock_run.assert_called_once_with(
+                    ["ollama", "list"], capture_output=True, text=True, timeout=10
+                )
 
         # Test self_check con timeout REALE
         with patch("subprocess.run") as mock_run:
