@@ -15,7 +15,7 @@ def run_command(cmd, description):
     """Run a command and handle errors."""
     print(f"{description}...")
     try:
-        result = subprocess.run(
+        subprocess.run(
             cmd, shell=True, check=True, capture_output=True, text=True
         )
         print(f"✅ {description} completed successfully")
@@ -37,9 +37,8 @@ def check_prerequisites():
     if sys.version_info < (3, 10):
         print("❌ Python 3.10+ is required")
         return False
-    print(
-        f"✅ Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
-    )
+    version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"  # noqa: E501
+    print(f"✅ Python {version}")
 
     # Check if Ollama is installed
     try:
@@ -64,7 +63,6 @@ def setup_virtual_environment():
 
 def install_dependencies():
     """Install project dependencies."""
-    venv_python = "venv\\Scripts\\python" if os.name == "nt" else "venv/bin/python"
     venv_pip = "venv\\Scripts\\pip" if os.name == "nt" else "venv/bin/pip"
 
     commands = [
@@ -88,7 +86,7 @@ def setup_pre_commit():
         (f"{venv_python} -m pip install pre-commit", "Installing pre-commit"),
         (
             (
-                f"venv\\Scripts\\pre-commit install"
+                "venv\\Scripts\\pre-commit install"
                 if os.name == "nt"
                 else "venv/bin/pre-commit install"
             ),
@@ -114,7 +112,8 @@ def pull_ollama_models():
             print(f"✅ Model {model} downloaded successfully")
         except subprocess.CalledProcessError:
             print(
-                f"⚠️  Could not download model {model}. You may need to install it manually."
+                f"⚠️  Could not download model {model}. "
+                "You may need to install it manually."
             )
         except FileNotFoundError:
             print("⚠️  Ollama not found. Skipping model download.")
@@ -142,7 +141,8 @@ SIGMA_API_PORT=8000
 debug: true
 log_level: "DEBUG"
 system_prompt: |
-  Sei SIGMA-NEX in modalità sviluppo. Fornisci risposte dettagliate e includi informazioni di debug quando richiesto.
+  Sei SIGMA-NEX in modalità sviluppo. Fornisci risposte dettagliate e
+  includi informazioni di debug quando richiesto.
 """
         dev_config.write_text(dev_content)
         print("✅ Created development config")

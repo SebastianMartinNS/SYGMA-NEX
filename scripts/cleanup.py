@@ -8,7 +8,6 @@ Removes temporary files, build artifacts, and cache directories.
 import glob
 import os
 import shutil
-from pathlib import Path
 
 
 def remove_patterns(patterns, root_dir="."):
