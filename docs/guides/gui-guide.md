@@ -478,7 +478,7 @@ sigma gui --show-fps
 5. **Audit Trail**: Monitor access to medical data
 
 For GUI support:
-- **User Guide**: https://docs.sigma-nex.org/gui
-- **Video Tutorials**: https://tutorials.sigma-nex.org
-- **Community**: https://community.sigma-nex.org
+- **User Guide**: https://github.com/SebastianMartinNS/SYGMA-NEX/blob/master/docs/guides/gui-guide.md
+- **Video Tutorials**: https://github.com/SebastianMartinNS/SYGMA-NEX/blob/master/docs/guides/tutorials.md
+- **Community**: https://github.com/SebastianMartinNS/SYGMA-NEX/discussions
 - **Support**: rootedlab6@gmail.com

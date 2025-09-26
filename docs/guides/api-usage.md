@@ -802,7 +802,7 @@ def robust_api_call(question: str):
 ```
 
 For API support and documentation:
-- **API Documentation**: https://api.sigma-nex.org/docs
-- **SDK Documentation**: https://sdk.sigma-nex.org
+- **API Documentation**: https://github.com/SebastianMartinNS/SYGMA-NEX/blob/master/docs/api.md
+- **SDK Documentation**: https://github.com/SebastianMartinNS/SYGMA-NEX/blob/master/docs/guides/api-usage.md
 - **API Support**: rootedlab6@gmail.com
 - **Integration Help**: rootedlab6@gmail.com

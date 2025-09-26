@@ -1,5 +1,4 @@
 # Docker Compose per Development - SIGMA-NEX
-version: '3.8'
 
 # Usa la configurazione base
 include:
@@ -29,7 +28,7 @@ services:
       - WATCHFILES_FORCE_POLLING=true
     
     # Override comando per development con hot-reload
-    command: ["sigma", "server", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    command: ["python", "-m", "sigma_nex", "server", "--host", "0.0.0.0", "--port", "8000"]
     
     # Porte aggiuntive per debugging
     ports:

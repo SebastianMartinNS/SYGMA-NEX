@@ -608,7 +608,7 @@ sigma config show --validate
 ```
 
 For configuration support:
-- **Configuration Guide**: https://docs.sigma-nex.org/config
-- **Schema Reference**: https://schema.sigma-nex.org
+- **Configuration Guide**: https://github.com/SebastianMartinNS/SYGMA-NEX/blob/master/docs/guides/configuration.md
+- **Schema Reference**: https://github.com/SebastianMartinNS/SYGMA-NEX/blob/master/docs/config/schema.md
 - **Examples**: https://github.com/SebastianMartinNS/SYGMA-NEX/tree/master/examples/config
 - **Support**: rootedlab6@gmail.com

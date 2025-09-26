@@ -4,7 +4,7 @@ FROM python:3.11-slim as base
 
 # Metadata
 LABEL maintainer="Sebastian Martin <rootedlab6@gmail.com>"
-LABEL version="0.3.1"
+LABEL version="0.3.5"
 LABEL description="SIGMA-NEX - Sistema di Intelligenza Artificiale Autonomo per la Sopravvivenza Offline-First"
 
 # Variabili di ambiente
@@ -39,8 +39,8 @@ FROM base as development
 # Installa dipendenze di sviluppo
 RUN pip install --no-cache-dir -r requirements-test.txt
 
-# Installa Ollama
-RUN curl -fsSL https://ollama.ai/install.sh | sh
+# Installa Ollama con gestione errori
+RUN curl -fsSL https://ollama.ai/install.sh | sh || echo "⚠️ Ollama installation failed, continuing without it"
 
 # Copia tutto il codice sorgente
 COPY --chown=sigma:sigma . .
@@ -55,7 +55,7 @@ USER sigma
 EXPOSE 8000 11434
 
 # Comando di default per development
-CMD ["sigma", "server", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "sigma_nex", "server", "--host", "0.0.0.0", "--port", "8000"]
 
 # Production stage (per deployment)
 FROM base as production
@@ -80,7 +80,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 EXPOSE 8000
 
 # Comando di default per production
-CMD ["sigma", "server", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "sigma_nex", "server", "--host", "0.0.0.0", "--port", "8000"]
 
 # Multi-arch build support
 FROM production as final
@@ -91,4 +91,4 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Entrypoint
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["sigma", "server"]
+CMD ["server"]

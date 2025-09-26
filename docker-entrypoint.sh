@@ -184,15 +184,15 @@ main() {
     case "$CMD" in
         "server"|"")
             log_info "Avviando SIGMA-NEX API Server..."
-            exec sigma server --host 0.0.0.0 --port ${PORT:-8000} "$@" &
+            exec python -m sigma_nex server --host 0.0.0.0 --port ${PORT:-8000} "$@" &
             ;;
         "cli")
             log_info "Avviando SIGMA-NEX CLI..."
-            exec sigma start "$@" &
+            exec python -m sigma_nex start "$@" &
             ;;
         "self-check")
             log_info "Eseguendo self-check..."
-            exec sigma self-check "$@"
+            exec python -m sigma_nex self-check "$@"
             ;;
         "gui")
             log_error "❌ GUI non disponibile in container"
@@ -200,7 +200,7 @@ main() {
             ;;
         *)
             log_info "Eseguendo comando personalizzato: $CMD"
-            exec sigma "$CMD" "$@" &
+            exec python -m sigma_nex "$CMD" "$@" &
             ;;
     esac
     
