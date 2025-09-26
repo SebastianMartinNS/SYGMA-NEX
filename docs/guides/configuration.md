@@ -501,6 +501,6 @@ When upgrading SIGMA-NEX, configuration schema may change:
 5. **Test** functionality
 
 For assistance with configuration:
-- **Documentation**: https://docs.sigma-nex.org/config
+- **Documentation**: https://github.com/SebastianMartinNS/SYGMA-NEX/blob/master/docs/guides/configuration.md
 - **Examples**: https://github.com/SebastianMartinNS/SYGMA-NEX/tree/master/examples
 - **Support**: rootedlab6@gmail.com

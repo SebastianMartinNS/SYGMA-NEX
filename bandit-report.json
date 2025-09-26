@@ -1,17 +1,17 @@
 {
   "errors": [],
-  "generated_at": "2025-09-25T19:00:57Z",
+  "generated_at": "2025-09-26T15:59:50Z",
   "metrics": {
     "_totals": {
-      "CONFIDENCE.HIGH": 8,
+      "CONFIDENCE.HIGH": 14,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
       "CONFIDENCE.UNDEFINED": 0,
       "SEVERITY.HIGH": 0,
-      "SEVERITY.LOW": 8,
+      "SEVERITY.LOW": 14,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 1914,
+      "loc": 2068,
       "nosec": 0,
       "skipped_tests": 0
     },
@@ -28,7 +28,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    "sigma_nex/cli.py": {
+    "sigma_nex/__main__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -37,7 +37,20 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 154,
+      "loc": 6,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "sigma_nex/cli.py": {
+      "CONFIDENCE.HIGH": 6,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 6,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 302,
       "nosec": 0,
       "skipped_tests": 0
     },
@@ -212,6 +225,163 @@
     }
   },
   "results": [
+    {
+      "code": "1 import subprocess\n2 import sys\n3 \n",
+      "col_offset": 0,
+      "end_col_offset": 17,
+      "filename": "sigma_nex/cli.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Consider possible security implications associated with the subprocess module.",
+      "line_number": 1,
+      "line_range": [
+        1
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_imports.html#b404-import-subprocess",
+      "test_id": "B404",
+      "test_name": "blacklist"
+    },
+    {
+      "code": "173     try:\n174         result = subprocess.run(\n175             [\"git\", \"status\", \"--porcelain\"],\n176             cwd=project_root,\n177             capture_output=True,\n178             text=True,\n179             check=True,\n180         )\n181         if result.stdout.strip():\n",
+      "col_offset": 17,
+      "end_col_offset": 9,
+      "filename": "sigma_nex/cli.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 174,
+      "line_range": [
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.8.6/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "173     try:\n174         result = subprocess.run(\n175             [\"git\", \"status\", \"--porcelain\"],\n176             cwd=project_root,\n177             capture_output=True,\n178             text=True,\n179             check=True,\n180         )\n181         if result.stdout.strip():\n",
+      "col_offset": 17,
+      "end_col_offset": 9,
+      "filename": "sigma_nex/cli.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 174,
+      "line_range": [
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.8.6/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "196     try:\n197         result = subprocess.run(\n198             [\"git\", \"pull\", \"origin\", \"master\"],\n199             cwd=project_root,\n200             capture_output=True,\n201             text=True,\n202             check=True,\n203         )\n204         click.echo(\"\u2705 Git pull completato!\")\n",
+      "col_offset": 17,
+      "end_col_offset": 9,
+      "filename": "sigma_nex/cli.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 197,
+      "line_range": [
+        197,
+        198,
+        199,
+        200,
+        201,
+        202,
+        203
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.8.6/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "196     try:\n197         result = subprocess.run(\n198             [\"git\", \"pull\", \"origin\", \"master\"],\n199             cwd=project_root,\n200             capture_output=True,\n201             text=True,\n202             check=True,\n203         )\n204         click.echo(\"\u2705 Git pull completato!\")\n",
+      "col_offset": 17,
+      "end_col_offset": 9,
+      "filename": "sigma_nex/cli.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 197,
+      "line_range": [
+        197,
+        198,
+        199,
+        200,
+        201,
+        202,
+        203
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.8.6/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "215                 try:\n216                     subprocess.run(\n217                         [\n218                             sys.executable,\n219                             \"-m\",\n220                             \"pip\",\n221                             \"install\",\n222                             \"-r\",\n223                             str(project_root / \"requirements.txt\"),\n224                             \"--upgrade\",\n225                         ],\n226                         capture_output=True,\n227                         text=True,\n228                         check=True,\n229                     )\n230                     click.echo(\"\u2705 Dipendenze aggiornate!\")\n",
+      "col_offset": 20,
+      "end_col_offset": 21,
+      "filename": "sigma_nex/cli.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 216,
+      "line_range": [
+        216,
+        217,
+        218,
+        219,
+        220,
+        221,
+        222,
+        223,
+        224,
+        225,
+        226,
+        227,
+        228,
+        229
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.8.6/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
     {
       "code": "9 import shutil\n10 import subprocess\n11 import sys\n",
       "col_offset": 0,

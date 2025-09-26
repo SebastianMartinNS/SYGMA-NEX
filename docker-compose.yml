@@ -1,8 +1,6 @@
 # Docker Compose per SIGMA-NEX
 # Configurazione completa per sviluppo e produzione
 
-version: '3.8'
-
 # Reti
 networks:
   sigma-net:
@@ -18,6 +16,8 @@ volumes:
   ollama-data:
     driver: local
   sigma-logs:
+    driver: local
+  postgres-data:
     driver: local
 
 # Servizi
