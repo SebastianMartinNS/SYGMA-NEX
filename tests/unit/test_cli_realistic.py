@@ -622,8 +622,8 @@ class TestCLIRealWorldUsage:
             mock_response = Mock()
             mock_response.status_code = 200
             mock_response.json.return_value = {
-                "tag_name": "v0.3.1",
-                "name": "Release 0.3.1",
+                "tag_name": "v0.3.5",
+                "name": "Release 0.3.5",
             }
             mock_get.return_value = mock_response
 

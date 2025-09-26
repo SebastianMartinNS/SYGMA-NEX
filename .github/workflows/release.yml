@@ -54,25 +54,39 @@ jobs:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
-    - name: 📦 Install bump2version
-      run: pip install bump2version
-
-    - name: 🔖 Get or create version
+    - name:  Get or create version
       id: version
       run: |
         if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-          # Manual release - bump version
+          # Manual release - calculate new version
           echo "Creating new ${{ inputs.release_type }} release..."
           
-          # Configure git
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          # Get current version from __init__.py
+          CURRENT_VERSION=$(python -c "import sys; sys.path.append('sigma_nex'); import __init__; print(__init__.__version__)")
+          echo "Current version: $CURRENT_VERSION"
           
-          # Bump version
-          bump2version ${{ inputs.release_type }} --tag
+          # Simple version bumping
+          IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
+          MAJOR=${VERSION_PARTS[0]}
+          MINOR=${VERSION_PARTS[1]}
+          PATCH=${VERSION_PARTS[2]}
           
-          # Get new version
-          VERSION=$(python -c "import sigma_nex; print(sigma_nex.__version__)")
+          case "${{ inputs.release_type }}" in
+            "major")
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+              ;;
+            "minor")
+              MINOR=$((MINOR + 1))
+              PATCH=0
+              ;;
+            "patch")
+              PATCH=$((PATCH + 1))
+              ;;
+          esac
+          
+          VERSION="${MAJOR}.${MINOR}.${PATCH}"
           TAG="v${VERSION}"
           
           # Push changes with retry mechanism
@@ -213,7 +227,7 @@ jobs:
         docker run --rm \
           -e SIGMA_SKIP_OLLAMA=true \
           ${{ env.REGISTRY }}/${{ github.repository_owner }}/sigma-nex:${{ needs.version.outputs.version }} \
-          sigma self-check
+          python -m sigma_nex self-check
 
   # 📄 Generate release notes
   release-notes:
