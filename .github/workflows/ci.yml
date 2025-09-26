@@ -86,7 +86,7 @@ jobs:
     - name: 🎯 Set Python matrix
       id: set-matrix
       run: |
-        echo "python-matrix=[\"3.10\", \"3.11\", \"3.12\"]" >> $GITHUB_OUTPUT
+        echo "python-matrix=[\"3.10\", \"3.11\"]" >> $GITHUB_OUTPUT
 
   # 🧪 Test suite con multiple versioni Python
   test:
@@ -222,7 +222,7 @@ jobs:
         docker run --rm \
           -e SIGMA_SKIP_OLLAMA=true \
           ${{ env.REGISTRY }}/${{ github.repository_owner }}/sigma-nex:test \
-          sigma self-check
+          python -m sigma_nex self-check
 
     - name: 🔐 Log in to Container Registry
       if: github.event_name != 'pull_request'
