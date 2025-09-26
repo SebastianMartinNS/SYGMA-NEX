@@ -23,6 +23,18 @@ try:
     FASTAPI_AVAILABLE = True
 except ImportError:
     FASTAPI_AVAILABLE = False
+    # Fallback per BaseModel se pydantic non disponibile
+    class BaseModel:
+        pass
+    class Field:
+        def __init__(self, *args, **kwargs):
+            pass
+    class Request:
+        pass
+    class HTTPException(Exception):
+        def __init__(self, status_code, detail=None):
+            self.status_code = status_code
+            self.detail = detail
 
 # Import SIGMA-NEX components
 from .config import get_config, load_config  # re-export per compat test
