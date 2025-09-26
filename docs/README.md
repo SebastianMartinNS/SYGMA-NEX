@@ -49,6 +49,13 @@ sigma server
 
 # Interfaccia grafica
 sigma gui
+
+# Aggiornamento sistema
+sigma update --check-only  # Solo controllo
+sigma update               # Aggiorna alla versione più recente
+
+# Esecuzione come modulo
+python -m sigma_nex --help
 ```
 
 ## Guide

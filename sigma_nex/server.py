@@ -142,7 +142,7 @@ class SigmaServer:
         self.app = FastAPI(
             title="SIGMA-NEX API",
             description="Optimized API for SIGMA-NEX cognitive agent",
-            version="0.3.1",
+            version="0.3.5",
             docs_url="/docs" if self.config.get("debug", False) else None,
         )
 
@@ -371,7 +371,7 @@ class SigmaServer:
             uptime = (datetime.datetime.utcnow() - self.start_time).total_seconds()
             return HealthResponse(
                 status="healthy",
-                version="0.3.1",
+                version="0.3.5",
                 uptime=uptime,
                 requests_processed=self.requests_processed,
             )

@@ -1,8 +1,35 @@
-import click
+import subprocess
+import sys
 
+import click
+import requests
+
+from . import __version__
 from .config import get_config
 from .core.runner import Runner
 from .data_loader import DataLoader
+
+
+def show_ascii_banner():
+    """Display SIGMA-NEX ASCII banner with author info."""
+    banner = """
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  ███████╗██╗ ██████╗ ███╗   ███╗ █████╗      ███╗   ██╗███████╗██╗  ██╗      ║
+║  ██╔════╝██║██╔════╝ ████╗ ████║██╔══██╗     ████╗  ██║██╔════╝╚██╗██╔╝      ║
+║  ███████╗██║██║  ███╗██╔████╔██║███████║     ██╔██╗ ██║█████╗   ╚███╔╝       ║
+║  ╚════██║██║██║   ██║██║╚██╔╝██║██╔══██║     ██║╚██╗██║██╔══╝   ██╔██╗       ║
+║  ███████║██║╚██████╔╝██║ ╚═╝ ██║██║  ██║     ██║ ╚████║███████╗██╔╝ ██╗      ║
+║  ╚══════╝╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝     ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝      ║
+║                                                                              ║
+║                   Agente Cognitivo Autonomo per Sopravvivenza                ║
+║                             Offline-First v0.3.5                             ║
+║                                                                              ║
+║      Sviluppato da: Martin Sebastian                                         ║
+║      Email: rootedlab6@gmail.com                                             ║
+║      Repository: https://github.com/SebastianMartinNS/SYGMA-NEX              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+"""
+    click.echo(banner)
 
 
 @click.group()
@@ -10,6 +37,7 @@ from .data_loader import DataLoader
 @click.pass_context
 def main(ctx, secure):
     """CLI di SIGMA-NEX - Agente cognitivo autonomo per sopravvivenza offline."""
+    show_ascii_banner()
     cfg = get_config()
     ctx.obj = {"config": cfg, "secure": secure}
 
@@ -87,6 +115,152 @@ def gui():
         )
     except KeyboardInterrupt:
         click.echo("\nGUI chiusa.")
+
+
+@main.command()
+@click.option("--check-only", is_flag=True, help="Solo controllo senza aggiornare")
+@click.option(
+    "--force", is_flag=True, help="Forza aggiornamento anche se già aggiornato"
+)
+def update(check_only, force):
+    """Aggiorna SIGMA-NEX dal repository GitHub."""
+    click.echo(
+        f"🔍 Controllo aggiornamenti SIGMA-NEX " f"(versione corrente: {__version__})"
+    )
+
+    cfg = get_config()
+    project_root = cfg.project_root
+
+    # 1. Verifica se siamo in un repository git
+    git_dir = project_root / ".git"
+    if not git_dir.exists():
+        click.echo("❌ Non siamo in un repository git. " "Impossibile aggiornare.")
+        click.echo(
+            "💡 Clona il repository: "
+            "git clone https://github.com/SebastianMartinNS/SYGMA-NEX.git"
+        )
+        return
+
+    # 2. Verifica connessione internet e repository
+    api_url = (
+        "https://api.github.com/repos/SebastianMartinNS/" "SYGMA-NEX/releases/latest"
+    )
+    try:
+        response = requests.get(api_url, timeout=10)
+        if response.status_code == 200:
+            latest_release = response.json()
+            latest_version = latest_release["tag_name"].lstrip("v")
+            click.echo(f"📡 Versione più recente su GitHub: {latest_version}")
+
+            if latest_version == __version__ and not force:
+                click.echo("✅ Sei già aggiornato all'ultima versione!")
+                if not check_only:
+                    click.echo("💡 Usa --force per forzare il pull comunque")
+                return
+            elif latest_version != __version__:
+                click.echo(f"🆕 Nuova versione disponibile: {latest_version}")
+        else:
+            click.echo("⚠️  Impossibile verificare l'ultima versione " "dal GitHub API")
+    except Exception as e:
+        click.echo(f"⚠️  Errore connessione GitHub API: {e}")
+        click.echo("🔄 Procedo comunque con git pull...")
+
+    if check_only:
+        click.echo("ℹ️  Solo controllo richiesto, non aggiorno.")
+        return
+
+    # 3. Controlla stato git locale
+    try:
+        result = subprocess.run(
+            ["git", "status", "--porcelain"],
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        if result.stdout.strip():
+            click.echo("⚠️  Ci sono modifiche locali non committate:")
+            click.echo(result.stdout)
+            if not click.confirm("Vuoi procedere comunque con git pull?"):
+                click.echo("❌ Aggiornamento annullato")
+                return
+    except subprocess.CalledProcessError as e:
+        click.echo(f"❌ Errore controllo git status: {e}")
+        return
+    except FileNotFoundError:
+        click.echo("❌ Git non trovato. " "Installa Git per usare questa funzione.")
+        return
+
+    # 4. Esegui git pull
+    click.echo("🔄 Aggiornamento in corso...")
+    try:
+        result = subprocess.run(
+            ["git", "pull", "origin", "master"],
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        click.echo("✅ Git pull completato!")
+        click.echo(result.stdout)
+
+        if "Already up to date" in result.stdout:
+            click.echo("ℹ️  Repository già aggiornato")
+        else:
+            click.echo("🔄 Repository aggiornato, controllo dipendenze...")
+
+            # 5. Aggiorna dipendenze se necessario
+            if (project_root / "requirements.txt").exists():
+                click.echo("📦 Aggiornamento dipendenze...")
+                try:
+                    subprocess.run(
+                        [
+                            sys.executable,
+                            "-m",
+                            "pip",
+                            "install",
+                            "-r",
+                            str(project_root / "requirements.txt"),
+                            "--upgrade",
+                        ],
+                        capture_output=True,
+                        text=True,
+                        check=True,
+                    )
+                    click.echo("✅ Dipendenze aggiornate!")
+                except subprocess.CalledProcessError as e:
+                    click.echo(f"⚠️  Errore aggiornamento dipendenze: {e}")
+                    msg = (
+                        "💡 Potresti dover aggiornare manualmente con: "
+                        "pip install -r requirements.txt --upgrade"
+                    )
+                    click.echo(msg)
+
+            # 6. Ricarica configurazione se necessario
+            try:
+                # Verifica se la versione è cambiata dopo il pull
+                import importlib
+
+                import sigma_nex
+
+                importlib.reload(sigma_nex)
+                new_version = getattr(sigma_nex, "__version__", "unknown")
+                if new_version != __version__:
+                    click.echo(
+                        f"🎉 SIGMA-NEX aggiornato alla " f"versione {new_version}!"
+                    )
+                else:
+                    click.echo("✅ Aggiornamento completato!")
+            except Exception:
+                click.echo("✅ Aggiornamento completato!")
+
+            click.echo("💡 Riavvia SIGMA-NEX per utilizzare " "la versione aggiornata")
+
+    except subprocess.CalledProcessError as e:
+        click.echo(f"❌ Errore durante git pull: {e}")
+        click.echo(f"Output: {e.stdout}")
+        click.echo(f"Error: {e.stderr}")
+        click.echo("💡 Prova a risolvere i conflitti manualmente e riprova")
 
 
 @main.command("install-config")

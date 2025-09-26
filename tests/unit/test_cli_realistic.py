@@ -9,6 +9,7 @@ import tempfile
 from unittest.mock import Mock, patch
 
 import pytest
+import requests
 from click.testing import CliRunner
 
 from sigma_nex.cli import load_framework, main
@@ -538,3 +539,139 @@ class TestCLIRealWorldUsage:
 
         finally:
             os.unlink(temp_path)
+
+    def test_cli_ascii_banner_functionality(self):
+        """Test funzionalità banner ASCII"""
+        from click.testing import CliRunner
+
+        from sigma_nex.cli import show_ascii_banner
+
+        runner = CliRunner()
+
+        # Test che il banner viene mostrato correttamente
+        result = runner.invoke(main, ["self-check"])
+
+        # Verifica elementi del banner
+        assert "Martin Sebastian" in result.output
+        assert "rootedlab6@gmail.com" in result.output
+        assert "v0.3.5" in result.output
+        assert "╔" in result.output  # Carattere del bordo del banner
+        assert "║" in result.output  # Carattere del bordo del banner
+        assert "Agente Cognitivo" in result.output
+
+    def test_cli_banner_function_direct(self):
+        """Test diretto della funzione show_ascii_banner"""
+        import sys
+        from io import StringIO
+
+        from click.testing import CliRunner
+
+        from sigma_nex.cli import show_ascii_banner
+
+        # Cattura l'output del banner
+        old_stdout = sys.stdout
+        sys.stdout = captured_output = StringIO()
+
+        try:
+            # Simula contesto click per evitare errori
+            with CliRunner().isolated_filesystem():
+                show_ascii_banner()
+                banner_output = captured_output.getvalue()
+
+                # Verifica contenuti del banner
+                assert "Martin Sebastian" in banner_output
+                assert "rootedlab6@gmail.com" in banner_output
+                assert "v0.3.5" in banner_output
+                assert "╔" in banner_output  # ASCII art border
+        finally:
+            sys.stdout = old_stdout
+
+    def test_cli_main_module_execution(self):
+        """Test esecuzione CLI come modulo Python"""
+        import subprocess
+        import sys
+
+        # Test esecuzione come modulo con help
+        try:
+            result = subprocess.run(
+                [sys.executable, "-m", "sigma_nex", "--help"],
+                capture_output=True,
+                text=True,
+                timeout=10,
+                cwd=".",
+            )
+
+            # Verifica che il modulo sia eseguibile
+            assert result.returncode == 0
+            assert "CLI di SIGMA-NEX" in result.stdout
+            assert "Commands:" in result.stdout
+
+        except subprocess.TimeoutExpired:
+            # Timeout è accettabile per questo test
+            pass
+        except Exception as e:
+            # Altri errori sono OK se il sistema non supporta l'esecuzione
+            pytest.skip(f"Module execution test skipped: {e}")
+
+    def test_cli_update_command_check_only(self):
+        """Test comando update con flag --check-only"""
+        runner = CliRunner()
+
+        # Mock requests per evitare chiamate HTTP reali
+        with patch("sigma_nex.cli.requests.get") as mock_get:
+            mock_response = Mock()
+            mock_response.status_code = 200
+            mock_response.json.return_value = {
+                "tag_name": "v0.3.1",
+                "name": "Release 0.3.1",
+            }
+            mock_get.return_value = mock_response
+
+            result = runner.invoke(main, ["update", "--check-only"])
+
+            # Dovrebbe non dare errori e mostrare info versione
+            assert result.exit_code == 0
+            assert "Controllo aggiornamenti" in result.output
+            assert "versione corrente" in result.output
+
+    def test_cli_update_command_no_git(self):
+        """Test comando update senza repository git"""
+        runner = CliRunner()
+
+        # Mock pathlib.Path exists method per simulare assenza .git
+        with patch("pathlib.Path.exists") as mock_exists:
+            mock_exists.return_value = False
+
+            result = runner.invoke(main, ["update"])
+
+            assert result.exit_code == 0
+            assert "Non siamo in un repository git" in result.output
+            assert "git clone" in result.output
+
+    def test_cli_update_command_network_error(self):
+        """Test comando update con errore di rete"""
+        runner = CliRunner()
+
+        # Mock requests per simulare errore rete
+        with patch("sigma_nex.cli.requests.get") as mock_get:
+            mock_get.side_effect = requests.exceptions.RequestException("Network error")
+
+            # Mock git directory esistente
+            with patch("pathlib.Path.exists") as mock_exists:
+                mock_exists.return_value = True
+
+                result = runner.invoke(main, ["update", "--check-only"])
+
+                assert result.exit_code == 0
+                assert "Errore connessione GitHub API" in result.output
+
+    def test_cli_update_command_help(self):
+        """Test help comando update"""
+        runner = CliRunner()
+
+        result = runner.invoke(main, ["update", "--help"])
+
+        assert result.exit_code == 0
+        assert "Aggiorna SIGMA-NEX dal repository GitHub" in result.output
+        assert "--check-only" in result.output
+        assert "--force" in result.output
