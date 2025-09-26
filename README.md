@@ -5,11 +5,11 @@
 # SIGMA-NEX
 **Sistema di Intelligenza Artificiale Autonomo per la Sopravvivenza Offline-First**
 
-![SIGMA-NEX](https://img.shields.io/badge/SIGMA--NEX-v0.3.1-blue?style=for-the-badge&logo=robot)
+![SIGMA-NEX](https://img.shields.io/badge/SIGMA--NEX-v0.3.5-blue?style=for-the-badge&logo=robot)
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-blue?style=for-the-badge)
 ![Build Status](https://img.shields.io/badge/Build-Passing-success?style=for-the-badge)
-![Tests](https://img.shields.io/badge/Tests-328%2F333%20Pass-brightgreen?style=for-the-badge)
+![Tests](https://img.shields.io/badge/Tests-335%2F340%20Pass-brightgreen?style=for-the-badge)
 
 </div>
 
@@ -184,6 +184,14 @@ sigma server --host 0.0.0.0 --port 8000
 
 # Avvia interfaccia grafica
 sigma gui
+
+# Aggiorna SIGMA-NEX dal repository GitHub
+sigma update                # Aggiorna alla versione più recente
+sigma update --check-only   # Solo controllo versione
+sigma update --force        # Forza aggiornamento
+
+# Esecuzione come modulo Python
+python -m sigma_nex --help
 ```
 
 ### API REST
@@ -394,11 +402,31 @@ mypy sigma_nex/
 - **[Testing Guide](docs/testing.md)**
 - **[Deployment Guide](docs/deployment.md)**
 
+## 🆕 Novità v0.3.5
+
+### Nuove Funzionalità
+
+- **🎨 ASCII Art Banner**: Nuovo banner grafico SIGMA-NEX visualizzato per tutti i comandi CLI
+- **🔄 Comando Update**: Nuovo comando `sigma update` per aggiornamenti automatici dal repository
+  - `--check-only`: Controlla solo versioni disponibili
+  - `--force`: Forza aggiornamento anche se già aggiornato
+  - Verifica automatica via GitHub API
+  - Gestione intelligente modifiche locali git
+- **📦 Module Execution**: Supporto completo `python -m sigma_nex` per esecuzione come modulo
+- **🧪 Test Coverage Potenziato**: 335+ test con coverage 78%
+
+### Miglioramenti
+
+- **User Experience**: Banner informativo con dettagli autore e repository
+- **Error Handling**: Gestione robusta errori di rete e git
+- **Code Quality**: Compliance completa flake8, isort, black
+- **Documentation**: README e documentazione completamente aggiornati
+
 ## Versioni e Changelog
 
 Vedi [CHANGELOG.md](CHANGELOG.md) per le modifiche dettagliate.
 
-**Versione Corrente:** v0.3.1 (24 Settembre 2025)
+**Versione Corrente:** v0.3.5 (26 Settembre 2025)
 
 ## Licenza
 

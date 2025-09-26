@@ -7,16 +7,16 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="sigma-nex",
-    version="0.3.1",
+    version="0.3.5",
     author="Sebastian",
     author_email="rootedlab6@gmail.com",
     description="Agente cognitivo autonomo per la sopravvivenza offline-first in scenari estremi",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/tuo-username/sigma-nex",
+    url="https://github.com/SebastianMartinNS/SYGMA-NEX",
     project_urls={
-        "Documentazione": "https://github.com/tuo-username/sigma-nex/wiki",
-        "Issue Tracker": "https://github.com/tuo-username/sigma-nex/issues",
+        "Documentazione": "https://github.com/SebastianMartinNS/SYGMA-NEX/wiki",
+        "Issue Tracker": "https://github.com/SebastianMartinNS/SYGMA-NEX/issues",
     },
     license="CC BY-NC 4.0",
     packages=find_packages(exclude=["tests", "data"]),

@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.5] - 2025-09-26
+
+### Added
+- **🎨 ASCII Art Banner**: Nuovo banner grafico SIGMA-NEX con informazioni autore e repository
+- **🔄 Update Command**: Nuovo comando `sigma update` per aggiornare dal repository GitHub
+  - Supporto `--check-only` per solo controlli senza aggiornare
+  - Supporto `--force` per forzare aggiornamento
+  - Verifica automatica versioni via GitHub API
+  - Controllo modifiche locali git prima dell'aggiornamento
+  - Aggiornamento automatico dipendenze post-pull
+- **📦 Module Execution**: Supporto `python -m sigma_nex` per esecuzione come modulo
+- **🧪 Enhanced Testing**: 4 nuovi test per comando update con coverage completa
+
+### Enhanced
+- **CLI User Experience**: Banner ASCII visualizzato per tutti i comandi
+- **Error Handling**: Gestione robusta errori di rete e git per comando update
+- **Code Quality**: Compliance flake8 completa per tutti i file modificati
+
+### Technical
+- **Version Management**: Sistema di versioning centralizzato in `__init__.py`
+- **Git Integration**: Integrazione completa con git per aggiornamenti automatici
+- **Network Resilience**: Fallback graceful per errori di connessione GitHub API
+
 ## [0.3.4] - 2025-09-25
 
 ### Added
