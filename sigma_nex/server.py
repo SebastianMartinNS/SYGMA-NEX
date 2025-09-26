@@ -24,13 +24,17 @@ try:
 except ImportError:
     FASTAPI_AVAILABLE = False
     # Fallback per BaseModel se pydantic non disponibile
+
     class BaseModel:
         pass
+
     class Field:
         def __init__(self, *args, **kwargs):
             pass
+
     class Request:
         pass
+
     class HTTPException(Exception):
         def __init__(self, status_code, detail=None):
             self.status_code = status_code
