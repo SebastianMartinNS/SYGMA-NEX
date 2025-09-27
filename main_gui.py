@@ -21,9 +21,9 @@ try:
         launch_gui()
 
 except ImportError as e:
-    print(f"❌ Error importing GUI: {e}")
+    print(f"Error importing GUI: {e}")
     print("Please install dependencies: pip install customtkinter")
     input("Press Enter to exit...")
 except Exception as e:
-    print(f"❌ Error starting GUI: {e}")
+    print(f"Error starting GUI: {e}")
     input("Press Enter to exit...")

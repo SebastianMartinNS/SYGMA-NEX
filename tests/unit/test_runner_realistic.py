@@ -551,18 +551,18 @@ class TestRunnerAdvancedFunctionality:
         # Test _show_stats (should not crash)
         try:
             runner._show_stats()
-            print("✅ _show_stats executed successfully")
+            print("_show_stats executed successfully")
         except Exception as e:
-            print(f"⚠️ _show_stats error: {e}")
+            print(f"_show_stats error: {e}")
             # Non deve crashare anche se non ha stats
             assert True
 
         # Test _show_help (should not crash)
         try:
             runner._show_help()
-            print("✅ _show_help executed successfully")
+            print("_show_help executed successfully")
         except Exception as e:
-            print(f"⚠️ _show_help error: {e}")
+            print(f"_show_help error: {e}")
             assert True
 
         # Test _clear_history
@@ -601,10 +601,10 @@ class TestRunnerAdvancedFunctionality:
                 assert "Test query" in content
                 assert "Test response" in content
 
-            print("✅ Export history successful")
+            print("Export history successful")
 
         except Exception as e:
-            print(f"⚠️ Export history error: {e}")
+            print(f"Export history error: {e}")
             # Export può fallire per validation, ma non deve crashare
             assert True
         finally:

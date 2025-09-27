@@ -64,7 +64,7 @@ Type 'help' for commands, 'exit' to quit
 
 >> Come disinfettare una ferita?
 
-🏥 Per disinfettare correttamente una ferita:
+Per disinfettare correttamente una ferita:
 
 1. **Lavaggio mani**: Lavati le mani con sapone antibatterico
 2. **Pulizia ferita**: Rimuovi delicatamente sporco e detriti

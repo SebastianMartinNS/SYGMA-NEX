@@ -123,11 +123,11 @@ class TestRetrieverRealistic:
                     has_content = "nome" in mod or "descrizione" in mod or "title" in mod
                     assert has_content
             else:
-                print("⚠️ Nessun modulo trovato, test di struttura")
+                print("Nessun modulo trovato, test di struttura")
 
         except Exception as e:
             # Se caricamento fallisce, testa behavior di fallback
-            print(f"⚠️ Caricamento dati fallito: {e}")
+            print(f"Caricamento dati fallito: {e}")
 
         # Test get_moduli con file non esistente
         try:
@@ -384,7 +384,7 @@ def mock_open_empty_mapping(*args, **kwargs):
                         assert len(parts[0].strip()) > 0  # nome non vuoto
                         assert len(parts[1].strip()) > 0  # descrizione non vuota
 
-                print(f"✅ Query '{query}': {len(results)} risultati")
+                print(f"Query '{query}': {len(results)} risultati")
 
             except Exception as e:
                 # Verifica che errori siano gestiti gracefully
@@ -397,7 +397,7 @@ def mock_open_empty_mapping(*args, **kwargs):
                     "transformers",
                 ]
                 assert any(err in error_msg for err in expected_errors), f"Errore inaspettato per query '{query}': {e}"
-                print(f"⚠️ Query '{query}' gestisce errore: {str(e)[:50]}...")
+                print(f"Query '{query}' gestisce errore: {str(e)[:50]}...")
 
         # Test casi limite
         edge_cases = ["", "   ", "query_molto_lunga_" * 20]
@@ -405,9 +405,9 @@ def mock_open_empty_mapping(*args, **kwargs):
             try:
                 results = search_moduli(edge_query, k=1)
                 assert isinstance(results, list)
-                print(f"✅ Edge case '{edge_query[:20]}...': {len(results)} risultati")
+                print(f"Edge case '{edge_query[:20]}...': {len(results)} risultati")
             except Exception:
-                print(f"⚠️ Edge case '{edge_query[:20]}...' gestito con errore")
+                print(f"Edge case '{edge_query[:20]}...' gestito con errore")
                 pass  # Errori per edge cases sono accettabili
 
 
@@ -492,11 +492,11 @@ class TestRetrieverClassReal:
                 results = retriever.search(query, k=2)
                 assert isinstance(results, list)
                 assert len(results) <= 2
-                print(f"✅ Retriever.search('{query}'): {len(results)} risultati")
+                print(f"Retriever.search('{query}'): {len(results)} risultati")
 
             except Exception as e:
                 # Errori accettabili per missing dependencies
-                print(f"⚠️ Retriever.search('{query}') error: {str(e)[:50]}...")
+                print(f"Retriever.search('{query}') error: {str(e)[:50]}...")
                 assert True
 
 
@@ -510,17 +510,17 @@ class TestRetrieverIntegration:
         # 1. Test caricamento moduli reali
         try:
             moduli = get_moduli()
-            print(f"✅ Caricati {len(moduli)} moduli reali")
+            print(f"Caricati {len(moduli)} moduli reali")
         except Exception as e:
-            print(f"⚠️ Caricamento moduli fallito: {e}")
+            print(f"Caricamento moduli fallito: {e}")
             moduli = []
 
         # 2. Test build index (potrebbe fallire per dipendenze)
         try:
             build_index()
-            print("✅ Build index completato")
+            print("Build index completato")
         except Exception as e:
-            print(f"⚠️ Build index fallito: {e}")
+            print(f"Build index fallito: {e}")
 
         # 3. Test search con diverse query
         test_queries = ["sopravvivenza", "primo soccorso", "navigazione", "test"]
@@ -528,7 +528,7 @@ class TestRetrieverIntegration:
         for query in test_queries:
             try:
                 results = search_moduli(query, k=3)
-                print(f"✅ Search '{query}': {len(results)} risultati")
+                print(f"Search '{query}': {len(results)} risultati")
 
                 # Verifica formato risultati
                 for result in results:
@@ -536,16 +536,16 @@ class TestRetrieverIntegration:
                     assert len(result) > 0
 
             except Exception as e:
-                print(f"⚠️ Search '{query}' error: {str(e)[:50]}...")
+                print(f"Search '{query}' error: {str(e)[:50]}...")
 
         # 4. Test integrazione con classe Retriever
         try:
             retriever = Retriever(INDEX_PATH, "test-model")
             for query in ["test", "survival"]:
                 results = retriever.search(query, k=2)
-                print(f"✅ Retriever.search('{query}'): {len(results)} risultati")
+                print(f"Retriever.search('{query}'): {len(results)} risultati")
         except Exception as e:
-            print(f"⚠️ Retriever integration error: {str(e)[:50]}...")
+            print(f"Retriever integration error: {str(e)[:50]}...")
 
         # Il test passa se il sistema gestisce errori gracefully
         assert True

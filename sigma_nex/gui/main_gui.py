@@ -160,7 +160,7 @@ class SigmaNexGUI:  # type: ignore[misc,valid-type]
     def run_selfcheck(self):
         def check():
             self.runner.self_check()
-            self.output_box.insert("end", "[✔] Ollama verificato.\n\n")
+            self.output_box.insert("end", "[OK] Ollama verificato.\n\n")
             self.output_box.see("end")
 
         self.run_background(check)
@@ -184,7 +184,7 @@ class SigmaNexGUI:  # type: ignore[misc,valid-type]
 
         def load():
             count = DataLoader().load(filepath)
-            self.output_box.insert("end", f"[✔] Caricati {count} moduli dal file {filepath}\n\n")
+            self.output_box.insert("end", f"[OK] Caricati {count} moduli dal file {filepath}\n\n")
             self.output_box.see("end")
 
         self.run_background(load)
