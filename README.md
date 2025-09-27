@@ -158,7 +158,7 @@ set SIGMA_NEX_ROOT=C:\path\to\sigma-nex
 export SIGMA_NEX_ROOT=/path/to/sigma-nex
 ```
 
-**⚠️ Importante**: Dopo l'installazione globale, riavvia il terminale per rendere effettive le modifiche.
+**Importante**: Dopo l'installazione globale, riavvia il terminale per rendere effettive le modifiche.
 
 ## Utilizzo
 
@@ -369,7 +369,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 pip install -r requirements-test.txt
 
-# ⚠️ IMPORTANTE: Configura autenticazione sicura
+# IMPORTANTE: Configura autenticazione sicura
 # Windows:
 scripts\setup_auth.bat
 # Linux/macOS:
@@ -429,7 +429,7 @@ mypy sigma_nex/
 - **[Deployment Guide](docs/deployment.md)**
 - **[Configurazione Autenticazione](docs/config/authentication.md)**
 
-## 🆕 Novità v0.4.0
+## Novita v0.4.0
 
 ### Sicurezza
 - **Data Leak Prevention**: Replaced real email addresses with placeholder contacts
@@ -471,15 +471,15 @@ Vedi [CHANGELOG.md](CHANGELOG.md) per le modifiche dettagliate.
 Questo progetto è open source per uso educativo, di ricerca e personale. L'uso commerciale richiede autorizzazione esplicita.
 
 **Puoi:**
-- ✅ Condividere il progetto
-- ✅ Modificare e adattare il codice
-- ✅ Usarlo per scopi educativi e di ricerca
-- ✅ Creare versioni derivate (non commerciali)
+- Condividere il progetto
+- Modificare e adattare il codice
+- Usarlo per scopi educativi e di ricerca
+- Creare versioni derivate (non commerciali)
 
 **Non puoi:**
-- ❌ Usarlo per scopi commerciali
-- ❌ Vendere o monetizzare il software
-- ❌ Rimuovere l'attribuzione al progetto originale
+- Usarlo per scopi commerciali
+- Vendere o monetizzare il software
+- Rimuovere l'attribuzione al progetto originale
 
 **Contatti per Licenze Commerciali:** rootedlab6@gmail.com
 

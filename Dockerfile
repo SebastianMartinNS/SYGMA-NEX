@@ -4,7 +4,7 @@ FROM python:3.11-slim as base
 
 # Metadata
 LABEL maintainer="Sebastian Martin <rootedlab6@gmail.com>"
-LABEL version="0.3.5"
+LABEL version="0.4.0"
 LABEL description="SIGMA-NEX - Sistema di Intelligenza Artificiale Autonomo per la Sopravvivenza Offline-First"
 
 # Variabili di ambiente
