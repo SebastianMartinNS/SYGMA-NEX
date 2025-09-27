@@ -35,11 +35,16 @@ class TestCLIIntegration:
 
         with tempfile.TemporaryDirectory() as temp_dir:
             framework_path = Path(temp_dir) / "framework.json"
-            framework_path.write_text(
-                '{"modules": [{"name": "test", "content": "test content"}]}'
-            )
+            framework_path.write_text('{"modules": [{"name": "test", "content": "test content"}]}')
 
-            result = runner.invoke(main, ["load-framework", str(framework_path)])
+            with (
+                patch("sigma_nex.cli.show_ascii_banner"),
+                patch("sigma_nex.cli.validate_cli_session", return_value=True),
+                patch("sigma_nex.cli.check_cli_permission", return_value=True),
+                patch("sigma_nex.cli.DataLoader.load", return_value=1),
+                patch.dict(os.environ, {"SIGMA_SESSION_TOKEN": "fake_token"}),
+            ):
+                result = runner.invoke(main, ["load-framework", "--path", str(framework_path)])
             assert result.exit_code == 0
 
     def test_cli_help_system_integration(self):

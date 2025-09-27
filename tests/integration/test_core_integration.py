@@ -93,9 +93,7 @@ class TestDataFlowIntegration:
         with tempfile.TemporaryDirectory() as temp_dir:
             # Setup test data
             framework_path = Path(temp_dir) / "framework.json"
-            framework_data = {
-                "modules": [{"name": "test", "content": "Test knowledge base"}]
-            }
+            framework_data = {"modules": [{"name": "test", "content": "Test knowledge base"}]}
             framework_path.write_text(json.dumps(framework_data))
 
             # Setup config

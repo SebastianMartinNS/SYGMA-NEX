@@ -39,9 +39,7 @@ def sanitize_text_input(text: str, max_length: int = 10000) -> str:
         text = text[:max_length]
 
     # Remove script tags
-    text = re.sub(
-        r"<script[^>]*>.*?</script>", "", text, flags=re.IGNORECASE | re.DOTALL
-    )
+    text = re.sub(r"<script[^>]*>.*?</script>", "", text, flags=re.IGNORECASE | re.DOTALL)
     text = re.sub(r"<script[^>]*>", "", text, flags=re.IGNORECASE)
 
     # Remove SQL injection patterns (case insensitive)
@@ -141,9 +139,7 @@ def validate_file_path(
     # Check file extension
     if allowed_extensions:
         if path.suffix.lower() not in [ext.lower() for ext in allowed_extensions]:
-            raise ValidationError(
-                f"File extension not allowed. Allowed: {allowed_extensions}"
-            )
+            raise ValidationError(f"File extension not allowed. Allowed: {allowed_extensions}")
 
     return path
 

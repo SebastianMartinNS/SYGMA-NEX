@@ -406,7 +406,7 @@ Alt+H       Emergency Contacts
 python -c "import customtkinter; print('GUI OK')"
 
 # Reset GUI settings
-sigma config set gui.reset true
+# Modify config.yaml: gui.reset true
 
 # Start in safe mode
 sigma gui --safe-mode
@@ -419,23 +419,23 @@ sigma gui --safe-mode
 sigma gui --scale-factor 1.0
 
 # Reset window size
-sigma config set gui.window_size [800, 600]
+# Modify config.yaml: gui.window_size [800, 600]
 
 # Check display settings
-sigma diagnose display
+# Diagnose manually display
 ```
 
 #### Performance Issues
 
 ```bash
 # Disable animations
-sigma config set gui.animations false
+# Modify config.yaml: gui.animations false
 
 # Reduce update frequency
-sigma config set gui.refresh_rate 30
+# Modify config.yaml: gui.refresh_rate 30
 
 # Enable hardware acceleration
-sigma config set gui.hardware_acceleration true
+# Modify config.yaml: gui.hardware_acceleration true
 ```
 
 ### Debug Mode
@@ -445,7 +445,7 @@ sigma config set gui.hardware_acceleration true
 sigma gui --debug
 
 # Enable verbose logging
-sigma config set gui.debug_logging true
+# Modify config.yaml: gui.debug_logging true
 
 # Show performance metrics
 sigma gui --show-fps

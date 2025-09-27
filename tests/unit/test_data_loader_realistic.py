@@ -56,9 +56,7 @@ class TestDataLoaderRealistic:
             ],
         }
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             json.dump(test_data, temp_file, indent=2, ensure_ascii=False)
             temp_path = temp_file.name
 
@@ -78,9 +76,7 @@ class TestDataLoaderRealistic:
         """Test caricamento file con array modules vuoto"""
         test_data = {"framework": "SIGMA-NEX", "modules": []}  # Array vuoto
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             json.dump(test_data, temp_file)
             temp_path = temp_file.name
 
@@ -103,9 +99,7 @@ class TestDataLoaderRealistic:
             "other_data": "some value",
         }
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             json.dump(test_data, temp_file)
             temp_path = temp_file.name
 
@@ -180,9 +174,7 @@ class TestDataLoaderRealistic:
             ]
         }
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             json.dump(test_data, temp_file, indent=2, ensure_ascii=False)
             temp_path = temp_file.name
 
@@ -213,9 +205,7 @@ class TestDataLoaderErrorHandling:
         # Crea file con JSON invalido
         invalid_json = '{"framework": "SIGMA-NEX", "modules": [invalid json}'
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             temp_file.write(invalid_json)
             temp_path = temp_file.name
 
@@ -231,9 +221,7 @@ class TestDataLoaderErrorHandling:
 
     def test_load_empty_file_real(self):
         """Test caricamento file vuoto"""
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             # File completamente vuoto
             temp_path = temp_file.name
 
@@ -257,9 +245,7 @@ class TestDataLoaderErrorHandling:
         # Crea file temporaneo
         test_data = {"modules": [{"id": "test"}]}
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             json.dump(test_data, temp_file)
             temp_path = temp_file.name
 
@@ -289,9 +275,7 @@ class TestDataLoaderErrorHandling:
         ]
 
         for test_case in test_cases:
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".json", delete=False, encoding="utf-8"
-            ) as temp_file:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
                 json.dump(test_case, temp_file)
                 temp_path = temp_file.name
 
@@ -322,9 +306,7 @@ class TestDataLoaderDataIntegrity:
             ],
         }
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             json.dump(test_data, temp_file, ensure_ascii=False, indent=2)
             temp_path = temp_file.name
 
@@ -354,9 +336,7 @@ class TestDataLoaderDataIntegrity:
 
         test_data = {"framework": "SIGMA-NEX", "modules": modules}
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             json.dump(test_data, temp_file)
             temp_path = temp_file.name
 
@@ -391,9 +371,7 @@ class TestDataLoaderDataIntegrity:
             ],
         }
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             json.dump(test_data, temp_file, indent=2)
             temp_path = temp_file.name
 
@@ -421,9 +399,7 @@ class TestDataLoaderOutput:
             ],
         }
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             json.dump(test_data, temp_file)
             temp_path = temp_file.name
 
@@ -464,9 +440,7 @@ class TestUtilityFunctions:
             "modules": [{"id": "test", "name": "Test Module"}],
         }
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             json.dump(test_data, temp_file, indent=2)
             temp_path = temp_file.name
 
@@ -493,9 +467,7 @@ class TestUtilityFunctions:
         """Test load_json_data con JSON invalido"""
         invalid_json = '{"invalid": json content}'
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             temp_file.write(invalid_json)
             temp_path = temp_file.name
 
@@ -511,9 +483,7 @@ class TestUtilityFunctions:
 
     def test_load_json_data_empty_file(self):
         """Test load_json_data con file vuoto"""
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             # File vuoto
             temp_path = temp_file.name
 
@@ -539,9 +509,7 @@ class TestDataLoaderPerformance:
         modules = [{"id": f"mod_{i}", "name": f"Module {i}"} for i in range(100)]
         test_data = {"framework": "SIGMA-NEX", "modules": modules}
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
             json.dump(test_data, temp_file)
             temp_path = temp_file.name
 
@@ -574,9 +542,7 @@ class TestDataLoaderPerformance:
             modules = [{"id": f"mod_{j}", "name": f"Module {j}"} for j in range(50)]
             test_data = {"modules": modules}
 
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".json", delete=False, encoding="utf-8"
-            ) as temp_file:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False, encoding="utf-8") as temp_file:
                 json.dump(test_data, temp_file)
                 temp_path = temp_file.name
 

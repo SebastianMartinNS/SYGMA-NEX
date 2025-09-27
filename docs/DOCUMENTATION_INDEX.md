@@ -6,9 +6,25 @@
 
 ## Overview
 
-Questo file fornisce un indice completo di tutta la documentazione SIGMA-NEX organizzata per categoria e livello di utilizzo.
+**MOVED TO WIKI**: This documentation index has been moved to the [GitHub Wiki](https://github.com/SebastianMartinNS/SYGMA-NEX/wiki) for better organization and community contributions.
+
+Please visit the [SIGMA-NEX Wiki](https://github.com/SebastianMartinNS/SYGMA-NEX/wiki/Documentation-Index) for the complete documentation index.
 
 </div>
+
+---
+
+## Quick Links (Legacy)
+
+For immediate access, here are the most important documents:
+
+- [README principale](../README.md) - Panoramica completa
+- [Installation Guide](installation.md) - Installazione dettagliata
+- [Development Guide](development.md) - Setup ambiente sviluppo
+- [API Reference](api.md) - Documentazione API
+- [Testing Guide](testing.md) - Framework di testing
+
+**Note**: This file is kept for backward compatibility. All new documentation and updates are maintained in the GitHub Wiki.
 
 ## Getting Started (Nuovi Utenti)
 
@@ -138,14 +154,13 @@ sigma server                  # Avvia API server
 sigma gui                     # Interfaccia grafica
 
 # Configurazione
-sigma config show            # Mostra configurazione
-sigma config validate        # Valida configurazione
-sigma config edit           # Modifica configurazione
+# Modifica manuale del file config.yaml
+# Valida configurazione manualmente
 
 # Debugging
-sigma status --detailed      # Status dettagliato
-sigma logs tail             # Logs in tempo reale
-sigma diagnose              # Diagnostica completa
+sigma self-check            # Verifica sistema
+# Controlla logs manualmente
+# Diagnostica manuale dei componenti
 ```
 
 ### Link Rapidi

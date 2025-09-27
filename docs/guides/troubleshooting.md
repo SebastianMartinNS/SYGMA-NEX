@@ -9,28 +9,29 @@
 sigma self-check
 
 # Detailed system status
-sigma status --detailed
+sigma self-check
 
 # Component-specific checks
-sigma status ollama
-sigma status index
-sigma status models
+# Check Ollama: ollama list
+# Check data: verify data/ directory
+# Check models: ollama ps
 ```
 
 ### Common Issues Quick Fix
 
 ```bash
 # Reset to working state
-sigma setup clean && sigma setup init
+# Clean cache and temp files manually
+# Reinitialize configuration
 
 # Rebuild search index
-sigma index rebuild --force
+# Verify data integrity manually
 
 # Update all models
-sigma models update --all
+ollama pull mistral
 
 # Clear all caches
-sigma cache clear --all
+# Remove temp files manually
 ```
 
 ## Installation Issues
@@ -167,9 +168,9 @@ ollama rm mistral
 ollama pull mistral
 
 # For memory issues
-# Reduce model size or increase system RAM
-sigma config set max_tokens 1024
-sigma config set temperature 0.7
+# Reduce model parameters in config.yaml:
+# max_tokens: 1024
+# temperature: 0.7
 ```
 
 ### Network Connectivity
@@ -197,10 +198,11 @@ curl http://127.0.0.1:11434/api/version
 # Configure Ollama host/port
 export OLLAMA_HOST=0.0.0.0:11434
 
-# Update SIGMA-NEX config
-sigma config set ollama.host localhost
-sigma config set ollama.port 11434
-sigma config set ollama.timeout 120
+# Update SIGMA-NEX config in config.yaml:
+# ollama:
+#   host: localhost
+#   port: 11434
+#   timeout: 120
 
 # Restart services
 sudo systemctl restart ollama
@@ -219,28 +221,10 @@ sigma server restart
 **Diagnostics**:
 ```bash
 # Test with simple query
-sigma ask "Test query" --debug
+sigma start
 
-# Check model configuration
-sigma config show | grep -A5 model
-
-# Verify model version
-ollama show mistral
-```
-
-**Solutions**:
-```bash
-# Adjust model parameters
-sigma config set temperature 0.7    # Reduce for more focused responses
-sigma config set top_p 0.9          # Adjust nucleus sampling
-sigma config set max_tokens 2048    # Increase for longer responses
-
-# Try different model
-sigma config set model_name llama2
-ollama pull llama2
-
-# Reset system prompt
-sigma config set system_prompt default
+# Check system health
+sigma self-check
 ```
 
 ### Memory and Performance Issues
@@ -257,28 +241,17 @@ htop                           # Linux/Mac
 Get-Process | Sort-Object CPU  # Windows PowerShell
 
 # Check SIGMA-NEX memory usage
-sigma status --resources
+# Monitor process memory manually
 
 # Profile performance
-sigma profile --duration 60
+# Use system monitoring tools
 ```
 
 **Solutions**:
 ```bash
-# Reduce memory usage
-sigma config set max_history 50
-sigma config set retrieval_top_k 3
-sigma config set embedding_batch_size 16
-
-# Clear caches
-sigma cache clear
-rm -rf ~/.sigma-nex/cache/*
-
-# Optimize index
-sigma index optimize
-
-# Restart with limited workers
-sigma server --workers 1
+# Restart system
+# Check available memory
+# Close other applications if needed
 ```
 
 ## GUI Issues
@@ -316,9 +289,6 @@ pip install customtkinter
 # For Linux display issues
 export DISPLAY=:0
 xhost +localhost
-
-# For Windows display scaling
-sigma gui --scale-factor 1.0
 ```
 
 ### GUI Performance Issues
@@ -331,277 +301,8 @@ sigma gui --scale-factor 1.0
 **Solutions**:
 ```bash
 # Enable hardware acceleration
-sigma config set gui.hardware_acceleration true
-
 # Reduce UI effects
-sigma config set gui.animations false
-sigma config set gui.transparency false
-
 # Optimize thread usage
-sigma config set gui.worker_threads 2
-```
-
-## Search and Retrieval Issues
-
-### Index Problems
-
-**Symptoms**:
-- "Index not found" errors
-- Poor search results
-- Search returning no results
-
-**Diagnostics**:
-```bash
-# Check index status
-sigma index stats
-
-# Verify index files
-ls -la ~/.sigma-nex/data/
-file ~/.sigma-nex/data/moduli.index
-
-# Test search manually
-sigma search "test query" --debug
-```
-
-**Solutions**:
-```bash
-# Rebuild index
-sigma index rebuild --force
-
-# Re-import data
-sigma data import data/ --format json --rebuild
-
-# Check data integrity
-sigma data verify
-
-# Update embeddings model
-sigma config set embedding.model "all-MiniLM-L6-v2"
-```
-
-### Poor Search Quality
-
-**Symptoms**:
-- Irrelevant search results
-- Missing relevant documents
-- Inconsistent results
-
-**Solutions**:
-```bash
-# Adjust search parameters
-sigma config set retrieval_top_k 10
-sigma config set similarity_threshold 0.6
-
-# Update embedding model
-sigma models update embeddings
-
-# Reprocess documents with better chunking
-sigma data reprocess --chunk-size 512 --overlap 50
-```
-
-## API and Server Issues
-
-### Server Won't Start
-
-**Symptoms**:
-- "Port already in use" error
-- Server crashes on startup
-- Cannot bind to address
-
-**Diagnostics**:
-```bash
-# Check port usage
-netstat -tlnp | grep 8000        # Linux
-netstat -an | findstr 8000       # Windows
-lsof -i :8000                    # macOS
-
-# Test server manually
-sigma server --debug --port 8001
-```
-
-**Solutions**:
-```bash
-# Kill process using port
-sudo kill -9 $(lsof -t -i:8000)  # Unix
-netstat -ano | findstr :8000     # Windows (find PID, then taskkill)
-
-# Use different port
-sigma server --port 8001
-
-# Configure different host
-sigma server --host 127.0.0.1 --port 8000
-```
-
-### API Errors
-
-**Symptoms**:
-- HTTP 500 errors
-- Connection timeouts
-- Malformed responses
-
-**Diagnostics**:
-```bash
-# Test API manually
-curl -X POST http://localhost:8000/ask \
-  -H "Content-Type: application/json" \
-  -d '{"question": "test"}'
-
-# Check server logs
-sigma logs tail --server
-
-# Debug API calls
-sigma server --debug --log-level DEBUG
-```
-
-**Solutions**:
-```bash
-# Restart server
-sigma server restart
-
-# Clear server cache
-sigma cache clear --server
-
-# Update server configuration
-sigma config set server.timeout 60
-sigma config set server.workers 2
-```
-
-## Translation Issues
-
-### Translation Not Working
-
-**Symptoms**:
-- "Translation model not found"
-- Poor translation quality
-- Translation errors
-
-**Diagnostics**:
-```bash
-# Test translation manually
-sigma translate test --source en --target it --text "Hello"
-
-# Check translation models
-ls -la ~/.cache/huggingface/transformers/
-
-# Verify language support
-sigma translate languages
-```
-
-**Solutions**:
-```bash
-# Download translation models
-sigma translate setup --languages en,es,fr,de
-
-# Clear translation cache
-rm -rf ~/.cache/huggingface/
-
-# Update translation configuration
-sigma config set translation.model "Helsinki-NLP/opus-mt"
-sigma config set translation.cache_size 1000
-```
-
-## Configuration Issues
-
-### Config File Problems
-
-**Symptoms**:
-- "Config file not found"
-- YAML parsing errors
-- Invalid configuration values
-
-**Diagnostics**:
-```bash
-# Validate configuration
-sigma config validate
-
-# Show effective configuration
-sigma config show --resolved
-
-# Check config file location
-sigma config show --sources
-```
-
-**Solutions**:
-```bash
-# Create default config
-sigma config init --force
-
-# Fix YAML syntax
-# Use online YAML validator or:
-python -c "import yaml; yaml.safe_load(open('config.yaml'))"
-
-# Reset to defaults
-sigma config reset --confirm
-```
-
-### Environment Variables
-
-**Symptoms**:
-- Config not loading from environment
-- Environment variables ignored
-- Inconsistent behavior
-
-**Solutions**:
-```bash
-# Check environment variables
-env | grep SIGMA
-
-# Set environment variables correctly
-export SIGMA_CONFIG="/path/to/config.yaml"
-export SIGMA_DEBUG="true"
-export SIGMA_LOG_LEVEL="DEBUG"
-
-# Windows equivalent
-set SIGMA_CONFIG=C:\path\to\config.yaml
-setx SIGMA_DEBUG true
-```
-
-## Logging and Debugging
-
-### Enable Debug Mode
-
-```bash
-# Enable debug globally
-sigma config set debug true
-sigma config set log_level DEBUG
-
-# Debug specific component
-sigma --debug ask "test query"
-sigma server --debug --reload
-
-# Trace execution
-SIGMA_TRACE=1 sigma ask "test query"
-```
-
-### Log Analysis
-
-```bash
-# View recent logs
-sigma logs show --last 100
-
-# Filter by level
-sigma logs show --level ERROR
-
-# Search logs
-sigma logs search "error" --last 24h
-
-# Follow logs in real-time
-sigma logs tail -f
-
-# Export logs for analysis
-sigma logs export --format json --output debug-logs.json
-```
-
-### Debug Information Collection
-
-```bash
-# Collect debug information
-sigma diagnose --full --output debug-info.json
-
-# System information
-sigma status --detailed --json
-
-# Performance profiling
-sigma profile --duration 60 --output profile.json
 ```
 
 ## Getting Help
@@ -609,15 +310,8 @@ sigma profile --duration 60 --output profile.json
 ### Documentation
 
 ```bash
-# Open documentation
-sigma docs open
-
-# Command-specific help
-sigma ask --help
-sigma server --help
-
-# Configuration reference
-sigma config help
+# Check system health for diagnostics
+sigma self-check
 ```
 
 ### Support Channels
@@ -639,17 +333,7 @@ When reporting bugs, include:
    systeminfo  # Windows
    ```
 
-2. **Configuration**:
-   ```bash
-   sigma config show --anonymized
-   ```
-
-3. **Debug Logs**:
-   ```bash
-   sigma logs export --level DEBUG --last 1h
-   ```
-
-4. **Error Details**:
+2. **Error Details**:
    - Exact error message
    - Steps to reproduce
    - Expected vs actual behavior
@@ -657,20 +341,6 @@ When reporting bugs, include:
 
 ### Performance Issues
 
-For performance problems, provide:
-
-```bash
-# System resources
-sigma status --resources
-
-# Performance profile
-sigma profile --duration 300
-
-# Memory analysis
-sigma memory analyze
-
-# Query timing
-time sigma ask "test query"
-```
+For performance problems, provide system resource information and timing data.
 
 This troubleshooting guide covers the most common issues. For specific problems not covered here, please consult the documentation or contact support.

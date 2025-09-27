@@ -167,6 +167,14 @@ playground/
 *.crt
 certificates/
 
+# Weekly token system - NEVER commit passwords
+tokens/
+*.token
+*.password
+*.secret
+.env.weekly
+scripts/tokens/
+
 # Backup files
 *.backup
 backup/

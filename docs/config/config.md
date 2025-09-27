@@ -595,16 +595,16 @@ schema:
 
 ```bash
 # Validate current configuration
-sigma config validate
+# Validate YAML syntax manually
 
 # Validate specific file
-sigma config validate --file config.production.yaml
+# Validate YAML syntax manually --file config.production.yaml
 
 # Check configuration schema
-sigma config schema
+# Check configuration schema manually
 
 # Show configuration with validation
-sigma config show --validate
+# Check config.yaml file --validate
 ```
 
 For configuration support:

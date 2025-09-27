@@ -4,6 +4,7 @@ Tests complete workflows that a user would experience.
 """
 
 import json
+import os
 import tempfile
 from pathlib import Path
 from unittest.mock import Mock, patch
@@ -41,8 +42,15 @@ class TestEndToEndWorkflows:
             result = runner.invoke(main, ["self-check"])
             assert result.exit_code == 0
 
-            # 2. Load framework
-            result = runner.invoke(main, ["load-framework", str(framework_path)])
+            # 2. Load framework con autenticazione
+            with (
+                patch("sigma_nex.cli.show_ascii_banner"),
+                patch("sigma_nex.cli.validate_cli_session", return_value=True),
+                patch("sigma_nex.cli.check_cli_permission", return_value=True),
+                patch("sigma_nex.data_loader.DataLoader.load", return_value=1),
+                patch.dict(os.environ, {"SIGMA_SESSION_TOKEN": "fake_token"}),
+            ):
+                result = runner.invoke(main, ["load-framework", "--path", str(framework_path)])
             assert result.exit_code == 0
 
             # 3. Another self-check to verify everything is working
@@ -132,9 +140,7 @@ class TestEndToEndWorkflows:
             runner.self_check()  # Should not raise exception
 
             # Test that subprocess was called
-            mock_subprocess.assert_called_with(
-                ["ollama", "list"], capture_output=True, text=True, timeout=10
-            )
+            mock_subprocess.assert_called_with(["ollama", "list"], capture_output=True, text=True, timeout=10)
 
 
 class TestErrorHandlingWorkflows:
@@ -169,9 +175,7 @@ class TestErrorHandlingWorkflows:
         with tempfile.TemporaryDirectory() as temp_dir:
             config = SigmaConfig(temp_dir)
 
-            with patch.object(
-                config, "save", side_effect=PermissionError("Access denied")
-            ):
+            with patch.object(config, "save", side_effect=PermissionError("Access denied")):
                 # Should handle permission errors gracefully
                 try:
                     config.set("test", "value")

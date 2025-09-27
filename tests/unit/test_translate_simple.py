@@ -271,9 +271,7 @@ class TestModelPathHandling:
             assert "it-en" in paths
             assert "en-it" in paths
             # Should use default paths
-            assert "sigma_nex" in str(paths["it-en"]) and "translate" in str(
-                paths["it-en"]
-            )
+            assert "sigma_nex" in str(paths["it-en"]) and "translate" in str(paths["it-en"])
 
 
 class TestModelLoading:
@@ -287,17 +285,11 @@ class TestModelLoading:
                 mock_path.exists.return_value = True
                 mock_paths.return_value = {"it-en": mock_path}
 
-                with patch(
-                    "sigma_nex.core.translate.MarianTokenizer"
-                ) as mock_tokenizer_class:
-                    with patch(
-                        "sigma_nex.core.translate.MarianMTModel"
-                    ) as mock_model_class:
+                with patch("sigma_nex.core.translate.MarianTokenizer") as mock_tokenizer_class:
+                    with patch("sigma_nex.core.translate.MarianMTModel") as mock_model_class:
                         mock_tokenizer = Mock()
                         mock_model = Mock()
-                        mock_tokenizer_class.from_pretrained.return_value = (
-                            mock_tokenizer
-                        )
+                        mock_tokenizer_class.from_pretrained.return_value = mock_tokenizer
                         mock_model_class.from_pretrained.return_value = mock_model
 
                         # Clear the cache
@@ -343,12 +335,8 @@ class TestModelLoading:
                 mock_path.exists.return_value = True
                 mock_paths.return_value = {"it-en": mock_path}
 
-                with patch(
-                    "sigma_nex.core.translate.MarianTokenizer"
-                ) as mock_tokenizer_class:
-                    mock_tokenizer_class.from_pretrained.side_effect = Exception(
-                        "Loading failed"
-                    )
+                with patch("sigma_nex.core.translate.MarianTokenizer") as mock_tokenizer_class:
+                    mock_tokenizer_class.from_pretrained.side_effect = Exception("Loading failed")
 
                     # Clear the cache
                     import sigma_nex.core.translate as translate_module
