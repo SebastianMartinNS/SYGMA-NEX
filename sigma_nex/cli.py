@@ -196,7 +196,7 @@ def server(ctx, host, port):
         server.run(host=host, port=port)
     except ImportError:
         click.echo(
-            "❌ Errore: dipendenze del server non installate. " "Installa con: pip install fastapi uvicorn",
+            "Errore: dipendenze del server non installate. " "Installa con: pip install fastapi uvicorn",
             err=True,
         )
         sys.exit(1)
@@ -214,7 +214,7 @@ def gui():
         gui_main()
     except ImportError:
         click.echo(
-            "❌ Errore: dipendenze GUI non installate. " "Installa con: pip install customtkinter",
+            "Errore: dipendenze GUI non installate. " "Installa con: pip install customtkinter",
             err=True,
         )
         sys.exit(1)
@@ -227,7 +227,7 @@ def gui():
 @click.option("--force", is_flag=True, help="Forza aggiornamento anche se già aggiornato")
 def update(check_only, force):
     """Aggiorna SIGMA-NEX dal repository GitHub."""
-    click.echo(f"🔍 Controllo aggiornamenti SIGMA-NEX " f"(versione corrente: {__version__})")
+    click.echo(f"Controllo aggiornamenti SIGMA-NEX " f"(versione corrente: {__version__})")
 
     cfg = get_config()
     project_root = cfg.project_root
@@ -235,7 +235,7 @@ def update(check_only, force):
     # 1. Verifica se siamo in un repository git
     git_dir = project_root / ".git"
     if not git_dir.exists():
-        click.echo("❌ Non siamo in un repository git. " "Impossibile aggiornare.")
+        click.echo("Non siamo in un repository git. " "Impossibile aggiornare.")
         click.echo("💡 Clona il repository: " "git clone https://github.com/SebastianMartinNS/SYGMA-NEX.git")
         return
 
@@ -249,20 +249,20 @@ def update(check_only, force):
             click.echo(f"📡 Versione più recente su GitHub: {latest_version}")
 
             if latest_version == __version__ and not force:
-                click.echo("✅ Sei già aggiornato all'ultima versione!")
+                click.echo("Sei già aggiornato all'ultima versione!")
                 if not check_only:
                     click.echo("💡 Usa --force per forzare il pull comunque")
                 return
             elif latest_version != __version__:
                 click.echo(f"🆕 Nuova versione disponibile: {latest_version}")
         else:
-            click.echo("⚠️  Impossibile verificare l'ultima versione " "dal GitHub API")
+            click.echo("Impossibile verificare l'ultima versione " "dal GitHub API")
     except Exception as e:
-        click.echo(f"⚠️  Errore connessione GitHub API: {e}")
+        click.echo(f"Errore connessione GitHub API: {e}")
         click.echo("🔄 Procedo comunque con git pull...")
 
     if check_only:
-        click.echo("ℹ️  Solo controllo richiesto, non aggiorno.")
+        click.echo("Solo controllo richiesto, non aggiorno.")
         return
 
     # 3. Controlla stato git locale
@@ -275,16 +275,16 @@ def update(check_only, force):
             check=True,
         )
         if result.stdout.strip():
-            click.echo("⚠️  Ci sono modifiche locali non committate:")
+            click.echo("Ci sono modifiche locali non committate:")
             click.echo(result.stdout)
             if not click.confirm("Vuoi procedere comunque con git pull?"):
-                click.echo("❌ Aggiornamento annullato")
+                click.echo("Aggiornamento annullato")
                 return
     except subprocess.CalledProcessError as e:
-        click.echo(f"❌ Errore controllo git status: {e}")
+        click.echo(f"Errore controllo git status: {e}")
         return
     except FileNotFoundError:
-        click.echo("❌ Git non trovato. " "Installa Git per usare questa funzione.")
+        click.echo("Git non trovato. " "Installa Git per usare questa funzione.")
         return
 
     # 4. Esegui git pull
@@ -297,17 +297,17 @@ def update(check_only, force):
             text=True,
             check=True,
         )
-        click.echo("✅ Git pull completato!")
+        click.echo("Git pull completato!")
         click.echo(result.stdout)
 
         if "Already up to date" in result.stdout:
-            click.echo("ℹ️  Repository già aggiornato")
+            click.echo("Repository già aggiornato")
         else:
             click.echo("🔄 Repository aggiornato, controllo dipendenze...")
 
             # 5. Aggiorna dipendenze se necessario
             if (project_root / "requirements.txt").exists():
-                click.echo("📦 Aggiornamento dipendenze...")
+                click.echo("Aggiornamento dipendenze...")
                 try:
                     subprocess.run(
                         [
@@ -323,9 +323,9 @@ def update(check_only, force):
                         text=True,
                         check=True,
                     )
-                    click.echo("✅ Dipendenze aggiornate!")
+                    click.echo("Dipendenze aggiornate!")
                 except subprocess.CalledProcessError as e:
-                    click.echo(f"⚠️  Errore aggiornamento dipendenze: {e}")
+                    click.echo(f"Errore aggiornamento dipendenze: {e}")
                     msg = "💡 Potresti dover aggiornare manualmente con: " "pip install -r requirements.txt --upgrade"
                     click.echo(msg)
 

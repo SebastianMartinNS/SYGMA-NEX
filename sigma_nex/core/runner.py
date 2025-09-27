@@ -146,12 +146,12 @@ class Runner:
                     self.performance_stats.append(processing_time)
 
                     echo(f"\n{response}\n")
-                    echo(f"⏱️ {processing_time:.2f}s")
+                    echo(f"Processing time: {processing_time:.2f}s")
 
                 except ValidationError as e:
-                    echo(f"❌ Input validation error: {e}", err=True)
+                    echo(f"Input validation error: {e}", err=True)
                 except Exception as e:
-                    echo(f"❌ Error processing query: {e}", err=True)
+                    echo(f"Error processing query: {e}", err=True)
 
         finally:
             self._cleanup()
@@ -355,26 +355,26 @@ SIGMA-NEX Statistics:
 
             echo(f"History exported to {filename}")
         except Exception as e:
-            echo(f"❌ Export failed: {e}", err=True)
+            echo(f"Export failed: {e}", err=True)
 
     def self_check(self) -> None:
         """Verify that Ollama CLI and models are available."""
         if not self._ollama_cli_available:
-            echo("⚠️ Ollama CLI not found; HTTP API may be available at :11434")
+            echo("Ollama CLI not found; HTTP API may be available at :11434")
             return
         try:
             result = subprocess.run(["ollama", "list"], capture_output=True, text=True, timeout=10)
             if result.returncode == 0:
-                echo("✅ Ollama is available")
+                echo("Ollama is available")
                 echo("Available models:")
                 echo(result.stdout)
             else:
-                echo("❌ Ollama error:", err=True)
+                echo("Ollama error:", err=True)
                 echo(result.stderr, err=True)
         except subprocess.TimeoutExpired:
-            echo("⏱️ Ollama check timeout", err=True)
+            echo("Ollama check timeout", err=True)
         except FileNotFoundError:
-            echo("❌ Ollama command not found", err=True)
+            echo("Ollama command not found", err=True)
 
     def self_heal_file(self, file_path: str) -> str:
         """
@@ -391,7 +391,7 @@ SIGMA-NEX Statistics:
             validated_path = validate_file_path(file_path, allowed_extensions=[".py"], base_directory=os.getcwd())
 
             if not validated_path.exists():
-                return f"❌ File not found: {file_path}"
+                return f"File not found: {file_path}"
 
             with open(validated_path, "r", encoding="utf-8") as f:
                 original_code = f.read()
@@ -410,12 +410,12 @@ SIGMA-NEX Statistics:
             with open(patch_path, "w", encoding="utf-8") as out:
                 out.write(suggestion)
 
-            return f"✅ Patch saved to: {patch_path}"
+            return f"Patch saved to: {patch_path}"
 
         except ValidationError as e:
-            return f"❌ Validation error: {e}"
+            return f"Validation error: {e}"
         except Exception as e:
-            return f"❌ Self-heal error: {e}"
+            return f"Self-heal error: {e}"
 
     def add_to_history(self, item: str) -> None:
         """Add an item to conversation history."""
