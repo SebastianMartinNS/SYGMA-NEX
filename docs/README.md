@@ -173,6 +173,7 @@ target_language: "it"
 
 - **[Advanced Configuration](config/advanced.md)** - Configurazioni avanzate
 - **[Environment Variables](config/environment.md)** - Variabili d'ambiente
+- **[Authentication Setup](config/authentication.md)** - Configurazione autenticazione
 - **[Production Config](config/production.md)** - Configurazione per produzione
 - **[Performance Tuning](config/performance.md)** - Ottimizzazione performance
 

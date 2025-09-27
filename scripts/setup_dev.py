@@ -11,6 +11,23 @@ import sys
 from pathlib import Path
 
 
+def print_banner():
+    """Print the SIGMA-NEX ASCII banner."""
+    banner = """
+================================================================================
+ ███████╗██╗ ██████╗ ███╗   ███╗ █████╗       ███╗   ██╗███████╗██╗  ██╗
+ ██╔════╝██║██╔════╝ ████╗ ████║██╔══██╗      ████╗  ██║██╔════╝╚██╗██╔╝
+ ███████╗██║██║  ███╗██╔████╔██║███████║█████╗██╔██╗ ██║█████╗   ╚███╔╝
+ ╚════██║██║██║   ██║██║╚██╔╝██║██╔══██║╚════╝██║╚██╗██║██╔══╝   ██╔██╗
+ ███████║██║╚██████╔╝██║ ╚═╝ ██║██║  ██║      ██║ ╚████║███████╗██╔╝ ██╗
+ ╚══════╝╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝      ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
+
+                    DEVELOPMENT ENVIRONMENT SETUP
+================================================================================
+"""
+    print(banner)
+
+
 def run_command(cmd, description):
     """Run a command and handle errors."""
     print(f"{description}...")
@@ -150,6 +167,7 @@ system_prompt: |
 
 def main():
     """Main setup function."""
+    print_banner()
     print("SIGMA-NEX Development Setup")
     print("=" * 40)
 
@@ -172,16 +190,26 @@ def main():
     # Optional step - doesn't fail setup if it doesn't work
     pull_ollama_models()
 
-    print("\nDevelopment environment setup completed!")
-    print("\nNext steps:")
-    print("1. Activate the virtual environment:")
+    print("\n" + "=" * 80)
+    print("                    CONFIGURAZIONE COMPLETATA")
+    print("=" * 80)
+    print("\n[SUCCESS] Ambiente di sviluppo SIGMA-NEX configurato con successo!")
+    print("\n" + "=" * 80)
+    print("                    PROSSIMI PASSI")
+    print("=" * 80)
+    print("\n1. Attiva l'ambiente virtuale:")
     if os.name == "nt":
         print("   venv\\Scripts\\activate")
     else:
         print("   source venv/bin/activate")
-    print("2. Run tests: pytest")
-    print("3. Start development: sigma start")
-    print("4. Check the docs/ folder for more information")
+    print("\n2. Esegui i test:")
+    print("   python -m pytest")
+    print("\n3. Avvia lo sviluppo:")
+    print("   sigma start")
+    print("\n4. Consulta la documentazione:")
+    print("   docs/development.md")
+    print("   docs/testing.md")
+    print("\n" + "=" * 80)
 
     return 0
 

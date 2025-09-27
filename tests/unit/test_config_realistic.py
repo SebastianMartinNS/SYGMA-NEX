@@ -87,9 +87,7 @@ class TestSigmaConfigRealistic:
             "translation": {"enabled": True, "target_lang": "it"},
         }
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".yaml", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False, encoding="utf-8") as temp_file:
             yaml.safe_dump(config_data, temp_file)
             temp_path = temp_file.name
 
@@ -125,9 +123,7 @@ class TestSigmaConfigRealistic:
         temperature: 0.8
         """
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".yaml", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False, encoding="utf-8") as temp_file:
             temp_file.write(invalid_yaml)
             temp_path = temp_file.name
 
@@ -141,9 +137,7 @@ class TestSigmaConfigRealistic:
 
                 # Dovrebbe stampare warning
                 mock_print.assert_called_once()
-                assert "Warning: invalid or unreadable YAML" in str(
-                    mock_print.call_args
-                )
+                assert "Warning: invalid or unreadable YAML" in str(mock_print.call_args)
 
         finally:
             os.unlink(temp_path)
@@ -212,18 +206,9 @@ class TestSigmaConfigRealistic:
             config.project_root = Path(temp_dir)
 
             # Test percorsi predefiniti
-            assert (
-                config.get_path("framework")
-                == Path(temp_dir) / "data" / "Framework_SIGMA.json"
-            )
-            assert (
-                config.get_path("models")
-                == Path(temp_dir) / "sigma_nex" / "core" / "models"
-            )
-            assert (
-                config.get_path("translate_models")
-                == Path(temp_dir) / "sigma_nex" / "core" / "models" / "translate"
-            )
+            assert config.get_path("framework") == Path(temp_dir) / "data" / "Framework_SIGMA.json"
+            assert config.get_path("models") == Path(temp_dir) / "sigma_nex" / "core" / "models"
+            assert config.get_path("translate_models") == Path(temp_dir) / "sigma_nex" / "core" / "models" / "translate"
             assert config.get_path("data") == Path(temp_dir) / "data"
             assert config.get_path("logs") == Path(temp_dir) / "logs"
             assert config.get_path("temp") == Path(temp_dir) / "temp"
@@ -235,9 +220,7 @@ class TestSigmaConfigRealistic:
             "models_path": "/absolute/path/to/models",
         }
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".yaml", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False, encoding="utf-8") as temp_file:
             yaml.safe_dump(config_data, temp_file)
             temp_path = temp_file.name
 
@@ -410,9 +393,7 @@ class TestGlobalConfigRealistic:
         """Test get_config() con percorso personalizzato"""
         config_data = {"custom": True, "model": "custom_model"}
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".yaml", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False, encoding="utf-8") as temp_file:
             yaml.safe_dump(config_data, temp_file)
             temp_path = temp_file.name
 
@@ -478,16 +459,12 @@ class TestGlobalConfigRealistic:
         """Test load_config() senza system_prompt obbligatorio"""
         config_data = {"debug": True}  # Manca system_prompt
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".yaml", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False, encoding="utf-8") as temp_file:
             yaml.safe_dump(config_data, temp_file)
             temp_path = temp_file.name
 
         try:
-            with pytest.raises(
-                RuntimeError, match="Missing 'system_prompt' in config.yaml"
-            ):
+            with pytest.raises(RuntimeError, match="Missing 'system_prompt' in config.yaml"):
                 load_config(temp_path)
 
         finally:
@@ -521,9 +498,7 @@ class TestConfigIntegration:
             # Crea framework
             framework_data = {
                 "framework": "SIGMA-NEX Integration",
-                "modules": [
-                    {"id": "int_001", "name": "Integration Module", "category": "test"}
-                ],
+                "modules": [{"id": "int_001", "name": "Integration Module", "category": "test"}],
             }
             data_dir = project_root / "data"
             data_dir.mkdir()
@@ -600,9 +575,7 @@ class TestConfigPerformance:
             "features": {f"feature_{i}": i % 2 == 0 for i in range(200)},
         }
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".yaml", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False, encoding="utf-8") as temp_file:
             yaml.safe_dump(large_config, temp_file)
             temp_path = temp_file.name
 
@@ -674,9 +647,7 @@ class TestConfigErrorHandling:
         # Test con file corrotto
         corrupted_yaml = "debug: true\nmodel: [unclosed"
 
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".yaml", delete=False, encoding="utf-8"
-        ) as temp_file:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False, encoding="utf-8") as temp_file:
             temp_file.write(corrupted_yaml)
             temp_path = temp_file.name
 
@@ -685,9 +656,7 @@ class TestConfigErrorHandling:
                 config = SigmaConfig(config_path=temp_path)
 
                 # Dovrebbe fallback a defaults
-                assert (
-                    config.get("debug") is False
-                )  # Default, non True dal file corrotto
+                assert config.get("debug") is False  # Default, non True dal file corrotto
                 assert config.get("model_name") == "mistral"  # Default
 
         finally:

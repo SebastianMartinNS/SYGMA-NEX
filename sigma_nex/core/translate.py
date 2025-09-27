@@ -82,6 +82,8 @@ def _load_model(direction: str) -> Optional[Tuple]:
         if direction not in _models:
             try:
                 print(f"Loading translation model: {direction}")
+                assert MarianTokenizer is not None, "MarianTokenizer not available"
+                assert MarianMTModel is not None, "MarianMTModel not available"
                 tokenizer = MarianTokenizer.from_pretrained(str(model_path))
                 model = MarianMTModel.from_pretrained(str(model_path))
                 _models[direction] = (tokenizer, model)

@@ -1,6 +1,7 @@
 # sigma_nex/core/retriever.py
 import json
 import os
+import time
 from typing import List
 
 # Lazy/optional imports to avoid heavy dependencies during import time
@@ -15,13 +16,9 @@ except Exception:  # pragma: no cover
     SentenceTransformer = None  # type: ignore
 
 # Percorsi file
-DATA_PATH = os.path.join(
-    os.path.dirname(__file__), "..", "..", "data", "Framework_SIGMA.json"
-)
+DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "Framework_SIGMA.json")
 INDEX_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "moduli.index")
-MAPPING_PATH = os.path.join(
-    os.path.dirname(__file__), "..", "..", "data", "moduli.mapping.json"
-)
+MAPPING_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "moduli.mapping.json")
 MODEL_PATH = os.path.join(
     os.path.dirname(__file__),
     "..",
@@ -36,6 +33,11 @@ MODEL_PATH = os.path.join(
 _model = None
 # Backward-compat global used by tests to patch
 model = None
+# FAISS index cache
+_cached_index = None
+_cached_texts = None
+_index_cache_time = 0.0
+INDEX_CACHE_TTL = 3600  # 1 hour cache
 
 
 def _get_model():
@@ -60,21 +62,33 @@ def _get_model():
                 return arr
 
         _model = _Stub()
+        print("[WARNING] Using stub embeddings model - semantic search disabled")
+        print("[INFO] Install sentence-transformers for full functionality:")
+        print("       pip install sentence-transformers")
         return _model
 
     try:
         _model = SentenceTransformer(MODEL_PATH)
+        print("[INFO] Loaded local embedding model from cache")
         return _model
     except Exception:
-        # Fallback to stub if local model not present
-        class _Stub:
-            def encode(self, texts, convert_to_numpy=True):
-                import numpy as _np
+        try:
+            _model = SentenceTransformer("all-MiniLM-L6-v2")
+            print("[INFO] Loaded default embedding model: all-MiniLM-L6-v2")
+            return _model
+        except Exception:
+            # Fallback to stub if local model not present
+            class _Stub:
+                def encode(self, texts, convert_to_numpy=True):
+                    import numpy as _np
 
-                return _np.zeros((len(texts), 8), dtype=_np.float32)
+                    return _np.zeros((len(texts), 8), dtype=_np.float32)
 
-        _model = _Stub()
-        return _model
+            _model = _Stub()
+            print("[WARNING] Using stub embeddings model - semantic search disabled")
+            print("[INFO] Install sentence-transformers for full functionality:")
+            print("       pip install sentence-transformers")
+            return _model
 
 
 class Retriever:
@@ -157,25 +171,38 @@ def search_moduli(query: str, k: int = 3):
     """
     Esegue una ricerca semantica tra i moduli usando FAISS e restituisce
     le descrizioni più rilevanti dalla mappatura testuale.
+    Utilizza cache per migliorare le performance.
     """
+    global _cached_index, _cached_texts, _index_cache_time
+
     try:
         if faiss is None:
             raise RuntimeError("FAISS non disponibile")
-        index = faiss.read_index(INDEX_PATH)
 
-        with open(MAPPING_PATH, encoding="utf-8") as f:
-            texts = json.load(f)
+        current_time = time.time()
 
-        if not texts:
+        # Check if cache is valid
+        if _cached_index is None or _cached_texts is None or current_time - _index_cache_time > INDEX_CACHE_TTL:
+
+            # Load and cache index and texts
+            _cached_index = faiss.read_index(INDEX_PATH)
+
+            with open(MAPPING_PATH, encoding="utf-8") as f:
+                _cached_texts = json.load(f)
+
+            _index_cache_time = current_time
+            print("[INFO] FAISS index cached for improved performance")
+
+        if not _cached_texts:
             print("[ERRORE FAISS] Mappatura moduli vuota o malformata.")
             return []
 
         # Prefer patched global model if available
         mdl = model if model is not None else _get_model()
         query_vec = mdl.encode([query], convert_to_numpy=True)
-        _D, indices = index.search(query_vec, k)
+        _D, indices = _cached_index.search(query_vec, k)
 
-        return [texts[i] for i in indices[0]]
+        return [_cached_texts[i] for i in indices[0]]
 
     except Exception as e:
         print(f"[ERRORE FAISS] Ricerca fallita: {e}")

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sigma-nex"
-version = "0.3.5"
+version = "0.4.0"
 description = "Agente cognitivo autonomo per la sopravvivenza offline-first in scenari estremi"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -69,7 +69,7 @@ include = ["sigma_nex*"]
 exclude = ["tests*", "venv*", "build*", "dist*"]
 
 [tool.black]
-line-length = 88
+line-length = 120
 target-version = ['py310']
 
 [tool.isort]
@@ -138,7 +138,7 @@ directory = "htmlcov"
 output = "coverage.xml"
 
 [tool.flake8]
-max-line-length = 88
+max-line-length = 120
 extend-ignore = ["E203", "W503"]
 per-file-ignores = [
     "__init__.py:F401",

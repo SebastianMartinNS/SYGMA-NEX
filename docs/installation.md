@@ -59,9 +59,6 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 # Install SIGMA-NEX
 pip install sigma-nex
-
-# Setup Windows service (optional)
-sigma setup service --install
 ```
 
 #### Windows-Specific Configuration
@@ -71,12 +68,6 @@ paths:
   data_dir: "C:\\ProgramData\\SigmaNex\\data"
   log_dir: "C:\\ProgramData\\SigmaNex\\logs"
   temp_dir: "C:\\Temp\\SigmaNex"
-
-# Windows service settings
-service:
-  name: "SigmaNex"
-  display_name: "SIGMA-NEX AI Agent"
-  start_type: "auto"
 ```
 
 ### macOS Installation
@@ -97,9 +88,6 @@ brew install git
 ```bash
 # Install SIGMA-NEX
 pip3 install sigma-nex
-
-# Setup macOS service (optional)
-sigma setup service --install --user
 ```
 
 #### macOS-Specific Configuration
@@ -109,11 +97,6 @@ paths:
   data_dir: "~/Library/Application Support/SigmaNex"
   log_dir: "~/Library/Logs/SigmaNex"
   temp_dir: "/tmp/SigmaNex"
-
-# LaunchAgent settings
-service:
-  plist_path: "~/Library/LaunchAgents/com.sigma-nex.agent.plist"
-  auto_start: true
 ```
 
 ### Linux Installation
@@ -128,9 +111,6 @@ sudo apt install python3.11 python3.11-venv python3-pip git curl
 
 # Install SIGMA-NEX
 pip3 install sigma-nex
-
-# Setup systemd service (optional)
-sudo sigma setup service --install --system
 ```
 
 #### CentOS/RHEL/Fedora
@@ -192,14 +172,11 @@ pip install pytest pytest-cov pytest-mock pytest-asyncio coverage black isort fl
 ### Initial Configuration
 
 ```bash
-# Generate default configuration
-sigma config init
+# Create config.yaml file manually with the following content:
+# Copy the example configuration below to ~/.sigma-nex/config.yaml
 
-# Edit configuration
-sigma config edit
-
-# Validate configuration
-sigma config validate
+# Edit configuration manually in your preferred editor
+# Validate configuration by checking YAML syntax
 ```
 
 ### Basic Configuration File
@@ -242,83 +219,7 @@ sigma --version
 sigma self-check
 
 # Test basic functionality
-sigma ask "Test query"
-```
-
-### Download Additional Data
-
-```bash
-# Download medical frameworks
-sigma data download medical
-
-# Build search index
-sigma index build
-
-# Setup translation models
-sigma translate setup
-```
-
-### Initial Data Import
-
-```bash
-# Import medical documents
-sigma data import medical_docs/ --type medical
-
-# Import FAQs
-sigma data import faq.json --type faq
-
-# Build initial index
-sigma index rebuild
-```
-
-## Service Setup
-
-### Linux Systemd Service
-
-```bash
-# Install service
-sudo sigma setup service --install --system
-
-# Enable auto-start
-sudo systemctl enable sigma-nex
-
-# Start service
-sudo systemctl start sigma-nex
-
-# Check status
-sudo systemctl status sigma-nex
-```
-
-### Windows Service
-
-```powershell
-# Install as Windows service
-sigma setup service --install
-
-# Start service
-sc start SigmaNex
-
-# Check status
-sc query SigmaNex
-```
-
-### Docker Service
-
-```yaml
-# docker-compose.yml
-version: '3.8'
-services:
-  sigma-nex:
-    image: ghcr.io/sebastianmartinns/sygma-nex:latest
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./data:/app/data
-      - ./config.yaml:/app/config.yaml
-    restart: unless-stopped
-    environment:
-      - SIGMA_CONFIG=/app/config.yaml
-```
+sigma start
 
 ## Troubleshooting Installation
 
@@ -365,14 +266,8 @@ brew services restart ollama   # macOS
 ### Log Analysis
 
 ```bash
-# Check installation logs
-sigma logs show --level INFO --grep "install"
-
 # System diagnostics
-sigma diagnose --full
-
-# Component status
-sigma status --detailed
+sigma self-check
 ```
 
 ## Upgrade Instructions
@@ -380,14 +275,8 @@ sigma status --detailed
 ### Upgrade SIGMA-NEX
 
 ```bash
-# Backup current installation
-sigma backup create pre-upgrade-backup.tar.gz
-
 # Upgrade to latest version
 pip install --upgrade sigma-nex
-
-# Migrate configuration if needed
-sigma config migrate
 
 # Verify upgrade
 sigma self-check
@@ -398,9 +287,6 @@ sigma self-check
 ```bash
 # Install specific version
 pip install sigma-nex==0.2.0
-
-# Restore from backup
-sigma backup restore pre-upgrade-backup.tar.gz
 ```
 
 ## Next Steps

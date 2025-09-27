@@ -1,4 +1,4 @@
-# 🖥️ SIGMA-NEX CLI Guide
+# SIGMA-NEX CLI Guide
 
 ## Overview
 
@@ -22,11 +22,14 @@ sigma --help
 ### First Query
 
 ```bash
-# Query semplice
-sigma ask "Come misurare la pressione arteriosa?"
+# Avvia modalità interattiva
+sigma start
 
-# Query con contesto
-sigma ask "Che farmaco posso usare?" --context "Ho mal di testa"
+# Avvia server API
+sigma server
+
+# Avvia interfaccia grafica
+sigma gui
 ```
 
 ## Interactive Mode
@@ -35,13 +38,10 @@ sigma ask "Che farmaco posso usare?" --context "Ho mal di testa"
 
 ```bash
 # Modalità interattiva standard
-sigma
-
-# Con modello specifico
-sigma --model mistral
+sigma start
 
 # Con configurazione personalizzata
-sigma --config config.production.yaml
+sigma start --config config.production.yaml
 ```
 
 ### Interactive Commands
@@ -52,16 +52,13 @@ Nella modalità interattiva sono disponibili comandi speciali:
 >> help                    # Mostra aiuto
 >> history                 # Mostra cronologia
 >> clear                   # Pulisci schermo
->> save conversation.txt   # Salva conversazione
->> load conversation.txt   # Carica conversazione
->> model mistral          # Cambia modello
 >> exit                    # Esci
 ```
 
 ### Example Interactive Session
 
 ```
-$ sigma
+$ sigma start
 🤖 SIGMA-NEX Interactive Mode
 Type 'help' for commands, 'exit' to quit
 
@@ -77,45 +74,14 @@ Type 'help' for commands, 'exit' to quit
    - Alcol etilico (70%)
 4. **Copertura**: Applica benda sterile
 
-⚠️ **ATTENZIONE**: Se la ferita è profonda o non smette di sanguinare, 
+⚠️ **ATTENZIONE**: Se la ferita è profonda o non smette di sanguinare,
 consulta immediatamente un medico.
 
 >> history
 1. Come disinfettare una ferita?
 
->> save wound_care.txt
-✅ Conversazione salvata in wound_care.txt
-
 >> exit
 👋 Arrivederci!
-```
-
-## Direct Queries
-
-### Basic Queries
-
-```bash
-# Query diretta
-sigma ask "Sintomi dell'infarto"
-
-# Query con priorità medica
-sigma ask "Dolore al petto acuto" --medical-priority
-
-# Query con traduzione
-sigma ask "How to treat a burn?" --translate-to it
-```
-
-### Advanced Queries
-
-```bash
-# Query con cronologia
-sigma ask "Quale antibiotico?" --history "Ho una ferita infetta da 2 giorni"
-
-# Query con contesto medico
-sigma ask "Dosaggio ibuprofene" --context "Paziente 65 anni, 70kg"
-
-# Query con formato output specifico
-sigma ask "Protocollo RCP" --format structured
 ```
 
 ## Server Management
@@ -128,260 +94,102 @@ sigma server
 
 # Server con configurazione custom
 sigma server --host 0.0.0.0 --port 8080
-
-# Server in debug mode
-sigma server --debug --reload
-
-# Server production
-sigma server --config production.yaml --workers 4
 ```
 
-### Server Monitoring
+### Server Authentication
 
 ```bash
-# Status del server
-curl http://localhost:8000/
+# Login per comandi protetti
+sigma login
 
-# Health check dettagliato
-sigma health --server
-
-# Logs in tempo reale
-sigma logs tail --server
+# Logout
+sigma logout
 ```
 
 ## Data Management
 
-### Index Operations
+### Framework Loading
 
 ```bash
-# Costruisci index da zero
-sigma index build
-
-# Aggiorna index esistente
-sigma index update
-
-# Ricostruisci forzando
-sigma index rebuild --force
-
-# Statistiche index
-sigma index stats
+# Carica file Framework_SIGMA.json
+sigma load-framework --path /path/to/Framework_SIGMA.json
 ```
 
-### Data Import/Export
+## System Management
+
+### Self Check
 
 ```bash
-# Importa documenti medici
-sigma data import medical_docs/ --format json
-
-# Importa da database
-sigma data import medical.db --type sqlite
-
-# Esporta configurazione
-sigma config export --format yaml
+# Verifica sistema e dipendenze
+sigma self-check
 ```
 
-## Model Management
-
-### Ollama Integration
+### Self Heal
 
 ```bash
-# Lista modelli disponibili
-sigma models list
-
-# Scarica nuovo modello
-sigma models pull medllama2
-
-# Test modello
-sigma models test mistral --query "Test di funzionamento"
-
-# Rimuovi modello
-sigma models remove old-model
+# Analizza e migliora codice Python
+sigma self-heal --file script.py
 ```
 
-### Model Configuration
+### Update
 
 ```bash
-# Configura modello default
-sigma config set model_name mistral
-
-# Configura temperatura
-sigma config set temperature 0.7
-
-# Mostra configurazione modelli
-sigma models config
+# Aggiorna SIGMA-NEX dal repository
+sigma update
 ```
 
-## Security and User Management
-
-### Security Commands
+### Global Configuration
 
 ```bash
-# Scansione sicurezza
-sigma security scan
+# Installa configurazione globale
+sigma install-config
 
-# Audit completo
-sigma security audit --output audit-report.json
-
-# Verifica permessi
-sigma security check
-
-# Logs di sicurezza
-sigma security logs --last 100
+# Rimuovi configurazione globale
+sigma install-config --uninstall
 ```
 
-### User Management
+## GUI Interface
+
+### Starting GUI
 
 ```bash
-# Crea utente
-sigma users create medic1 --role medical
-
-# Lista utenti
-sigma users list
-
-# Aggiorna permessi
-sigma users update medic1 --permissions emergency,prescription
-
-# Disabilita utente
-sigma users disable medic1
+# Avvia interfaccia grafica
+sigma gui
 ```
 
-## Monitoring and Diagnostics
+## Authentication System
 
-### System Monitoring
+### Login Process
 
 ```bash
-# Status completo del sistema
-sigma status --detailed
+# Login con credenziali
+sigma login --username dev --password your_password
 
-# Monitoring in tempo reale
-sigma monitor --refresh 5 --metrics cpu,memory,requests
-
-# Performance metrics
-sigma metrics --period 1h
+# Login con environment variables
+export SIGMA_DEV_PASSWORD=your_password
+sigma login --username dev
 ```
 
-### Log Management
+### Session Management
 
-```bash
-# Mostra logs recenti
-sigma logs show --last 50
+Le sessioni sono gestite automaticamente con timeout di sicurezza e supporto multi-sessione limitato.
 
-# Filtra per livello
-sigma logs show --level ERROR
+## Configuration Examples
 
-# Cerca nei logs
-sigma logs search "medical query" --timeframe 24h
-
-# Export logs
-sigma logs export --format json --output logs-$(date +%Y%m%d).json
-```
-
-## Configuration Management
-
-### Config Commands
-
-```bash
-# Mostra configurazione corrente
-sigma config show
-
-# Edita configurazione
-sigma config edit
-
-# Valida configurazione
-sigma config validate
-
-# Reset a default
-sigma config reset
-```
-
-### Environment Setup
+### Development Setup
 
 ```bash
 # Setup ambiente sviluppo
-sigma setup dev
-
-# Setup ambiente produzione
-sigma setup production
-
-# Verifica dipendenze
-sigma setup check
-
-# Pulizia cache
-sigma setup clean
+sigma self-check
+sigma start  # Test modalità interattiva
 ```
 
-## Advanced Features
-
-### Backup and Restore
+### Production Setup
 
 ```bash
-# Crea backup completo
-sigma backup create --output backup-$(date +%Y%m%d).tar.gz
-
-# Lista backup disponibili
-sigma backup list
-
-# Ripristina da backup
-sigma backup restore backup-20240901.tar.gz
-
-# Verifica integrità backup
-sigma backup verify backup-20240901.tar.gz
-```
-
-### Performance Tools
-
-```bash
-# Profiling performance
-sigma profile start --duration 60
-
-# Analisi memoria
-sigma memory analyze
-
-# Ottimizzazione automatica
-sigma optimize --target performance
-
-# Cache management
-sigma cache stats
-sigma cache clear
-```
-
-## Automation and Scripting
-
-### Batch Processing
-
-```bash
-# Processa file di query
-cat queries.txt | sigma batch --format json
-
-# Script automatico
-sigma script run daily-checks.sh
-
-# Scheduled tasks
-sigma schedule add "0 */6 * * *" "sigma index update"
-```
-
-### Integration Examples
-
-```bash
-#!/bin/bash
-# medical-check.sh - Script di controllo medico automatico
-
-# Verifica sistema
-if ! sigma self-check --quiet; then
-    echo "❌ Sistema non funzionante"
-    exit 1
-fi
-
-# Query medica standard
-RESPONSE=$(sigma ask "Protocolli emergenza attivi" --format json)
-
-# Salva response
-echo "$RESPONSE" > /var/log/medical-status.json
-
-# Notifica se necessario
-if echo "$RESPONSE" | grep -q "ALERT"; then
-    sigma notify admin "Attenzione protocolli emergenza"
-fi
+# Setup produzione con autenticazione
+sigma login --username admin
+sigma server --host 0.0.0.0 --port 8000
 ```
 
 ## Troubleshooting
@@ -389,29 +197,21 @@ fi
 ### Common Issues
 
 ```bash
-# Modello non trovato
-sigma models list          # Verifica modelli disponibili
-sigma models pull mistral  # Scarica modello mancante
+# Sistema non risponde
+sigma self-check
 
-# Errori di connessione
-sigma diagnose network     # Diagnosi rete
-sigma status ollama        # Verifica Ollama
+# Problemi autenticazione
+sigma login  # Riprova login
 
-# Problemi permessi
-sudo chown -R $USER ~/.sigma-nex/  # Fix permessi Linux
+# Aggiorna se necessario
+sigma update
 ```
 
 ### Debug Mode
 
 ```bash
-# Debug completo
-sigma --debug --verbose ask "test query"
-
-# Trace comandi
-SIGMA_TRACE=1 sigma ask "debug test"
-
-# Logs debug
-sigma logs show --level DEBUG --tail
+# Esegui comandi con debug
+SIGMA_DEBUG=1 sigma self-check
 ```
 
 ## Tips and Best Practices
@@ -420,59 +220,39 @@ sigma logs show --level DEBUG --tail
 
 ```bash
 # Alias utili
-alias sq='sigma ask'
-alias slog='sigma logs tail'
-alias sstatus='sigma status'
-
-# Autocompletamento
-eval "$(_SIGMA_COMPLETE=bash_source sigma)"  # Bash
-eval "$(_SIGMA_COMPLETE=zsh_source sigma)"   # Zsh
+alias sq='sigma start'
+alias sserver='sigma server'
+alias scheck='sigma self-check'
 ```
 
-### Medical Use Cases
+### Security Best Practices
 
 ```bash
-# Emergenza rapida
-sigma ask "RCP pediatrica" --priority high --format checklist
+# Usa sempre autenticazione per comandi protetti
+sigma login --username admin
 
-# Ricerca farmaci
-sigma ask "Interazioni paracetamolo ibuprofene" --context "Paziente anziano"
-
-# Protocolli ospedalieri
-sigma ask "Protocollo sepsi" --format protocol --save protocols/
+# Non condividere session tokens
+# Configura environment variables per password sicure
 ```
 
 ### Integration Workflows
 
 ```bash
-# Pipeline medica completa
-sigma data import latest-medical-db.json
-sigma index rebuild
-sigma models update
-sigma server restart
-sigma notify team "Sistema aggiornato"
-```
+#!/bin/bash
+# workflow.sh - Script di automazione SIGMA-NEX
 
-## Configuration Examples
+# Verifica sistema
+sigma self-check
 
-### Development Setup
+# Avvia servizi
+sigma server &
+SERVER_PID=$!
 
-```bash
-# Configura per sviluppo
-sigma config set debug true
-sigma config set log_level DEBUG
-sigma config set auto_reload true
-sigma server --dev
-```
+# Esegui operazioni
+# ... operazioni automatizzate ...
 
-### Production Setup
-
-```bash
-# Configura per produzione
-sigma config set workers 4
-sigma config set log_level INFO
-sigma config set security.rate_limiting true
-sigma config set monitoring.enabled true
+# Cleanup
+kill $SERVER_PID
 ```
 
 ## Getting Help
@@ -482,12 +262,62 @@ sigma config set monitoring.enabled true
 sigma --help
 
 # Help per comando specifico
-sigma ask --help
 sigma server --help
-
-# Documentazione online
-sigma docs open
-
-# Support
-sigma support contact
+sigma login --help
 ```
+
+## Available Commands
+
+### Core Commands
+- `sigma start` - Modalità interattiva
+- `sigma server` - Avvia server API
+- `sigma gui` - Interfaccia grafica
+
+### Authentication
+- `sigma login` - Login al sistema
+- `sigma logout` - Logout dal sistema
+
+### System Management
+- `sigma self-check` - Verifica sistema
+- `sigma self-heal` - Analisi codice
+- `sigma update` - Aggiornamento sistema
+- `sigma install-config` - Configurazione globale
+
+### Data Operations
+- `sigma load-framework` - Caricamento framework
+
+## Configuration Files
+
+### Main Configuration
+- `config.yaml` - Configurazione principale
+- Environment variables per credenziali sicure
+
+### Global Configuration
+- `SIGMA_NEX_ROOT` - Directory root globale
+- Session files in directory temporanea
+
+## Security Features
+
+### Authentication Levels
+- **Public**: Accesso limitato (disabilitato per sicurezza)
+- **User**: Query base (disabilitato per sicurezza)
+- **Dev**: Sviluppo e testing
+- **Admin**: Accesso completo
+
+### Session Security
+- Token sicuri generati casualmente
+- Timeout automatico sessioni
+- Limite sessioni concorrenti
+- Lockout dopo tentativi falliti
+
+## Performance Optimization
+
+### Memory Management
+- Gestione efficiente history con deque
+- Cleanup automatico file temporanei
+- Limits configurabili per risorse
+
+### Caching
+- Cache modelli e configurazioni
+- Session persistence ottimizzata
+- File locking per concorrenza sicura

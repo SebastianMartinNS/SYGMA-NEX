@@ -17,11 +17,9 @@ class SigmaConfig:
 
     def __init__(self, config_path: Optional[str] = None):
         self.project_root = self._find_project_root()
-        self.config_path = (
-            Path(config_path) if config_path else (self.project_root / "config.yaml")
-        )
-        self._config = None
-        self._framework = None
+        self.config_path = Path(config_path) if config_path else (self.project_root / "config.yaml")
+        self._config: Optional[Dict[str, Any]] = None
+        self._framework: Optional[Dict[str, Any]] = None
 
     def _find_project_root(self) -> Path:
         """Find the project root directory safely."""
@@ -74,6 +72,7 @@ class SigmaConfig:
         """Get configuration, loading it if necessary."""
         if self._config is None:
             self._load_config()
+        assert self._config is not None  # _load_config always sets it
         return self._config
 
     def _load_config(self) -> None:
@@ -89,7 +88,7 @@ class SigmaConfig:
                 self._config = data if isinstance(data, dict) else {}
         except Exception:
             # Invalid YAML or other IO issues: fall back to empty config
-            print(f"⚠️ Warning: invalid or unreadable YAML at {self.config_path}")
+            print(f"Warning: invalid or unreadable YAML at {self.config_path}")
             self._config = {}
 
     @property
@@ -97,6 +96,7 @@ class SigmaConfig:
         """Get framework data, loading it if necessary."""
         if self._framework is None:
             self._load_framework()
+        assert self._framework is not None  # _load_framework always sets it
         return self._framework
 
     def _load_framework(self) -> None:
@@ -109,18 +109,14 @@ class SigmaConfig:
                 with open(framework_path, "r", encoding="utf-8") as f:
                     self._framework = json.load(f)
         except Exception as e:
-            print(f"⚠️ Warning: Cannot load framework from {framework_path}: {e}")
+            print(f"Warning: Cannot load framework from {framework_path}: {e}")
 
     def get_path(self, path_type: str, default_relative: str = "") -> Path:
         """Get a path for a specific resource type."""
         paths = {
             "framework": self.project_root / "data" / "Framework_SIGMA.json",
             "models": self.project_root / "sigma_nex" / "core" / "models",
-            "translate_models": self.project_root
-            / "sigma_nex"
-            / "core"
-            / "models"
-            / "translate",
+            "translate_models": self.project_root / "sigma_nex" / "core" / "models" / "translate",
             "data": self.project_root / "data",
             "logs": self.project_root / "logs",
             "temp": self.project_root / "temp",
@@ -234,9 +230,7 @@ def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
             with open(framework_path, "r", encoding="utf-8") as ff:
                 framework = json.load(ff)
     except Exception as e:
-        print(
-            f"⚠️ Warning: Cannot load framework from {framework_path}: {e}", flush=True
-        )
+        print(f"⚠️ Warning: Cannot load framework from {framework_path}: {e}", flush=True)
 
     cfg["framework"] = framework
     return cfg

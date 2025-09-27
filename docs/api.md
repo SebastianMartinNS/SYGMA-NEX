@@ -13,7 +13,26 @@ http://localhost:8000
 
 ## Authentication
 
-Currently, the API uses IP-based filtering for administrative endpoints. Only localhost (127.0.0.1) can access sensitive endpoints like logs.
+The API uses API key authentication for security. Configure API keys in your `config.yaml`:
+
+```yaml
+api_keys:
+  - "your-api-key-1"
+  - "your-api-key-2"
+```
+
+Include the API key in requests:
+
+```bash
+curl -X POST "http://localhost:8000/ask" \
+  -H "Authorization: Bearer your-api-key-1" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Test question"}'
+```
+
+**Security Note**: Never commit API keys to version control. Use environment variables or secure configuration management.
+
+For support and security issues, contact: rootedlab6@gmail.com
 
 ## Endpoints
 

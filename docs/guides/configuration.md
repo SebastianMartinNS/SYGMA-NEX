@@ -368,13 +368,13 @@ config = load_config(env_override=True)
 
 ```bash
 # Validate current config
-sigma config validate
+# Validate YAML syntax manually
 
 # Validate specific file
-sigma config validate --file config.production.yaml
+# Validate YAML syntax manually --file config.production.yaml
 
 # Show configuration with sources
-sigma config show --sources
+# Check config.yaml file --sources
 ```
 
 ### Dynamic Configuration
@@ -451,11 +451,11 @@ server:
 
 ```bash
 # Configuration not found
-sigma config show                    # Check current config
-sigma config init                    # Create default config
+# Check config.yaml file                    # Check current config
+# Create config.yaml manually                    # Create default config
 
 # Invalid YAML syntax
-sigma config validate               # Check for syntax errors
+# Validate YAML syntax manually               # Check for syntax errors
 
 # Permission issues
 sudo chown $USER ~/.sigma-nex/config.yaml
@@ -466,13 +466,13 @@ chmod 600 ~/.sigma-nex/config.yaml  # Secure permissions
 
 ```bash
 # Show effective configuration
-sigma config show --resolved
+# Check config.yaml file --resolved
 
 # Show configuration sources
-sigma config show --sources
+# Check config.yaml file --sources
 
 # Test configuration
-sigma config test
+# Test configuration manually
 ```
 
 ## Migration Guide
@@ -484,10 +484,10 @@ sigma config test
 cp ~/.sigma-nex/config.yaml ~/.sigma-nex/config.yaml.backup
 
 # Migrate to new version
-sigma config migrate --from-version 0.1.0
+# Migrate configuration manually --from-version 0.1.0
 
 # Validate after migration
-sigma config validate
+# Validate YAML syntax manually
 ```
 
 ### Configuration Schema Changes

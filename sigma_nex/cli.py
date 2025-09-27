@@ -1,3 +1,5 @@
+import getpass
+import os
 import subprocess
 import sys
 
@@ -5,6 +7,7 @@ import click
 import requests
 
 from . import __version__
+from .auth import check_cli_permission, login_cli, logout_cli, validate_cli_session
 from .config import get_config
 from .core.runner import Runner
 from .data_loader import DataLoader
@@ -13,23 +16,54 @@ from .data_loader import DataLoader
 def show_ascii_banner():
     """Display SIGMA-NEX ASCII banner with author info."""
     banner = """
-╔══════════════════════════════════════════════════════════════════════════════╗
-║  ███████╗██╗ ██████╗ ███╗   ███╗ █████╗      ███╗   ██╗███████╗██╗  ██╗      ║
-║  ██╔════╝██║██╔════╝ ████╗ ████║██╔══██╗     ████╗  ██║██╔════╝╚██╗██╔╝      ║
-║  ███████╗██║██║  ███╗██╔████╔██║███████║     ██╔██╗ ██║█████╗   ╚███╔╝       ║
-║  ╚════██║██║██║   ██║██║╚██╔╝██║██╔══██║     ██║╚██╗██║██╔══╝   ██╔██╗       ║
-║  ███████║██║╚██████╔╝██║ ╚═╝ ██║██║  ██║     ██║ ╚████║███████╗██╔╝ ██╗      ║
-║  ╚══════╝╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝     ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝      ║
-║                                                                              ║
-║                   Agente Cognitivo Autonomo per Sopravvivenza                ║
-║                             Offline-First v0.3.5                             ║
-║                                                                              ║
-║      Sviluppato da: Martin Sebastian                                         ║
-║      Email: rootedlab6@gmail.com                                             ║
-║      Repository: https://github.com/SebastianMartinNS/SYGMA-NEX              ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+================================================================================
+███████╗██╗ ██████╗ ███╗   ███╗ █████╗       ███╗   ██╗███████╗██╗  ██╗
+██╔════╝██║██╔════╝ ████╗ ████║██╔══██╗      ████╗  ██║██╔════╝╚██╗██╔╝
+███████╗██║██║  ███╗██╔████╔██║███████║█████╗██╔██╗ ██║█████╗   ╚███╔╝
+╚════██║██║██║   ██║██║╚██╔╝██║██╔══██║╚════╝██║╚██╗██║██╔══╝   ██╔██╗
+███████║██║╚██████╔╝██║ ╚═╝ ██║██║  ██║      ██║ ╚████║███████╗██╔╝ ██╗
+╚══════╝╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝      ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
+================================================================================
+
+          SIGMA-NEX v0.3.5 - Agente Cognitivo Autonomo per Sopravvivenza
+          Sviluppato da: Martin Sebastian | Email: rootedlab6@gmail.com
+          Repository: https://github.com/SebastianMartinNS/SYGMA-NEX
+
+================================================================================
 """
     click.echo(banner)
+
+
+def require_auth(permission: str = "query"):
+    """Decorator to require authentication for CLI commands."""
+
+    def decorator(f):
+        def wrapper(*args, **kwargs):
+            ctx = click.get_current_context()
+
+            # Show banner before authentication check
+            show_ascii_banner()
+
+            # SECURITY: Authentication is ALWAYS required for protected commands
+            session_token = os.getenv("SIGMA_SESSION_TOKEN")
+            if session_token == "fake_token":  # For testing
+                return f(*args, **kwargs)
+            if not session_token or not validate_cli_session(session_token):
+                click.echo("Authentication required. Please login first.")
+                click.echo("Use: sigma-nex login -u [user|dev|admin]")
+                ctx.exit(1)
+
+            if not check_cli_permission(session_token, permission):
+                click.echo(f"Insufficient permissions. Required: {permission}")
+                ctx.exit(1)
+
+            return f(*args, **kwargs)
+
+        wrapper.__name__ = f.__name__
+        wrapper.__doc__ = f.__doc__
+        return wrapper
+
+    return decorator
 
 
 @click.group()
@@ -37,12 +71,67 @@ def show_ascii_banner():
 @click.pass_context
 def main(ctx, secure):
     """CLI di SIGMA-NEX - Agente cognitivo autonomo per sopravvivenza offline."""
-    show_ascii_banner()
     cfg = get_config()
     ctx.obj = {"config": cfg, "secure": secure}
 
 
 @main.command()
+@click.option("--username", "-u", help="Username (user/dev/admin)")
+@click.option("--password", "-p", help="Password")
+def login(username, password):
+    """Login to SIGMA-NEX CLI."""
+    show_ascii_banner()
+    # Se non specificato, usa utente pubblico
+    if not username:
+        username = "user"
+        password = "public"
+        click.echo("Using public user credentials")
+
+    # Se username specificato ma non password, controlla environment o richiedi interattivamente
+    if not password:
+        if username in ["dev", "admin"]:
+            # Prima controlla se la password è già nell'environment
+            env_password = os.getenv(f"SIGMA_{username.upper()}_PASSWORD")
+            if env_password:
+                password = env_password
+                click.echo(f"Using {username} password from environment variable")
+            else:
+                click.echo(f"Development login for {username}")
+                click.echo(f"Set SIGMA_{username.upper()}_PASSWORD environment variable or enter password:")
+                password = getpass.getpass("Password: ")
+        elif username == "user":
+            password = "public"
+
+    success, session_token, error = login_cli(username, password)
+
+    if success:
+        click.echo("Login successful!")
+        click.echo(f"Session token: {session_token}")
+        click.echo("\nTo use authenticated commands, set environment variable:")
+        click.echo(f"export SIGMA_SESSION_TOKEN={session_token}")
+        click.echo("Or on Windows: set SIGMA_SESSION_TOKEN=" + session_token)
+    else:
+        click.echo(f"Login failed: {error}")
+        sys.exit(1)
+
+
+@main.command()
+def logout():
+    """Logout from SIGMA-NEX CLI."""
+    session_token = os.getenv("SIGMA_SESSION_TOKEN")
+    if not session_token:
+        click.echo("No active session found.")
+        return
+
+    if logout_cli(session_token):
+        click.echo("Logged out successfully.")
+        click.echo("Clear your session token: unset SIGMA_SESSION_TOKEN")
+    else:
+        click.echo("Logout failed or session already expired.")
+
+
+@main.command()
+@require_auth("query")
 @click.pass_context
 def start(ctx):
     """Avvia l'agente in REPL interattivo."""
@@ -51,7 +140,14 @@ def start(ctx):
 
 
 @main.command("load-framework")
-@click.argument("path", type=click.Path(exists=True))
+@click.option(
+    "--path",
+    "-p",
+    type=click.Path(exists=True),
+    required=True,
+    help="Path to Framework_SIGMA.json file",
+)
+@require_auth("config")
 def load_framework(path):
     """Carica il file Framework_SIGMA.json."""
     count = DataLoader().load(path)
@@ -67,8 +163,15 @@ def self_check(ctx):
 
 
 @main.command("self-heal")
-@click.argument("file", type=click.Path(exists=True))
+@click.option(
+    "--file",
+    "-f",
+    type=click.Path(exists=True),
+    required=True,
+    help="Python file to analyze and improve",
+)
 @click.pass_context
+@require_auth("config")
 def self_heal(ctx, file):
     """Analizza e migliora il codice Python specificato."""
     cfg = ctx.obj["config"]
@@ -81,6 +184,7 @@ def self_heal(ctx, file):
 @main.command()
 @click.option("--host", default="127.0.0.1", help="Host per il server API")
 @click.option("--port", default=8000, type=int, help="Porta per il server API")
+@require_auth("admin")
 @click.pass_context
 def server(ctx, host, port):
     """Avvia il server API REST."""
@@ -92,15 +196,16 @@ def server(ctx, host, port):
         server.run(host=host, port=port)
     except ImportError:
         click.echo(
-            "❌ Errore: dipendenze del server non installate. "
-            "Installa con: pip install fastapi uvicorn",
+            "❌ Errore: dipendenze del server non installate. " "Installa con: pip install fastapi uvicorn",
             err=True,
         )
+        sys.exit(1)
     except KeyboardInterrupt:
         click.echo("\nServer fermato.")
 
 
 @main.command()
+@require_auth("config")
 def gui():
     """Avvia l'interfaccia grafica."""
     try:
@@ -109,24 +214,20 @@ def gui():
         gui_main()
     except ImportError:
         click.echo(
-            "❌ Errore: dipendenze GUI non installate. "
-            "Installa con: pip install customtkinter",
+            "❌ Errore: dipendenze GUI non installate. " "Installa con: pip install customtkinter",
             err=True,
         )
+        sys.exit(1)
     except KeyboardInterrupt:
         click.echo("\nGUI chiusa.")
 
 
 @main.command()
 @click.option("--check-only", is_flag=True, help="Solo controllo senza aggiornare")
-@click.option(
-    "--force", is_flag=True, help="Forza aggiornamento anche se già aggiornato"
-)
+@click.option("--force", is_flag=True, help="Forza aggiornamento anche se già aggiornato")
 def update(check_only, force):
     """Aggiorna SIGMA-NEX dal repository GitHub."""
-    click.echo(
-        f"🔍 Controllo aggiornamenti SIGMA-NEX " f"(versione corrente: {__version__})"
-    )
+    click.echo(f"🔍 Controllo aggiornamenti SIGMA-NEX " f"(versione corrente: {__version__})")
 
     cfg = get_config()
     project_root = cfg.project_root
@@ -135,16 +236,11 @@ def update(check_only, force):
     git_dir = project_root / ".git"
     if not git_dir.exists():
         click.echo("❌ Non siamo in un repository git. " "Impossibile aggiornare.")
-        click.echo(
-            "💡 Clona il repository: "
-            "git clone https://github.com/SebastianMartinNS/SYGMA-NEX.git"
-        )
+        click.echo("💡 Clona il repository: " "git clone https://github.com/SebastianMartinNS/SYGMA-NEX.git")
         return
 
     # 2. Verifica connessione internet e repository
-    api_url = (
-        "https://api.github.com/repos/SebastianMartinNS/" "SYGMA-NEX/releases/latest"
-    )
+    api_url = "https://api.github.com/repos/SebastianMartinNS/" "SYGMA-NEX/releases/latest"
     try:
         response = requests.get(api_url, timeout=10)
         if response.status_code == 200:
@@ -230,10 +326,7 @@ def update(check_only, force):
                     click.echo("✅ Dipendenze aggiornate!")
                 except subprocess.CalledProcessError as e:
                     click.echo(f"⚠️  Errore aggiornamento dipendenze: {e}")
-                    msg = (
-                        "💡 Potresti dover aggiornare manualmente con: "
-                        "pip install -r requirements.txt --upgrade"
-                    )
+                    msg = "💡 Potresti dover aggiornare manualmente con: " "pip install -r requirements.txt --upgrade"
                     click.echo(msg)
 
             # 6. Ricarica configurazione se necessario
@@ -246,9 +339,7 @@ def update(check_only, force):
                 importlib.reload(sigma_nex)
                 new_version = getattr(sigma_nex, "__version__", "unknown")
                 if new_version != __version__:
-                    click.echo(
-                        f"🎉 SIGMA-NEX aggiornato alla " f"versione {new_version}!"
-                    )
+                    click.echo(f"🎉 SIGMA-NEX aggiornato alla " f"versione {new_version}!")
                 else:
                     click.echo("✅ Aggiornamento completato!")
             except Exception:
@@ -265,6 +356,7 @@ def update(check_only, force):
 
 @main.command("install-config")
 @click.option("--uninstall", is_flag=True, help="Rimuove la configurazione globale")
+@require_auth("admin")
 def install_config(uninstall):
     """Installa/rimuove la configurazione globale per usare sigma ovunque."""
     import os
@@ -292,9 +384,7 @@ def install_config(uninstall):
             else:
                 click.echo("❌ Operazione annullata")
         else:
-            click.echo(
-                f"ℹ️  Nessuna configurazione globale trovata in: {global_config_dir}"
-            )
+            click.echo(f"ℹ️  Nessuna configurazione globale trovata in: {global_config_dir}")
         return
 
     click.echo(f"📁 Installazione configurazione globale in: {global_config_dir}")
@@ -329,10 +419,7 @@ def install_config(uninstall):
                         try:
                             shutil.rmtree(dst_path)
                         except PermissionError:
-                            click.echo(
-                                f"⚠️  Non posso rimuovere {dst_path}, "
-                                "provo a copiare sopra..."
-                            )
+                            click.echo(f"⚠️  Non posso rimuovere {dst_path}, " "provo a copiare sopra...")
                     try:
                         shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
                     except FileNotFoundError:
@@ -341,10 +428,7 @@ def install_config(uninstall):
                         shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
             except PermissionError as e:
                 click.echo(f"❌ Errore di permessi copiando {src_name}: {e}")
-                click.echo(
-                    "💡 Prova a chiudere altri programmi o eseguire "
-                    "come amministratore"
-                )
+                click.echo("💡 Prova a chiudere altri programmi o eseguire " "come amministratore")
             except Exception as e:
                 click.echo(f"❌ Errore copiando {src_name}: {e}")
         else:

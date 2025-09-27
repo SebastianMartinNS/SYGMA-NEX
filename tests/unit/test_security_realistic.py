@@ -30,12 +30,13 @@ class TestSecurityRealistic:
         assert isinstance(fernet, Fernet)
 
     def test_derive_key_consistency_real(self):
-        """Test consistenza derivazione chiavi"""
-        password = "consistent_password"
+        """Test consistenza derivazione chiave con salt fisso"""
+        password = "test_password"
+        salt = b"fixed_salt_for_test"
 
-        # Stessa password dovrebbe generare stessa chiave
-        key1 = derive_key(password)
-        key2 = derive_key(password)
+        # Stessa password e salt dovrebbero generare stessa chiave
+        key1 = derive_key(password, salt)
+        key2 = derive_key(password, salt)
 
         assert key1 == key2
         assert key1 is not key2  # Oggetti diversi ma contenuto uguale
@@ -72,13 +73,23 @@ class TestSecurityRealistic:
         assert empty_key != long_key != special_key
 
     def test_derive_key_hash_algorithm_real(self):
-        """Test algoritmo hash sottostante"""
+        """Test algoritmo PBKDF2 sottostante"""
         password = "hash_test_password"
-        key = derive_key(password)
+        salt = b"test_salt_16byte"
+        key = derive_key(password, salt)
 
-        # Verifica che sia basato su SHA256
-        expected_digest = hashlib.sha256(password.encode()).digest()
-        expected_key = base64.urlsafe_b64encode(expected_digest)
+        # Verifica che sia basato su PBKDF2-SHA256
+        from cryptography.hazmat.primitives import hashes
+        from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=salt,
+            iterations=100000,
+        )
+        expected_key_bytes = kdf.derive(password.encode())
+        expected_key = base64.urlsafe_b64encode(expected_key_bytes)
 
         assert key == expected_key
 
@@ -256,8 +267,9 @@ class TestSecurityPerformance:
         end_time = time.time()
 
         # Derivazione chiavi dovrebbe essere ragionevolmente veloce
+        # PBKDF2 con 100k iterazioni è più lento ma più sicuro
         total_time = end_time - start_time
-        assert total_time < 1.0  # Meno di 1 secondo per 100 derivazioni
+        assert total_time < 3.0  # Meno di 3 secondi per 100 derivazioni PBKDF2
 
     def test_encrypt_decrypt_performance_real(self):
         """Test performance crittografia/decrittografia"""
@@ -361,9 +373,7 @@ class TestSecurityRealWorldScenarios:
 
         # Decritta e verifica
         for service, original_pwd in passwords_to_store.items():
-            decrypted_pwd = decrypt(
-                encrypted_storage[service], master_password
-            ).decode()
+            decrypted_pwd = decrypt(encrypted_storage[service], master_password).decode()
             assert decrypted_pwd == original_pwd
 
     def test_file_encryption_scenario_real(self):

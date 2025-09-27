@@ -752,10 +752,10 @@ security:
 curl -v http://localhost:8000/
 
 # Check server status
-sigma status --server
+# Check system status manually --server
 
 # View server logs
-sigma logs tail --server
+# Check logs manually tail --server
 ```
 
 #### Performance Issues

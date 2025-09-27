@@ -56,9 +56,7 @@ class TestBasicIntegration:
         with tempfile.TemporaryDirectory() as temp_dir:
             # Test framework structure
             framework_file = Path(temp_dir) / "framework.json"
-            framework_data = {
-                "modules": [{"name": "test_module", "content": "test content"}]
-            }
+            framework_data = {"modules": [{"name": "test_module", "content": "test content"}]}
             framework_file.write_text(json.dumps(framework_data))
 
             result = load_json_data(str(framework_file))

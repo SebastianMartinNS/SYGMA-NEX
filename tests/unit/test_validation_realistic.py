@@ -214,9 +214,7 @@ class TestValidateFilePathRealistic:
                 assert result.exists()
 
                 # File fuori base directory dovrebbe fallire
-                with pytest.raises(
-                    ValidationError, match="Path outside allowed directory"
-                ):
+                with pytest.raises(ValidationError, match="Path outside allowed directory"):
                     validate_file_path(external_file, base_directory=base_dir)
 
     def test_validate_file_extensions_real(self):
@@ -238,9 +236,7 @@ class TestValidateFilePathRealistic:
             assert result.exists()
 
             # File .json dovrebbe essere OK
-            result = validate_file_path(
-                json_file, allowed_extensions=allowed_extensions
-            )
+            result = validate_file_path(json_file, allowed_extensions=allowed_extensions)
             assert result.exists()
 
             # File .exe non dovrebbe essere permesso
@@ -261,9 +257,7 @@ class TestValidateFilePathRealistic:
                 symlink_file.symlink_to(real_file)
 
                 # Symlink dovrebbe essere rifiutato per sicurezza
-                with pytest.raises(
-                    ValidationError, match="Symbolic links are not allowed"
-                ):
+                with pytest.raises(ValidationError, match="Symbolic links are not allowed"):
                     validate_file_path(symlink_file)
 
             except OSError:
@@ -357,20 +351,14 @@ class TestValidateModelNameRealistic:
     def test_validate_invalid_model_names_real(self):
         """Test nomi modello invalidi"""
         # Nome vuoto
-        with pytest.raises(
-            ValidationError, match="Model name must be a non-empty string"
-        ):
+        with pytest.raises(ValidationError, match="Model name must be a non-empty string"):
             validate_model_name("")
 
-        with pytest.raises(
-            ValidationError, match="Model name must be a non-empty string"
-        ):
+        with pytest.raises(ValidationError, match="Model name must be a non-empty string"):
             validate_model_name(None)
 
         # Tipo sbagliato
-        with pytest.raises(
-            ValidationError, match="Model name must be a non-empty string"
-        ):
+        with pytest.raises(ValidationError, match="Model name must be a non-empty string"):
             validate_model_name(123)
 
         # Caratteri invalidi
@@ -384,9 +372,7 @@ class TestValidateModelNameRealistic:
         ]
 
         for name in invalid_names:
-            with pytest.raises(
-                ValidationError, match="Model name contains invalid characters"
-            ):
+            with pytest.raises(ValidationError, match="Model name contains invalid characters"):
                 validate_model_name(name)
 
         # Nome troppo lungo
