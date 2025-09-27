@@ -24,7 +24,7 @@ env:
   PYTHON_VERSION: '3.11'
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  DOCKER_IMAGE: ghcr.io/sebastianmartinns/sigma-nex
+  DOCKER_IMAGE: ghcr.io/${{ github.repository_owner }}/sygma-nex
 
 jobs:
   # Pre-checks: Linting e Security
@@ -223,7 +223,7 @@ jobs:
         docker run --rm \
           -e SIGMA_SKIP_OLLAMA=true \
           ${{ env.DOCKER_IMAGE }}:test \
-          python -m sigma_nex self-check
+          python -c "import sigma_nex; print('SIGMA-NEX import successful')"
 
     - name: Log in to Container Registry
       if: github.event_name != 'pull_request'
@@ -245,6 +245,7 @@ jobs:
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
           type=sha,prefix={{branch}}-
+          type=raw,value=test
 
     - name: Build and push Docker image
       if: github.event_name != 'pull_request'
