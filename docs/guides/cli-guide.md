@@ -74,14 +74,14 @@ Type 'help' for commands, 'exit' to quit
    - Alcol etilico (70%)
 4. **Copertura**: Applica benda sterile
 
-⚠️ **ATTENZIONE**: Se la ferita è profonda o non smette di sanguinare,
+**ATTENZIONE**: Se la ferita è profonda o non smette di sanguinare,
 consulta immediatamente un medico.
 
 >> history
 1. Come disinfettare una ferita?
 
 >> exit
-👋 Arrivederci!
+Arrivederci!
 ```
 
 ## Server Management
