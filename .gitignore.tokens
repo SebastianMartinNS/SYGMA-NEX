@@ -1,8 +1,0 @@
-# Token directory - Never commit passwords or sensitive data
-tokens/
-*.token
-*.password
-*.secret
-*.key
-*.env.weekly
-.env.local
