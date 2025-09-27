@@ -40,7 +40,7 @@ FROM base as development
 RUN pip install --no-cache-dir -r requirements-test.txt
 
 # Installa Ollama con gestione errori
-RUN curl -fsSL https://ollama.ai/install.sh | sh || echo "⚠️ Ollama installation failed, continuing without it"
+RUN curl -fsSL https://ollama.ai/install.sh | sh || echo "Ollama installation failed, continuing without it"
 
 # Copia tutto il codice sorgente
 COPY --chown=sigma:sigma . .

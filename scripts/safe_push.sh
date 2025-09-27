@@ -12,8 +12,8 @@ fi
 
 echo "Pushing changes..."
 if git push origin master; then
-    echo "✅ Push successful!"
+    echo "Push successful!"
 else
-    echo "❌ Push failed!"
+    echo "Push failed!"
     exit 1
 fi
