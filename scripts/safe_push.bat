@@ -15,8 +15,8 @@ echo Pushing changes...
 git push origin master
 
 if %ERRORLEVEL% EQU 0 (
-    echo ✅ Push successful!
+    echo Push successful!
 ) else (
-    echo ❌ Push failed!
+    echo Push failed!
     exit /b 1
 )

@@ -236,7 +236,7 @@ def update(check_only, force):
     git_dir = project_root / ".git"
     if not git_dir.exists():
         click.echo("Non siamo in un repository git. " "Impossibile aggiornare.")
-        click.echo("💡 Clona il repository: " "git clone https://github.com/SebastianMartinNS/SYGMA-NEX.git")
+        click.echo("Clona il repository: " "git clone https://github.com/SebastianMartinNS/SYGMA-NEX.git")
         return
 
     # 2. Verifica connessione internet e repository
@@ -246,12 +246,12 @@ def update(check_only, force):
         if response.status_code == 200:
             latest_release = response.json()
             latest_version = latest_release["tag_name"].lstrip("v")
-            click.echo(f"📡 Versione più recente su GitHub: {latest_version}")
+            click.echo(f"Versione più recente su GitHub: {latest_version}")
 
             if latest_version == __version__ and not force:
                 click.echo("Sei già aggiornato all'ultima versione!")
                 if not check_only:
-                    click.echo("💡 Usa --force per forzare il pull comunque")
+                    click.echo("Usa --force per forzare il pull comunque")
                 return
             elif latest_version != __version__:
                 click.echo(f"🆕 Nuova versione disponibile: {latest_version}")
@@ -259,7 +259,7 @@ def update(check_only, force):
             click.echo("Impossibile verificare l'ultima versione " "dal GitHub API")
     except Exception as e:
         click.echo(f"Errore connessione GitHub API: {e}")
-        click.echo("🔄 Procedo comunque con git pull...")
+        click.echo("Procedo comunque con git pull...")
 
     if check_only:
         click.echo("Solo controllo richiesto, non aggiorno.")
@@ -288,7 +288,7 @@ def update(check_only, force):
         return
 
     # 4. Esegui git pull
-    click.echo("🔄 Aggiornamento in corso...")
+    click.echo("Aggiornamento in corso...")
     try:
         result = subprocess.run(
             ["git", "pull", "origin", "master"],
@@ -303,7 +303,7 @@ def update(check_only, force):
         if "Already up to date" in result.stdout:
             click.echo("Repository già aggiornato")
         else:
-            click.echo("🔄 Repository aggiornato, controllo dipendenze...")
+            click.echo("Repository aggiornato, controllo dipendenze...")
 
             # 5. Aggiorna dipendenze se necessario
             if (project_root / "requirements.txt").exists():
@@ -326,7 +326,7 @@ def update(check_only, force):
                     click.echo("Dipendenze aggiornate!")
                 except subprocess.CalledProcessError as e:
                     click.echo(f"Errore aggiornamento dipendenze: {e}")
-                    msg = "💡 Potresti dover aggiornare manualmente con: " "pip install -r requirements.txt --upgrade"
+                    msg = "Potresti dover aggiornare manualmente con: " "pip install -r requirements.txt --upgrade"
                     click.echo(msg)
 
             # 6. Ricarica configurazione se necessario
@@ -339,19 +339,19 @@ def update(check_only, force):
                 importlib.reload(sigma_nex)
                 new_version = getattr(sigma_nex, "__version__", "unknown")
                 if new_version != __version__:
-                    click.echo(f"🎉 SIGMA-NEX aggiornato alla " f"versione {new_version}!")
+                    click.echo(f"SIGMA-NEX aggiornato alla " f"versione {new_version}!")
                 else:
-                    click.echo("✅ Aggiornamento completato!")
+                    click.echo("Aggiornamento completato!")
             except Exception:
-                click.echo("✅ Aggiornamento completato!")
+                click.echo("Aggiornamento completato!")
 
-            click.echo("💡 Riavvia SIGMA-NEX per utilizzare " "la versione aggiornata")
+            click.echo("Riavvia SIGMA-NEX per utilizzare " "la versione aggiornata")
 
     except subprocess.CalledProcessError as e:
-        click.echo(f"❌ Errore durante git pull: {e}")
+        click.echo(f"Errore durante git pull: {e}")
         click.echo(f"Output: {e.stdout}")
         click.echo(f"Error: {e.stderr}")
-        click.echo("💡 Prova a risolvere i conflitti manualmente e riprova")
+        click.echo("Prova a risolvere i conflitti manualmente e riprova")
 
 
 @main.command("install-config")
@@ -377,17 +377,17 @@ def install_config(uninstall):
 
     if uninstall:
         if global_config_dir.exists():
-            response = click.confirm(f"🗑️  Rimuovere {global_config_dir}?")
+            response = click.confirm(f"Rimuovere {global_config_dir}?")
             if response:
                 shutil.rmtree(global_config_dir)
-                click.echo(f"✅ Configurazione globale rimossa da: {global_config_dir}")
+                click.echo(f"Configurazione globale rimossa da: {global_config_dir}")
             else:
-                click.echo("❌ Operazione annullata")
+                click.echo("Operazione annullata")
         else:
             click.echo(f"ℹ️  Nessuna configurazione globale trovata in: {global_config_dir}")
         return
 
-    click.echo(f"📁 Installazione configurazione globale in: {global_config_dir}")
+    click.echo(f"Installazione configurazione globale in: {global_config_dir}")
 
     # Crea la directory se non esiste
     global_config_dir.mkdir(parents=True, exist_ok=True)
@@ -406,7 +406,7 @@ def install_config(uninstall):
         if src_path.exists():
             try:
                 if src_path.is_file():
-                    click.echo(f"📄 Copiando {src_name}...")
+                    click.echo(f"Copiando {src_name}...")
                     # Verifica se il file esiste e ha lo stesso contenuto
                     if dst_path.exists():
                         if dst_path.stat().st_size == src_path.stat().st_size:
@@ -414,12 +414,12 @@ def install_config(uninstall):
                             continue
                     shutil.copy2(src_path, dst_path)
                 elif src_path.is_dir():
-                    click.echo(f"📁 Copiando directory {src_name}...")
+                    click.echo(f"Copiando directory {src_name}...")
                     if dst_path.exists():
                         try:
                             shutil.rmtree(dst_path)
                         except PermissionError:
-                            click.echo(f"⚠️  Non posso rimuovere {dst_path}, " "provo a copiare sopra...")
+                            click.echo(f"Non posso rimuovere {dst_path}, " "provo a copiare sopra...")
                     try:
                         shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
                     except FileNotFoundError:
@@ -427,15 +427,15 @@ def install_config(uninstall):
                         dst_path.parent.mkdir(parents=True, exist_ok=True)
                         shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
             except PermissionError as e:
-                click.echo(f"❌ Errore di permessi copiando {src_name}: {e}")
-                click.echo("💡 Prova a chiudere altri programmi o eseguire " "come amministratore")
+                click.echo(f"Errore di permessi copiando {src_name}: {e}")
+                click.echo("Prova a chiudere altri programmi o eseguire " "come amministratore")
             except Exception as e:
-                click.echo(f"❌ Errore copiando {src_name}: {e}")
+                click.echo(f"Errore copiando {src_name}: {e}")
         else:
-            click.echo(f"⚠️  File/directory non trovato: {src_path}")
+            click.echo(f"File/directory non trovato: {src_path}")
 
-    click.echo("\n✅ Installazione completata!")
-    click.echo("🎯 Per usare SIGMA-NEX da qualsiasi directory, imposta:")
+    click.echo("\nInstallazione completata!")
+    click.echo("Per usare SIGMA-NEX da qualsiasi directory, imposta:")
     if os.name == "nt":
         click.echo(f"   set SIGMA_NEX_ROOT={global_config_dir}")
         click.echo("   Oppure aggiungi questa variabile alle variabili di sistema")

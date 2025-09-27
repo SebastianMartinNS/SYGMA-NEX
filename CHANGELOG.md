@@ -43,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.4] - 2025-09-25
 
 ### Added
-- **🌍 Global Configuration System**: Risolto il problema della perdita del contesto quando si esegue `sigma` da directory diverse
+- **Global Configuration System**: Risolto il problema della perdita del contesto quando si esegue `sigma` da directory diverse
 - **New CLI Command**: `sigma install-config` per installare/rimuovere la configurazione globale
 - **Environment Variable Support**: Supporto per `SIGMA_NEX_ROOT` per definire la root del progetto
 - **Automated Setup Scripts**: 

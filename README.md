@@ -21,7 +21,7 @@ Un agente cognitivo avanzato progettato per scenari critici, blackout e ambienti
 
 SIGMA-NEX è un sistema di intelligenza artificiale completamente offline progettato per fornire supporto cognitivo avanzato in condizioni estreme. Utilizzando modelli di linguaggio locali attraverso Ollama, offre assistenza specializzata per la sopravvivenza, gestione del rischio e adattamento autonomo senza dipendere da infrastrutture cloud o connessioni internet.
 
-> **💡 Uso Globale**: SIGMA-NEX può essere usato da qualsiasi directory grazie al sistema di configurazione globale integrato!
+> **Uso Globale**: SIGMA-NEX può essere usato da qualsiasi directory grazie al sistema di configurazione globale integrato!
 
 ### Caratteristiche Principali
 
@@ -122,7 +122,7 @@ sigma self-check
 #   mistral:latest
 ```
 
-### 🌍 Configurazione Globale (Uso da Qualsiasi Directory)
+### Configurazione Globale (Uso da Qualsiasi Directory)
 
 Per utilizzare `sigma` da qualsiasi directory senza perdere il contesto:
 

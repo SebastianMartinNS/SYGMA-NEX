@@ -35,10 +35,10 @@ def run_command(cmd, description):
         subprocess.run(
             cmd, shell=True, check=True, capture_output=True, text=True
         )
-        print(f"✅ {description} completed successfully")
+        print(f"{description} completed successfully")
         return True
     except subprocess.CalledProcessError as e:
-        print(f"❌ {description} failed: {e}")
+        print(f"{description} failed: {e}")
         if e.stdout:
             print(f"STDOUT: {e.stdout}")
         if e.stderr:
@@ -52,17 +52,17 @@ def check_prerequisites():
 
     # Check Python version
     if sys.version_info < (3, 10):
-        print("❌ Python 3.10+ is required")
+        print("Python 3.10+ is required")
         return False
     version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"  # noqa: E501
-    print(f"✅ Python {version}")
+    print(f"Python {version}")
 
     # Check if Ollama is installed
     try:
         subprocess.run(["ollama", "--version"], check=True, capture_output=True)
-        print("✅ Ollama is installed")
+        print("Ollama is installed")
     except (subprocess.CalledProcessError, FileNotFoundError):
-        print("⚠️  Ollama not found. Please install from https://ollama.com")
+        print("Ollama not found. Please install from https://ollama.com")
 
     return True
 
@@ -126,14 +126,14 @@ def pull_ollama_models():
         print(f"Pulling Ollama model: {model}")
         try:
             subprocess.run(["ollama", "pull", model], check=True)
-            print(f"✅ Model {model} downloaded successfully")
+            print(f"Model {model} downloaded successfully")
         except subprocess.CalledProcessError:
             print(
-                f"⚠️  Could not download model {model}. "
+                f"Could not download model {model}. "
                 "You may need to install it manually."
             )
         except FileNotFoundError:
-            print("⚠️  Ollama not found. Skipping model download.")
+            print("Ollama not found. Skipping model download.")
             break
 
 
@@ -149,7 +149,7 @@ SIGMA_API_HOST=127.0.0.1
 SIGMA_API_PORT=8000
 """
         env_file.write_text(env_content)
-        print("✅ Created .env file")
+        print("Created .env file")
 
     # Create development config
     dev_config = Path("config.dev.yaml")
@@ -162,7 +162,7 @@ system_prompt: |
   includi informazioni di debug quando richiesto.
 """
         dev_config.write_text(dev_content)
-        print("✅ Created development config")
+        print("Created development config")
 
 
 def main():
@@ -172,7 +172,7 @@ def main():
     print("=" * 40)
 
     if not check_prerequisites():
-        print("\n❌ Prerequisites check failed. Please install required tools.")
+        print("\nPrerequisites check failed. Please install required tools.")
         return 1
 
     steps = [
@@ -184,7 +184,7 @@ def main():
 
     for step in steps:
         if not step():
-            print(f"\n❌ Setup failed at step: {step.__name__}")
+            print(f"\nSetup failed at step: {step.__name__}")
             return 1
 
     # Optional step - doesn't fail setup if it doesn't work

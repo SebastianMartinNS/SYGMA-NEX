@@ -258,9 +258,9 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-  # 📄 Documentation build (moved to separate pages.yml workflow)
+  # Documentation build (moved to separate pages.yml workflow)
   # docs:
-  #   name: 📄 Documentation  
+  #   name: Documentation  
   #   runs-on: ubuntu-latest
   #   if: github.ref == 'refs/heads/master'
   #   # Moved to .github/workflows/pages.yml to avoid conflicts

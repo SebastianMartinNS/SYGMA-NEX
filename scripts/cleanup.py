@@ -25,7 +25,7 @@ def remove_patterns(patterns, root_dir="."):
                     print(f"Removed file: {match}")
                 removed.append(match)
             except Exception as e:
-                print(f"⚠️  Could not remove {match}: {e}")
+                print(f"Could not remove {match}: {e}")
     return removed
 
 
@@ -67,7 +67,7 @@ def main():
 
     removed = remove_patterns(cleanup_patterns)
 
-    print(f"\n✅ Cleanup completed! Removed {len(removed)} items.")
+    print(f"\nCleanup completed! Removed {len(removed)} items.")
     print("\nProject is now clean and organized!")
 
 

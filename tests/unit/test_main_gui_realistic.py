@@ -60,21 +60,23 @@ class TestSigmaNexGUIRealistic:
         # Test that load_config is called during GUI initialization
         with patch("sigma_nex.gui.main_gui.load_config") as mock_config:
             mock_config.side_effect = Exception("Config file not found")
-            
+
             with patch("sigma_nex.gui.main_gui.ctk") as mock_ctk:
-                mock_ctk.CTk = Mock()
-                
-                with patch("sigma_nex.gui.main_gui.messagebox.showerror") as mock_error:
-                    with patch("sigma_nex.gui.main_gui.Runner"):
-                        from sigma_nex.gui.main_gui import SigmaNexGUI
-                        
-                        # This should not raise an exception, just handle the error gracefully
+                # Don't mock CTk to ensure hasattr(ctk, "CTk") returns False
+                # This forces the code to re-raise exceptions in test environment
+
+                with patch("sigma_nex.gui.main_gui.Runner"):
+                    from sigma_nex.gui.main_gui import SigmaNexGUI
+
+                    # Mock destroy method to avoid AttributeError in test
+                    with patch.object(SigmaNexGUI, 'destroy', create=True):
+                        # This should raise the config exception since ctk is mocked
                         try:
                             SigmaNexGUI()
-                        except AttributeError:
-                            # Expected in test environment due to mocking
-                            pass
-                        
+                        except Exception as e:
+                            # Expected exception from config loading in test environment
+                            assert "Config file not found" in str(e)
+
                         # Verify load_config was called
                         mock_config.assert_called_once()
 
@@ -123,7 +125,7 @@ class TestSigmaNexGUIRealistic:
                     # Mock runner instance
                     mock_runner = Mock()
                     mock_runner.self_check = Mock()
-                    mock_runner.self_heal_file = Mock(return_value="✅ Patch saved")
+                    mock_runner.self_heal_file = Mock(return_value="Patch saved")
                     mock_runner_class.return_value = mock_runner
 
                     with patch.object(SigmaNexGUI, "__init__", lambda x: None):

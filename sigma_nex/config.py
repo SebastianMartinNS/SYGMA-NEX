@@ -230,7 +230,7 @@ def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
             with open(framework_path, "r", encoding="utf-8") as ff:
                 framework = json.load(ff)
     except Exception as e:
-        print(f"⚠️ Warning: Cannot load framework from {framework_path}: {e}", flush=True)
+        print(f"Warning: Cannot load framework from {framework_path}: {e}", flush=True)
 
     cfg["framework"] = framework
     return cfg
