@@ -53,45 +53,45 @@ jobs:
         pip install -r requirements-test.txt
         pip install -e .
 
-    - name: 🎨 Code formatting check (Black)
+    - name: Code formatting check (Black)
       run: |
-        echo "🎨 Running Black formatter check..."
-        black --check sigma_nex tests || echo "⚠️ Code formatting issues found - will be fixed in next iteration"
+        echo "Running Black formatter check..."
+        black --check sigma_nex tests || echo "Code formatting issues found - will be fixed in next iteration"
       continue-on-error: true
 
-    - name: 📏 Import sorting check (isort)
+    - name: Import sorting check (isort)
       run: |
-        echo "📏 Running isort import sorting check..."
-        isort --check-only sigma_nex tests || echo "⚠️ Import sorting issues found - will be fixed in next iteration"
+        echo "Running isort import sorting check..."
+        isort --check-only sigma_nex tests || echo "Import sorting issues found - will be fixed in next iteration"
       continue-on-error: true
 
-    - name: 🔍 Linting (flake8)
+    - name: Linting (flake8)
       run: |
-        echo "🔍 Running flake8 linter..."
-        flake8 sigma_nex tests --max-line-length=88 --extend-ignore=E501,W293,E302,W291 || echo "⚠️ Linting issues found - focusing on critical errors only"
+        echo "Running flake8 linter..."
+        flake8 sigma_nex tests --max-line-length=88 --extend-ignore=E501,W293,E302,W291 || echo "Linting issues found - focusing on critical errors only"
       continue-on-error: true
 
-    - name: 🏷️ Type checking (mypy)
+    - name: Type checking (mypy)
       run: |
-        echo "🏷️ Running mypy type checker..."
-        mypy sigma_nex --ignore-missing-imports || echo "⚠️ Type checking issues found - gradual typing improvement planned"
+        echo "Running mypy type checker..."
+        mypy sigma_nex --ignore-missing-imports || echo "Type checking issues found - gradual typing improvement planned"
       continue-on-error: true
 
-    # Security scan temporaneamente disabilitato per debugging workflow
-    - name: � Security scan (Bandit) - SKIPPED
+    - name: Security scan (Bandit)
       run: |
-        echo "� Security scan temporarily disabled for workflow debugging"
-        echo "⚠️ Will be re-enabled after workflow stabilization"
+        echo "Running Bandit security scanner..."
+        bandit -r sigma_nex -f json -o bandit-report.json || echo "Security issues found - review bandit-report.json"
+        echo "Security scan completed - check bandit-report.json for details"
       continue-on-error: true
 
-    - name: 🎯 Set Python matrix
+    - name: Set Python matrix
       id: set-matrix
       run: |
         echo "python-matrix=[\"3.10\", \"3.11\"]" >> $GITHUB_OUTPUT
 
-  # 🧪 Test suite con multiple versioni Python
+  # Test suite con multiple versioni Python
   test:
-    name: 🧪 Tests (Python ${{ matrix.python-version }})
+    name: Tests (Python ${{ matrix.python-version }})
     needs: pre-checks
     runs-on: ubuntu-latest
     strategy:
@@ -100,23 +100,23 @@ jobs:
         python-version: ${{ fromJson(needs.pre-checks.outputs.python-matrix) }}
     
     steps:
-    - name: 📥 Checkout
+    - name: Checkout
       uses: actions/checkout@v4
 
-    - name: 🐍 Setup Python ${{ matrix.python-version }}
+    - name: Setup Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
 
-    - name: 📦 Install dependencies
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -r requirements-test.txt
         pip install -e .
 
-    - name: 🧪 Run unit tests
+    - name: Run unit tests
       run: |
         pytest tests/unit/ -v \
           --cov=sigma_nex \
@@ -124,14 +124,14 @@ jobs:
           --cov-report=term-missing \
           --junit-xml=pytest-results.xml
 
-    - name: 🔗 Run integration tests
+    - name: Run integration tests
       run: |
         pytest tests/integration/ -v \
           --junit-xml=pytest-integration-results.xml
       env:
         SIGMA_SKIP_OLLAMA: "true"
 
-    - name: 📊 Upload coverage to Codecov
+    - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       if: matrix.python-version == env.PYTHON_VERSION
       with:
@@ -141,7 +141,7 @@ jobs:
         name: sigma-nex-coverage
         fail_ci_if_error: false
 
-    - name: 📈 Publish test results
+    - name: Publish test results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
@@ -149,24 +149,24 @@ jobs:
           pytest-results.xml
           pytest-integration-results.xml
 
-  # 🚀 Performance tests
+  # Performance tests
   performance:
-    name: 🚀 Performance Tests
+    name: Performance Tests
     needs: pre-checks
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'performance')
     
     steps:
-    - name: 📥 Checkout
+    - name: Checkout
       uses: actions/checkout@v4
 
-    - name: 🐍 Setup Python
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         cache: 'pip'
 
-    - name: 📦 Install dependencies
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
@@ -174,41 +174,41 @@ jobs:
         pip install pytest-benchmark
         pip install -e .
 
-    - name: ⚡ Run performance tests
+    - name: Run performance tests
       run: |
         # Check if performance tests exist
         if [ -z "$(find tests/performance/ -name '*.py' -not -name '__*' 2>/dev/null)" ]; then
-          echo "⚠️ No performance tests found - creating placeholder benchmark results"
+          echo "No performance tests found - creating placeholder benchmark results"
           echo '{"benchmarks": [], "machine_info": {"node": "github-actions"}, "commit_info": {"id": "'"$GITHUB_SHA"'"}}' > benchmark-results.json
         else
-          echo "🚀 Running performance tests..."
+          echo "Running performance tests..."
           pytest tests/performance/ -v \
-            --benchmark-json=benchmark-results.json || echo "⚠️ Performance tests completed with warnings"
+            --benchmark-json=benchmark-results.json || echo "Performance tests completed with warnings"
         fi
       env:
         SIGMA_SKIP_OLLAMA: "true"
       continue-on-error: true
 
-    - name: 📊 Upload benchmark results
+    - name: Upload benchmark results
       uses: actions/upload-artifact@v4
       with:
         name: benchmark-results
         path: benchmark-results.json
 
-  # 🐳 Docker build and test
+  # Docker build and test
   docker:
-    name: 🐳 Docker Build & Test
+    name: Docker Build & Test
     needs: pre-checks
     runs-on: ubuntu-latest
     
     steps:
-    - name: 📥 Checkout
+    - name: Checkout
       uses: actions/checkout@v4
 
-    - name: 🐳 Set up Docker Buildx
+    - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    - name: 🏗️ Build Docker image
+    - name: Build Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
@@ -218,14 +218,14 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
-    - name: 🧪 Test Docker image
+    - name: Test Docker image
       run: |
         docker run --rm \
           -e SIGMA_SKIP_OLLAMA=true \
           ${{ env.DOCKER_IMAGE }}:test \
           python -m sigma_nex self-check
 
-    - name: 🔐 Log in to Container Registry
+    - name: Log in to Container Registry
       if: github.event_name != 'pull_request'
       uses: docker/login-action@v3
       with:
@@ -233,7 +233,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: 🏷️ Extract metadata
+    - name: Extract metadata
       if: github.event_name != 'pull_request'
       id: meta
       uses: docker/metadata-action@v5
@@ -246,7 +246,7 @@ jobs:
           type=semver,pattern={{major}}.{{minor}}
           type=sha,prefix={{branch}}-
 
-    - name: 🚀 Build and push Docker image
+    - name: Build and push Docker image
       if: github.event_name != 'pull_request'
       uses: docker/build-push-action@v5
       with:
@@ -265,43 +265,43 @@ jobs:
   #   if: github.ref == 'refs/heads/master'
   #   # Moved to .github/workflows/pages.yml to avoid conflicts
 
-  # 🏷️ Release automation
+  # Release automation
   release:
-    name: 🏷️ Release
+    name: Release
     needs: [pre-checks, test, docker]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     
     steps:
-    - name: 📥 Checkout
+    - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
-    - name: 🐍 Setup Python
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
-    - name: 📦 Install build dependencies
+    - name: Install build dependencies
       run: |
         python -m pip install --upgrade pip
         pip install build twine
 
-    - name: 🏗️ Build package
+    - name: Build package
       run: python -m build
 
-    - name: 🔍 Check package
+    - name: Check package
       run: twine check dist/*
 
-    - name: 📝 Generate release notes
+    - name: Generate release notes
       id: release_notes
       run: |
         # Estrai note dalla CHANGELOG.md
         sed -n '/^## \[.*\]/,/^## \[.*\]/p' CHANGELOG.md | head -n -1 > release_notes.md
         echo "notes_file=release_notes.md" >> $GITHUB_OUTPUT
 
-    - name: 🚀 Create GitHub Release
+    - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
         body_path: ${{ steps.release_notes.outputs.notes_file }}
@@ -313,17 +313,17 @@ jobs:
 
 
 
-  # 📊 Quality gate finale
+  # Quality gate finale
   quality-gate:
-    name: 📊 Quality Gate
+    name: Quality Gate
     needs: [pre-checks, test, docker, performance]
     runs-on: ubuntu-latest
     if: always()
     
     steps:
-    - name: 🎯 Check job results
+    - name: Check job results
       run: |
-        echo "=== 📊 SIGMA-NEX CI/CD Quality Gate ==="
+        echo "=== SIGMA-NEX CI/CD Quality Gate ==="
         echo ""
         echo "Job Status Summary:"
         echo "  Pre-checks: ${{ needs.pre-checks.result }}"
@@ -336,59 +336,59 @@ jobs:
         CRITICAL_FAILED=false
         
         if [[ "${{ needs.test.result }}" == "failure" ]]; then
-          echo "❌ CRITICAL: Test suite failed"
+          echo "CRITICAL: Test suite failed"
           CRITICAL_FAILED=true
         elif [[ "${{ needs.test.result }}" == "success" ]]; then
-          echo "✅ Tests: All unit tests passed"
+          echo "Tests: All unit tests passed"
         fi
         
         if [[ "${{ needs.docker.result }}" == "failure" ]]; then
-          echo "❌ CRITICAL: Docker build failed"
+          echo "CRITICAL: Docker build failed"
           CRITICAL_FAILED=true
         elif [[ "${{ needs.docker.result }}" == "success" ]]; then
-          echo "✅ Docker: Build and test successful"
+          echo "Docker: Build and test successful"
         fi
         
         # Pre-checks are warnings only (code quality)
         if [[ "${{ needs.pre-checks.result }}" == "failure" ]]; then
-          echo "⚠️  WARNING: Code quality checks have issues (see quality workflow)"
+          echo "WARNING: Code quality checks have issues (see quality workflow)"
         elif [[ "${{ needs.pre-checks.result }}" == "success" ]]; then
-          echo "✅ Code Quality: All checks passed"
+          echo "Code Quality: All checks passed"
         fi
         
         # Performance tests are optional
         if [[ "${{ needs.performance.result }}" == "failure" ]]; then
-          echo "⚠️  WARNING: Performance tests failed"
+          echo "WARNING: Performance tests failed"
         elif [[ "${{ needs.performance.result }}" == "success" ]]; then
-          echo "✅ Performance: All benchmarks passed"
+          echo "Performance: All benchmarks passed"
         fi
         
         echo ""
         if [[ "$CRITICAL_FAILED" == "true" ]]; then
-          echo "❌ Quality Gate: FAILED"
+          echo "Quality Gate: FAILED"
           echo "   Critical issues must be resolved before merge"
           exit 1
         else
-          echo "✅ Quality Gate: PASSED"
+          echo "Quality Gate: PASSED"
           echo "   Core functionality verified and ready"
         fi
 
-    - name: 📈 Quality gate status
+    - name: Quality gate status
       run: |
         echo ""
-        echo "=== 📈 SIGMA-NEX Quality Gate Summary ==="
+        echo "=== SIGMA-NEX Quality Gate Summary ==="
         if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-          echo "🔍 Pull Request Quality Gate: PASSED ✅"
+          echo "Pull Request Quality Gate: PASSED"
           echo "   - All critical tests pass"
           echo "   - Docker build successful"
           echo "   - Code runs correctly"
           echo ""
-          echo "� Next steps:"
+          echo "Next steps:"
           echo "   - Review code quality warnings (if any)"
           echo "   - Run quality improvement workflow if needed"
           echo "   - Ready for review and merge"
         else
-          echo "�🚀 Continuous Integration Quality Gate: PASSED ✅"
+          echo "Continuous Integration Quality Gate: PASSED"
           echo "   - Core functionality verified"
           echo "   - Build pipeline healthy"
           echo "   - Ready for deployment"

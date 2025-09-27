@@ -66,7 +66,7 @@ class WeeklyTokenGenerator:
 
     def get_manual_password(self, username, length_min=8):
         """Richiede password manuale con validazione sicurezza e interfaccia migliorata."""
-        print(f"\n🔒 Manual Password Input for {username.upper()}")
+        print(f"\n[SECURE] Manual Password Input for {username.upper()}")
         print("="*50)
         print("Requirements:")
         print(f"  - Minimum {length_min} characters")
@@ -77,7 +77,7 @@ class WeeklyTokenGenerator:
             try:
                 password = input(f"\nEnter {username} password: ").strip()
                 if len(password) < length_min:
-                    print(f"❌ Password too short. Minimum {length_min} characters required.")
+                    print(f"[ERROR] Password too short. Minimum {length_min} characters required.")
                     continue
 
                 # Validazione sicurezza base
@@ -87,22 +87,22 @@ class WeeklyTokenGenerator:
                 has_special = any(c in "!@#$%^&*()-_=+[]{}|.<>?" for c in password)
 
                 if not (has_upper and has_lower and has_digit and has_special):
-                    print("❌ Password must include uppercase, lowercase, numbers, and special characters")
+                    print("[ERROR] Password must include uppercase, lowercase, numbers, and special characters")
                     continue
 
                 confirm = input(f"Confirm {username} password: ").strip()
                 if password != confirm:
-                    print("❌ Passwords don't match. Try again.")
+                    print("[ERROR] Passwords don't match. Try again.")
                     continue
 
-                print(f"✅ {username} password accepted and secured")
+                print(f"[SUCCESS] {username} password accepted and secured")
                 return password
 
             except KeyboardInterrupt:
-                print("\n⚠️  Password input cancelled")
+                print("\n[WARNING] Password input cancelled")
                 raise
             except EOFError:
-                print("\n⚠️  End of input detected")
+                print("\n[WARNING] End of input detected")
                 raise
 
     def generate_secure_password(self, length=16):
@@ -311,16 +311,16 @@ SIGMA_ADMIN_PASSWORD={tokens['admin_password']}
                 if weeks_old > keep_weeks:
                     token_file.unlink()
                     removed_count += 1
-                    print(f"   🗑️  Removed old token: {token_file.name}")
+                    print(f"   [REMOVED] Removed old token: {token_file.name}")
 
             except (ValueError, IndexError):
                 # Nome file non valido, ignora
                 continue
 
         if removed_count > 0:
-            print(f"✅ Cleaned up {removed_count} old token files")
+            print(f"[SUCCESS] Cleaned up {removed_count} old token files")
         else:
-            print("ℹ️  No old token files to clean up")
+            print("[INFO] No old token files to clean up")
 
 
 def main():
@@ -385,16 +385,16 @@ Security Notes:
 
         if args.cleanup_only:
             if not args.quiet:
-                print("🧹 Cleaning up old token files...")
+                print("[CLEANUP] Cleaning up old token files...")
             generator.cleanup_old_tokens(args.keep_weeks)
             if not args.quiet:
-                print("✅ Cleanup completed successfully!")
+                print("[SUCCESS] Cleanup completed successfully!")
             return
 
         # Genera nuovi token
         if not args.quiet:
             mode = "manual input" if args.manual else "secure auto-generation"
-            print(f"🔐 Generating weekly tokens for SIGMA-NEX using {mode}...")
+            print(f"[SECURE] Generating weekly tokens for SIGMA-NEX using {mode}...")
             print("   This may take a few seconds...")
 
         tokens = generator.generate_token_pair(manual_input=args.manual)
@@ -403,25 +403,25 @@ Security Notes:
 
         if not args.quiet:
             generator.show_summary(tokens, token_file, env_file)
-            print("\n🎉 Token generation completed successfully!")
+            print("\n[SUCCESS] Token generation completed successfully!")
         else:
-            print(f"✅ Tokens generated: {token_file}")
-            print(f"📄 Env file: {env_file}")
+            print(f"[SUCCESS] Tokens generated: {token_file}")
+            print(f"[FILE] Env file: {env_file}")
 
         # Cleanup se richiesto
         if args.cleanup:
             if not args.quiet:
-                print("\n🧹 Cleaning up old tokens...")
+                print("\n[CLEANUP] Cleaning up old tokens...")
             generator.cleanup_old_tokens(args.keep_weeks)
             if not args.quiet:
-                print("✅ Cleanup completed!")
+                print("[SUCCESS] Cleanup completed!")
 
     except KeyboardInterrupt:
-        print("\n\n⚠️  Operation cancelled by user")
+        print("\n\n[WARNING] Operation cancelled by user")
         print("   No files were created or modified")
         sys.exit(1)
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n[ERROR] Error: {e}")
         print("   Please check your permissions and try again")
         print("   If the problem persists, contact the development team")
         sys.exit(1)

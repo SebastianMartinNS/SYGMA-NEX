@@ -589,7 +589,7 @@ class TestCLIRealWorldUsage:
         # Verifica elementi del banner
         assert "Martin Sebastian" in result.output
         assert "rootedlab6@gmail.com" in result.output
-        assert "v0.3.5" in result.output
+        assert "v0.4.0" in result.output
         assert "====" in result.output  # Carattere del bordo del banner
         assert "Agente Cognitivo" in result.output
 
@@ -615,7 +615,7 @@ class TestCLIRealWorldUsage:
                 # Verifica contenuti del banner
                 assert "Martin Sebastian" in banner_output
                 assert "rootedlab6@gmail.com" in banner_output
-                assert "v0.3.5" in banner_output
+                assert "v0.4.0" in banner_output
                 assert "====" in banner_output  # ASCII art border
         finally:
             sys.stdout = old_stdout
@@ -656,8 +656,8 @@ class TestCLIRealWorldUsage:
             mock_response = Mock()
             mock_response.status_code = 200
             mock_response.json.return_value = {
-                "tag_name": "v0.3.5",
-                "name": "Release 0.3.5",
+                "tag_name": "v0.4.0",
+                "name": "Release 0.4.0",
             }
             mock_get.return_value = mock_response
 
