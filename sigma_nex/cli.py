@@ -25,7 +25,7 @@ def show_ascii_banner():
 ╚══════╝╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝      ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
 ================================================================================
 
-          SIGMA-NEX v0.3.5 - Agente Cognitivo Autonomo per Sopravvivenza
+          SIGMA-NEX v0.4.0 - Agente Cognitivo Autonomo per Sopravvivenza
           Sviluppato da: Martin Sebastian | Email: rootedlab6@gmail.com
           Repository: https://github.com/SebastianMartinNS/SYGMA-NEX
 
